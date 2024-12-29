@@ -1,0 +1,36 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Local tooling scratch space
+.verify-tmp/
+
+# Personal/session planning notes — not meant for the public repo
+gap.md
+tasks.md
+tasks_missing_model_resilience.md
+llm_gateway_spec.md
+history.md
+handoff_resume_benchmarks.md
+afk_decisions.md
+gateway_plan.md
+research/
