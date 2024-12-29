@@ -1,0 +1,38 @@
+pricing:
+  # Local LLM via Ollama — zero marginal cost, logged for observability so
+  # cost dashboards reflect actual $0 against this row. Quoted because the
+  # model id contains a colon (Ollama tag separator).
+  "qwen2:7b":
+    input_per_1m_usd: 0.00
+    output_per_1m_usd: 0.00
+
+  claude-haiku-4-5:
+    input_per_1m_usd: 1.00
+    output_per_1m_usd: 5.00
+
+  claude-opus-4-8:
+    input_per_1m_usd: 5.00
+    output_per_1m_usd: 25.00
+
+  claude-opus-4-7:
+    input_per_1m_usd: 5.00
+    output_per_1m_usd: 25.00
+
+  claude-opus-4-6:
+    input_per_1m_usd: 5.00
+    output_per_1m_usd: 25.00
+
+  claude-opus-4-5:
+    input_per_1m_usd: 5.00
+    output_per_1m_usd: 25.00
+
+  gpt-4o:
+    input_per_1m_usd: 2.50
+    output_per_1m_usd: 10.00
+
+  # Phase 2.4 — gpt-4o-mini missing from pricing meant the eval framework's
+  # direct:openai:gpt-4o-mini target reported $0 cost. Public pricing: $0.15
+  # in / $0.60 out per 1M.
+  gpt-4o-mini:
+    input_per_1m_usd: 0.15
+    output_per_1m_usd: 0.60
