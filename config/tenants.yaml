@@ -1,0 +1,25 @@
+tenants:
+  - id: default
+    name: "Default Tenant"
+    rate_limit_rpm: 600           # set to 0 to disable rate limiting
+    daily_token_budget: null      # null = unlimited; otherwise integer
+    monthly_cost_cap_usd: null    # null = unlimited; otherwise USD
+    api_keys:
+      - key_id: ak_default
+        key_hash: "1274fe420d101a4011de803310387bdfffe679adecc6a34b647e778e88c727b4"
+        name: "default key"
+      - key_id: ak_phase16_smoke
+        key_hash: "0b0384ed412ff0f2cc6e3c8d8f5dccd2d7200bbcd6110fdb3a0501e1226d2291"
+        name: "phase 1.6 smoke-test key"
+      - key_id: ak_phase23_smoke
+        key_hash: "f4501aa28ddadf8ccc1b6ee181e17a15899aa73a1bf5a728713cdc29c47b5c1b"
+        name: "phase 2.3 smoke-test key"
+      - key_id: ak_phase24_eval
+        key_hash: "c11b91c8dceffdcf027501dc8f6b41b8a2186740e0c8ff358179cd45946225df"
+        name: "phase 2.4 eval runner key"
+      - key_id: ak_phase25_smoke
+        key_hash: "7c766643c81d0a191749c1659aa222b1184c83a67965af586239c176442c0c55"
+        name: "phase 2.5 judge smoke-test key"
+      - key_id: new_key
+        key_hash: 'e62337df783712bf62386d98699ba5ed2599ec28debb0fb27289e4a7867e14e5'
+        name: 'new key'
