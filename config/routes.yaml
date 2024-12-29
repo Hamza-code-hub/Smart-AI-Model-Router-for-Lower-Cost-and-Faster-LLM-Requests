@@ -1,0 +1,144 @@
+routes:
+  # Phase 2.2 — local LLM via Ollama. Used as the tier-3 classifier model
+  # (DEFAULT_CLASSIFIER_VIRTUAL_MODEL in src/gateway/routing/classifier.py).
+  # Fails over to Haiku so a stopped/missing Ollama keeps the router alive.
+  - virtual_model: "local-llm"
+    primary:
+      provider: ollama
+      model: qwen2:7b
+    fallback:
+      provider: anthropic
+      model: claude-haiku-4-5
+
+  # Legacy named routes
+  - virtual_model: "fast-qa"
+    primary:
+      provider: anthropic
+      model: claude-haiku-4-5
+    fallback:
+      provider: openai
+      model: gpt-4o-mini
+
+  - virtual_model: "deep-reasoning"
+    primary:
+      provider: anthropic
+      model: claude-opus-4-8
+    fallback:
+      provider: openai
+      model: gpt-4o
+    compaction:
+      enabled: true
+      token_threshold: 20000
+      keep_last_n_turns: 4
+      summarizer_virtual_model: "fast-qa"
+
+  - virtual_model: "code"
+    primary:
+      provider: openai
+      model: gpt-4o
+    fallback:
+      provider: anthropic
+      model: claude-opus-4-8
+
+  # Phase 2.4 — completes the Phase 1 locked mapping. Long-context is the
+  # 4th classifier category but had no provider route until the eval
+  # framework first tried to dispatch through it. Routed to Opus 4-7 (the
+  # locked target per memory/project_router_phase1_decisions.md) with
+  # gpt-4o as the fallback for the >128k case Opus can't take.
+  - virtual_model: "long-context"
+    primary:
+      provider: anthropic
+      model: claude-opus-4-7
+    fallback:
+      provider: openai
+      model: gpt-4o
+
+  # Anthropic — 1:1 virtual routes (fail over to OpenAI)
+  - virtual_model: "claude-haiku-4-5"
+    primary:
+      provider: anthropic
+      model: claude-haiku-4-5
+    fallback:
+      provider: openai
+      model: gpt-4o-mini
+
+  - virtual_model: "claude-sonnet-4-6"
+    primary:
+      provider: anthropic
+      model: claude-sonnet-4-6
+    fallback:
+      provider: openai
+      model: gpt-4o
+
+  - virtual_model: "claude-opus-4-8"
+    primary:
+      provider: anthropic
+      model: claude-opus-4-8
+    fallback:
+      provider: openai
+      model: gpt-4o
+
+  - virtual_model: "claude-opus-4-7"
+    primary:
+      provider: anthropic
+      model: claude-opus-4-7
+    fallback:
+      provider: openai
+      model: gpt-4o
+
+  - virtual_model: "claude-opus-4-6"
+    primary:
+      provider: anthropic
+      model: claude-opus-4-6
+    fallback:
+      provider: openai
+      model: gpt-4o
+
+  - virtual_model: "claude-opus-4-5"
+    primary:
+      provider: anthropic
+      model: claude-opus-4-5
+    fallback:
+      provider: openai
+      model: gpt-4o
+
+  - virtual_model: "claude-fable-5"
+    primary:
+      provider: anthropic
+      model: claude-fable-5
+    fallback:
+      provider: openai
+      model: gpt-4o
+
+  # OpenAI — 1:1 virtual routes (fail over to Anthropic)
+  - virtual_model: "gpt-4o"
+    primary:
+      provider: openai
+      model: gpt-4o
+    fallback:
+      provider: anthropic
+      model: claude-opus-4-8
+
+  - virtual_model: "gpt-4o-mini"
+    primary:
+      provider: openai
+      model: gpt-4o-mini
+    fallback:
+      provider: anthropic
+      model: claude-haiku-4-5
+
+  - virtual_model: "o1"
+    primary:
+      provider: openai
+      model: o1
+    fallback:
+      provider: anthropic
+      model: claude-opus-4-8
+
+  - virtual_model: "o3"
+    primary:
+      provider: openai
+      model: o3
+    fallback:
+      provider: anthropic
+      model: claude-opus-4-8
