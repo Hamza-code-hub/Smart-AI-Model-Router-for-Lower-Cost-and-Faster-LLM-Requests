@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Router</title>
+
+  <!-- IBM Plex Sans + Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- marked.js + DOMPurify -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --ink:         #0B0F1A;
+      --void:        #0F1420;
+      --panel:       #161D2C;
+      --input-bg:    #1B2338;
+      --wire:        #242F47;
+      --wire-strong: #2E3D5C;
+      --ghost:       #7B8FAD;
+      --signal:      #DDE4F0;
+      --muted:       #445066;
+      --route-a:     #7B61FF;   /* Anthropic — electric indigo */
+      --route-b:     #0EA570;   /* OpenAI    — muted emerald   */
+      --route-a-dim: rgba(123,97,255,0.10);
+      --route-b-dim: rgba(14,165,112,0.10);
+
+      /* Per-model accents — picked up via .model-haiku / .model-sonnet /
+         .model-opus on the assistant bubble when the gateway's routing
+         decision identifies which Claude tier actually answered. */
+      --route-haiku:      #F59E0B;   /* orange */
+      --route-sonnet:     #10B981;   /* emerald */
+      --route-opus:       #8B5CF6;   /* purple */
+      --route-gpt:        #38BDF8;   /* sky blue */
+      --route-haiku-dim:  rgba(245,158,11,0.10);
+      --route-sonnet-dim: rgba(16,185,129,0.10);
+      --route-opus-dim:   rgba(139,92,246,0.10);
+      --route-gpt-dim:    rgba(56,189,248,0.10);
+      --danger:      #E05C5C;
+      --font-ui:     'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono:   'IBM Plex Mono', 'Menlo', monospace;
+      --radius:      6px;
+      --sidebar-w:   240px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--void);
+      color: var(--signal);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { cursor: pointer; font-family: inherit; }
+    textarea { font-family: inherit; }
+    a { color: inherit; }
+
+    /* ── Layout ── */
+    #app {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--ink);
+      border-right: 1px solid var(--wire);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #sidebar-header {
+      padding: 16px 12px 12px;
+      border-bottom: 1px solid var(--wire);
+    }
+
+    #new-chat-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid var(--wire-strong);
+      border-radius: var(--radius);
+      color: var(--signal);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    #new-chat-btn:hover { background: var(--panel); border-color: var(--ghost); }
+
+    #new-chat-btn .icon {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      line-height: 1;
+      color: var(--ghost);
+    }
+
+    #conversations {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 8px;
+    }
+    #conversations::-webkit-scrollbar { width: 4px; }
+    #conversations::-webkit-scrollbar-track { background: transparent; }
+    #conversations::-webkit-scrollbar-thumb { background: var(--wire-strong); border-radius: 2px; }
+
+    .conv-group-label {
+      padding: 6px 8px 4px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .conv-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      color: var(--ghost);
+      font-size: 13px;
+      transition: background 0.12s, color 0.12s;
+      user-select: none;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .conv-item:hover { background: var(--panel); color: var(--signal); }
+    .conv-item.active { background: var(--panel); color: var(--signal); }
+
+    .conv-item .conv-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .conv-item .conv-delete {
+      opacity: 0;
+      background: transparent;
+      border: none;
+      color: var(--ghost);
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 12px;
+      line-height: 1;
+      transition: opacity 0.12s, color 0.12s;
+      flex-shrink: 0;
+    }
+    .conv-item:hover .conv-delete { opacity: 1; }
+    .conv-item .conv-delete:hover { color: var(--danger); }
+
+    #sidebar-footer {
+      padding: 12px;
+      border-top: 1px solid var(--wire);
+    }
+
+    #settings-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius);
+      color: var(--ghost);
+      font-size: 13px;
+      transition: background 0.15s, color 0.15s;
+    }
+    #settings-btn:hover { background: var(--panel); color: var(--signal); }
+
+    /* ── Main chat area ── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Empty state ── */
+    #empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    #empty-state .logo-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--panel);
+      border: 1px solid var(--wire-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    #empty-state h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--signal);
+      letter-spacing: -0.02em;
+    }
+
+    #empty-state p {
+      font-size: 13px;
+      color: var(--ghost);
+      max-width: 280px;
+      line-height: 1.5;
+    }
+
+    .empty-hint-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+      max-width: 360px;
+    }
+
+    .hint-card {
+      background: var(--panel);
+      border: 1px solid var(--wire);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .hint-card:hover { border-color: var(--wire-strong); background: var(--input-bg); }
+
+    .hint-card .hint-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--signal);
+      margin-bottom: 2px;
+    }
+    .hint-card .hint-desc {
+      font-size: 11px;
+      color: var(--ghost);
+    }
+
+    /* ── Messages ── */
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 0 8px;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+    }
+    #messages.visible { display: flex; }
+    #messages::-webkit-scrollbar { width: 4px; }
+    #messages::-webkit-scrollbar-track { background: transparent; }
+    #messages::-webkit-scrollbar-thumb { background: var(--wire-strong); border-radius: 2px; }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .message-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .message-role {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .message-model-tag {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--muted);
+      padding: 1px 6px;
+      background: var(--panel);
+      border: 1px solid var(--wire);
+      border-radius: 3px;
+    }
+
+    .message-bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      border-left: 2px solid transparent;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    /* Collapsible bubble — long assistant responses clip to ~10 lines with a
+       fade-to-page-bg at the bottom and a "Show more" button below. */
+    .message-bubble.collapsible {
+      max-height: 240px;
+      overflow: hidden;
+      position: relative;
+    }
+    .message-bubble.collapsible.expanded {
+      max-height: none;
+    }
+    .message-bubble.collapsible:not(.expanded)::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 80px;
+      background: linear-gradient(to bottom, rgba(15, 20, 32, 0), var(--void) 95%);
+      pointer-events: none;
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+    }
+
+    .collapse-toggle {
+      align-self: center;
+      margin-top: 8px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--ghost);
+      font-family: inherit;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: color 0.12s, border-color 0.12s, background 0.12s;
+    }
+    .collapse-toggle:hover {
+      color: var(--signal);
+      border-color: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* User message */
+    .message.user .message-role { color: var(--ghost); }
+    .message.user .message-bubble {
+      background: var(--panel);
+      border-left-color: var(--wire-strong);
+      color: var(--signal);
+    }
+
+    /* Assistant — Anthropic */
+    .message.assistant.anthropic .message-role { color: var(--route-a); }
+    .message.assistant.anthropic .message-bubble {
+      background: var(--route-a-dim);
+      border-left-color: var(--route-a);
+    }
+
+    /* Assistant — Claude Haiku (orange) */
+    .message.assistant.model-haiku .message-role { color: var(--route-haiku); }
+    .message.assistant.model-haiku .message-bubble {
+      background: var(--route-haiku-dim);
+      border-left-color: var(--route-haiku);
+    }
+
+    /* Assistant — Claude Sonnet (green) */
+    .message.assistant.model-sonnet .message-role { color: var(--route-sonnet); }
+    .message.assistant.model-sonnet .message-bubble {
+      background: var(--route-sonnet-dim);
+      border-left-color: var(--route-sonnet);
+    }
+
+    /* Assistant — Claude Opus (purple) */
+    .message.assistant.model-opus .message-role { color: var(--route-opus); }
+    .message.assistant.model-opus .message-bubble {
+      background: var(--route-opus-dim);
+      border-left-color: var(--route-opus);
+    }
+
+    /* Assistant — GPT family (sky blue) */
+    .message.assistant.model-gpt .message-role { color: var(--route-gpt); }
+    .message.assistant.model-gpt .message-bubble {
+      background: var(--route-gpt-dim);
+      border-left-color: var(--route-gpt);
+    }
+
+    /* Assistant — OpenAI */
+    .message.assistant.openai .message-role { color: var(--route-b); }
+    .message.assistant.openai .message-bubble {
+      background: var(--route-b-dim);
+      border-left-color: var(--route-b);
+    }
+
+    /* Markdown inside bubbles */
+    .message-bubble p { margin: 0 0 10px; }
+    .message-bubble p:last-child { margin-bottom: 0; }
+    .message-bubble ul, .message-bubble ol { margin: 0 0 10px 20px; }
+    .message-bubble li { margin-bottom: 2px; }
+    .message-bubble h1, .message-bubble h2, .message-bubble h3 {
+      font-weight: 600;
+      margin: 16px 0 6px;
+      letter-spacing: -0.01em;
+    }
+    .message-bubble h1:first-child,
+    .message-bubble h2:first-child,
+    .message-bubble h3:first-child { margin-top: 0; }
+    .message-bubble code {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      background: var(--panel);
+      border: 1px solid var(--wire);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .message-bubble pre {
+      margin: 10px 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--wire);
+    }
+    .message-bubble pre code {
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: 12.5px;
+      display: block;
+    }
+    .message-bubble blockquote {
+      border-left: 3px solid var(--wire-strong);
+      padding-left: 12px;
+      color: var(--ghost);
+      margin: 8px 0;
+    }
+    .message-bubble table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 13px;
+    }
+    .message-bubble th, .message-bubble td {
+      padding: 6px 10px;
+      border: 1px solid var(--wire);
+      text-align: left;
+    }
+    .message-bubble th { background: var(--panel); font-weight: 600; }
+    .message-bubble a { color: var(--route-a); text-decoration: underline; text-underline-offset: 2px; }
+
+    /* Streaming cursor */
+    .streaming-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: var(--ghost);
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Error bubble */
+    .message.error .message-bubble {
+      background: rgba(224,92,92,0.08);
+      border-left-color: var(--danger);
+      color: #F0A0A0;
+    }
+    .message.error .message-role { color: var(--danger); }
+
+    /* ── Input area ── */
+    #input-area {
+      padding: 12px 24px 20px;
+      background: var(--void);
+      border-top: 1px solid var(--wire);
+    }
+
+    #input-card {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--input-bg);
+      border: 1px solid var(--wire-strong);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    #input-card:focus-within { border-color: var(--ghost); }
+
+    #message-input {
+      width: 100%;
+      min-height: 52px;
+      max-height: 200px;
+      padding: 14px 16px 6px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--signal);
+      font-size: 14px;
+      line-height: 1.6;
+      resize: none;
+      overflow-y: auto;
+    }
+    #message-input::placeholder { color: var(--muted); }
+    #message-input::-webkit-scrollbar { width: 4px; }
+    #message-input::-webkit-scrollbar-thumb { background: var(--wire-strong); border-radius: 2px; }
+
+    #input-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px 10px;
+      gap: 8px;
+    }
+
+    /* Model selector pill */
+    #model-selector-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      background: var(--panel);
+      border: 1px solid var(--wire);
+      border-radius: 20px;
+      color: var(--ghost);
+      font-size: 12px;
+      font-family: var(--font-mono);
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      max-width: 260px;
+      overflow: hidden;
+    }
+    #model-selector-btn:hover { border-color: var(--wire-strong); color: var(--signal); background: var(--input-bg); }
+
+    .provider-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--muted);
+    }
+    .provider-dot.anthropic { background: var(--route-a); }
+    .provider-dot.openai    { background: var(--route-b); }
+    .provider-dot.auto      { background: linear-gradient(135deg, var(--route-a), var(--route-b)); }
+
+    .provider-dot.pulsing {
+      animation: pulse-dot 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    #model-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .chevron {
+      font-size: 10px;
+      flex-shrink: 0;
+      color: var(--muted);
+      transition: transform 0.15s;
+    }
+    #model-selector-btn.open .chevron { transform: rotate(180deg); }
+
+    /* Send button */
+    #send-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--route-a);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
+    }
+    #send-btn:hover { opacity: 0.88; }
+    #send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* ── Model dropdown ── */
+    #model-dropdown {
+      position: fixed;
+      bottom: 100px;
+      left: calc(var(--sidebar-w) + 24px);
+      width: 280px;
+      max-height: 320px;
+      background: var(--panel);
+      border: 1px solid var(--wire-strong);
+      border-radius: 10px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      z-index: 100;
+      display: none;
+    }
+    #model-dropdown::-webkit-scrollbar { width: 8px; }
+    #model-dropdown::-webkit-scrollbar-thumb {
+      background: var(--wire-strong);
+      border-radius: 4px;
+    }
+    #model-dropdown::-webkit-scrollbar-track { background: transparent; }
+    #model-dropdown.visible { display: block; }
+
+    .dropdown-provider-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .dropdown-provider-header .provider-dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--wire);
+      margin: 4px 0;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: background 0.1s;
+      gap: 8px;
+    }
+    .dropdown-item:hover { background: var(--input-bg); }
+    .dropdown-item.selected { background: rgba(123,97,255,0.08); }
+
+    .dropdown-item-info { flex: 1; overflow: hidden; }
+
+    .dropdown-item-name {
+      font-size: 12.5px;
+      font-family: var(--font-mono);
+      color: var(--signal);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dropdown-item-desc {
+      font-size: 11px;
+      color: var(--ghost);
+    }
+
+    .dropdown-check {
+      color: var(--route-a);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    /* ── Settings modal ── */
+    #settings-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #settings-overlay.visible { display: flex; }
+
+    #settings-modal {
+      background: var(--panel);
+      border: 1px solid var(--wire-strong);
+      border-radius: 12px;
+      padding: 28px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+    }
+
+    #settings-modal h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    #settings-modal p {
+      font-size: 13px;
+      color: var(--ghost);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ghost);
+      margin-bottom: 6px;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--wire-strong);
+      border-radius: var(--radius);
+      color: var(--signal);
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field-input:focus { border-color: var(--ghost); }
+    .field-input::placeholder { color: var(--muted); }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .btn-secondary {
+      padding: 7px 16px;
+      background: transparent;
+      border: 1px solid var(--wire-strong);
+      border-radius: var(--radius);
+      color: var(--ghost);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-secondary:hover { background: var(--input-bg); color: var(--signal); }
+
+    .btn-primary {
+      padding: 7px 16px;
+      background: var(--route-a);
+      border: none;
+      border-radius: var(--radius);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+
+    /* ── Key warning banner ── */
+    #key-warning {
+      max-width: 760px;
+      margin: 0 auto 12px;
+      padding: 10px 16px;
+      background: rgba(224,92,92,0.08);
+      border: 1px solid rgba(224,92,92,0.25);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: #F0A0A0;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    #key-warning.visible { display: flex; }
+    #key-warning span { flex: 1; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .streaming-cursor,
+      .provider-dot.pulsing { animation: none; }
+    }
+
+    /* ── Scrollbar for hljs code ── */
+    .hljs { padding: 14px 16px !important; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ─── Sidebar ─── -->
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <button id="new-chat-btn">
+        <span class="icon">+</span>
+        New Chat
+      </button>
+    </div>
+
+    <div id="conversations"></div>
+
+    <div id="sidebar-footer">
+      <button id="settings-btn">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Settings
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── Main ─── -->
+  <main id="main">
+
+    <!-- Empty state -->
+    <div id="empty-state">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="5" cy="10" r="2.5" stroke="#7B61FF" stroke-width="1.5"/>
+          <circle cx="15" cy="6" r="2.5" stroke="#0EA570" stroke-width="1.5"/>
+          <circle cx="15" cy="14" r="2.5" stroke="#0EA570" stroke-width="1.5"/>
+          <path d="M7.5 10H10M10 10L12.5 6M10 10L12.5 14" stroke="#7B8FAD" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1>LLM Router</h1>
+      <p>Route your prompts across Anthropic and OpenAI models from a single interface.</p>
+      <div class="empty-hint-grid">
+        <div class="hint-card" data-prompt="Explain the difference between Claude and GPT-4o in terms of reasoning ability.">
+          <div class="hint-label">Compare models</div>
+          <div class="hint-desc">Ask the same question across providers</div>
+        </div>
+        <div class="hint-card" data-prompt="Write a Python function that parses JSON with error handling.">
+          <div class="hint-label">Write code</div>
+          <div class="hint-desc">Generate and review code snippets</div>
+        </div>
+        <div class="hint-card" data-prompt="Summarize the key tradeoffs between speed and quality in large language models.">
+          <div class="hint-label">Summarize</div>
+          <div class="hint-desc">Condense long content quickly</div>
+        </div>
+        <div class="hint-card" data-prompt="What is 1729 and why is it mathematically interesting?">
+          <div class="hint-label">Explore ideas</div>
+          <div class="hint-desc">Curious questions, open reasoning</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages"></div>
+
+    <!-- Input area -->
+    <div id="input-area">
+      <div id="key-warning" role="alert">
+        <span>No API key set — requests will fail.</span>
+        <strong>Add key →</strong>
+      </div>
+      <div id="input-card">
+        <textarea
+          id="message-input"
+          placeholder="Message…"
+          rows="1"
+          aria-label="Message input"
+        ></textarea>
+        <div id="input-toolbar">
+          <button id="model-selector-btn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="provider-dot" id="provider-dot"></span>
+            <span id="model-label">Select model</span>
+            <span class="chevron">▾</span>
+          </button>
+          <button id="send-btn" disabled>
+            Send
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M2 6.5H11M11 6.5L7 2.5M11 6.5L7 10.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- ─── Model dropdown ─── -->
+<div id="model-dropdown" role="listbox" aria-label="Select model"></div>
+
+<!-- ─── Settings overlay ─── -->
+<div id="settings-overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+  <div id="settings-modal">
+    <h2 id="settings-title">Settings</h2>
+    <p>Your API key is stored locally in this browser and sent as a Bearer token with each request.</p>
+    <label class="field-label" for="api-key-input">API Key</label>
+    <input
+      id="api-key-input"
+      class="field-input"
+      type="password"
+      placeholder="sk-ant-… or similar"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <div class="modal-actions">
+      <button class="btn-secondary" id="settings-cancel">Cancel</button>
+      <button class="btn-primary" id="settings-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const STORAGE_KEY_CONVS = 'llm-router:conversations';
+const STORAGE_KEY_KEY   = 'llm-router:api-key';
+const STORAGE_KEY_MODEL = 'llm-router:model';
+
+// SSE streaming toggle. Set to true for incremental token rendering, false for
+// a single JSON response. Non-streaming mode lets the gateway's production
+// sampler and exemplar auto-seeder background tasks fire (both live on the
+// non-streaming success path in src/gateway/routes/chat.py:397).
+const STREAM_MODE = false;
+
+let models        = [];          // {id, provider, model, display_name, description}
+let selectedModel = null;        // model object
+let conversations = {};          // { [uuid]: {id, title, messages: [{role, content, provider, model}]} }
+let activeId      = null;        // uuid of active conversation
+let isStreaming   = false;
+
+// ── DOM refs ───────────────────────────────────────────────────────────────
+const $newChatBtn      = document.getElementById('new-chat-btn');
+const $conversations   = document.getElementById('conversations');
+const $emptyState      = document.getElementById('empty-state');
+const $messages        = document.getElementById('messages');
+const $messageInput    = document.getElementById('message-input');
+const $sendBtn         = document.getElementById('send-btn');
+const $modelSelectorBtn= document.getElementById('model-selector-btn');
+const $modelLabel      = document.getElementById('model-label');
+const $providerDot     = document.getElementById('provider-dot');
+const $modelDropdown   = document.getElementById('model-dropdown');
+const $settingsBtn     = document.getElementById('settings-btn');
+const $settingsOverlay = document.getElementById('settings-overlay');
+const $settingsCancel  = document.getElementById('settings-cancel');
+const $settingsSave    = document.getElementById('settings-save');
+const $apiKeyInput     = document.getElementById('api-key-input');
+const $keyWarning      = document.getElementById('key-warning');
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function uuid() {
+  return crypto.randomUUID ? crypto.randomUUID()
+    : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+}
+
+function apiKey() { return localStorage.getItem(STORAGE_KEY_KEY) || ''; }
+
+function persistConversations() {
+  localStorage.setItem(STORAGE_KEY_CONVS, JSON.stringify(conversations));
+}
+
+function loadConversations() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_CONVS);
+    if (raw) conversations = JSON.parse(raw);
+  } catch { conversations = {}; }
+}
+
+function renderMarkdown(text) {
+  if (typeof marked === 'undefined' || typeof DOMPurify === 'undefined') return escapeHtml(text);
+  const html = marked.parse(text, { breaks: true, gfm: true });
+  return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function highlightCode($el) {
+  $el.querySelectorAll('pre code').forEach(block => {
+    if (typeof hljs !== 'undefined') hljs.highlightElement(block);
+  });
+}
+
+function groupConversations() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const yesterday = new Date(today); yesterday.setDate(today.getDate()-1);
+  const groups = { Today: [], Yesterday: [], Earlier: [] };
+  Object.values(conversations).forEach(c => {
+    const d = new Date(c.createdAt || 0); d.setHours(0,0,0,0);
+    if (d >= today) groups.Today.push(c);
+    else if (d >= yesterday) groups.Yesterday.push(c);
+    else groups.Earlier.push(c);
+  });
+  return groups;
+}
+
+// ── Sidebar ─────────────────────────────────────────────────────────────────
+function renderSidebar() {
+  $conversations.innerHTML = '';
+  const groups = groupConversations();
+  let hasAny = false;
+
+  for (const [label, items] of Object.entries(groups)) {
+    if (!items.length) continue;
+    hasAny = true;
+    const $label = document.createElement('div');
+    $label.className = 'conv-group-label';
+    $label.textContent = label;
+    $conversations.appendChild($label);
+
+    items.sort((a,b) => (b.createdAt||0) - (a.createdAt||0)).forEach(conv => {
+      const $item = document.createElement('div');
+      $item.className = 'conv-item' + (conv.id === activeId ? ' active' : '');
+      $item.dataset.id = conv.id;
+
+      const $title = document.createElement('span');
+      $title.className = 'conv-title';
+      $title.textContent = conv.title || 'New chat';
+
+      const $del = document.createElement('button');
+      $del.className = 'conv-delete';
+      $del.title = 'Delete';
+      $del.innerHTML = '&times;';
+      $del.addEventListener('click', e => { e.stopPropagation(); deleteConversation(conv.id); });
+
+      $item.appendChild($title);
+      $item.appendChild($del);
+      $item.addEventListener('click', () => selectConversation(conv.id));
+      $conversations.appendChild($item);
+    });
+  }
+
+  if (!hasAny) $conversations.innerHTML = '';
+}
+
+// ── Conversations ────────────────────────────────────────────────────────────
+function createConversation(firstMessage) {
+  const id = uuid();
+  conversations[id] = {
+    id,
+    title: firstMessage
+      ? firstMessage.slice(0, 40) + (firstMessage.length > 40 ? '…' : '')
+      : 'New chat',
+    messages: [],
+    createdAt: Date.now(),
+  };
+  persistConversations();
+  activeId = id;
+  renderSidebar();
+  showChat();
+  return id;
+}
+
+function selectConversation(id) {
+  if (isStreaming) return;
+  activeId = id;
+  renderSidebar();
+  showChat();
+  renderMessages();
+}
+
+function deleteConversation(id) {
+  delete conversations[id];
+  persistConversations();
+  if (activeId === id) {
+    const remaining = Object.keys(conversations);
+    activeId = remaining.length ? remaining[remaining.length-1] : null;
+  }
+  renderSidebar();
+  if (!activeId) showEmpty();
+  else renderMessages();
+}
+
+function showEmpty() {
+  $emptyState.style.display = '';
+  $messages.classList.remove('visible');
+  $messages.innerHTML = '';
+}
+
+function showChat() {
+  $emptyState.style.display = 'none';
+  $messages.classList.add('visible');
+}
+
+// ── Messages ─────────────────────────────────────────────────────────────────
+function renderMessages() {
+  $messages.innerHTML = '';
+  const conv = conversations[activeId];
+  if (!conv) return;
+  conv.messages.forEach(msg => {
+    const $b = appendMessageBubble(msg.role, msg.content, msg.provider, msg.model, false, msg.routedModel);
+    maybeMakeCollapsible($b);
+  });
+  scrollToBottom();
+}
+
+// Collapse threshold for assistant bubbles. ~10 lines at the bubble's 1.65
+// line-height + vertical padding lands at ~260px; clamping the bubble to 240
+// guarantees the user sees content cut off rather than ending neatly on a
+// line — that's the affordance for the "Show more" button.
+const COLLAPSE_THRESHOLD_PX = 260;
+
+function maybeMakeCollapsible($bubble) {
+  if (!$bubble) return;
+  const $msg = $bubble.closest('.message');
+  // User and error bubbles stay full-length — only assistant responses can run
+  // long enough to need collapsing, and the error class replaces 'assistant'.
+  if (!$msg || !$msg.classList.contains('assistant')) return;
+  if ($bubble.classList.contains('collapsible')) return;
+  if ($bubble.scrollHeight <= COLLAPSE_THRESHOLD_PX) return;
+
+  $bubble.classList.add('collapsible');
+
+  const $btn = document.createElement('button');
+  $btn.type = 'button';
+  $btn.className = 'collapse-toggle';
+  $btn.textContent = 'Show more';
+  $btn.addEventListener('click', () => {
+    const expanded = $bubble.classList.toggle('expanded');
+    $btn.textContent = expanded ? 'Show less' : 'Show more';
+  });
+
+  $msg.appendChild($btn);
+}
+
+// Resolve a Claude tier from a model id to a CSS accent class. Falls back to
+// the provider class (anthropic/openai) so non-Claude models keep their
+// original colour scheme.
+function modelClass(modelId, provider) {
+  if (modelId) {
+    const id = modelId.toLowerCase();
+    if (id.includes('haiku'))  return 'model-haiku';
+    if (id.includes('sonnet')) return 'model-sonnet';
+    if (id.includes('opus'))   return 'model-opus';
+    if (id.startsWith('gpt') || id.startsWith('o1') || id.startsWith('o3')) return 'model-gpt';
+  }
+  return provider || '';
+}
+
+function appendMessageBubble(role, content, provider, model, streaming, routedModel) {
+  const $msg = document.createElement('div');
+  // Colour by the model that actually answered when known, otherwise by the
+  // user's selected provider. Keeps `auto` bubbles tinted to whoever ran.
+  const colourCls = role === 'assistant'
+    ? modelClass(routedModel || model, provider)
+    : (provider || '');
+  $msg.className = `message ${role}${colourCls ? ' ' + colourCls : ''}`;
+
+  const $meta = document.createElement('div');
+  $meta.className = 'message-meta';
+
+  const $role = document.createElement('span');
+  $role.className = 'message-role';
+  // For assistant bubbles routed via `auto`, show `auto (claude-haiku-4-5)`
+  // inline with the role label. The small badge below keeps the bare model id.
+  let roleText;
+  if (role === 'user') {
+    roleText = 'You';
+  } else if (routedModel && model && routedModel !== model) {
+    roleText = `${model} (${routedModel})`;
+  } else {
+    roleText = model || 'Assistant';
+  }
+  $role.textContent = roleText;
+  $meta.appendChild($role);
+
+  if (role === 'assistant' && model) {
+    const $tag = document.createElement('span');
+    $tag.className = 'message-model-tag';
+    $tag.textContent = model;
+    $meta.appendChild($tag);
+  }
+
+  const $bubble = document.createElement('div');
+  $bubble.className = 'message-bubble';
+
+  if (role === 'user') {
+    $bubble.textContent = content;
+  } else if (streaming) {
+    $bubble.dataset.raw = '';
+    $bubble.innerHTML = '<span class="streaming-cursor"></span>';
+  } else {
+    $bubble.innerHTML = renderMarkdown(content);
+    highlightCode($bubble);
+  }
+
+  $msg.appendChild($meta);
+  $msg.appendChild($bubble);
+  $messages.appendChild($msg);
+  scrollToBottom();
+  return $bubble;
+}
+
+function scrollToBottom() {
+  $messages.scrollTop = $messages.scrollHeight;
+}
+
+// ── Model selector ────────────────────────────────────────────────────────────
+function setSelectedModel(m) {
+  selectedModel = m;
+  if (m) {
+    localStorage.setItem(STORAGE_KEY_MODEL, m.id);
+    $modelLabel.textContent = m.id;
+    $providerDot.className = 'provider-dot ' + m.provider;
+    updateSendBtn();
+  }
+  renderDropdown();
+}
+
+function updateSendBtn() {
+  const hasKey   = !!apiKey();
+  const hasModel = !!selectedModel;
+  const hasText  = $messageInput.value.trim().length > 0;
+  $sendBtn.disabled = !hasKey || !hasModel || !hasText || isStreaming;
+  $keyWarning.classList.toggle('visible', !hasKey);
+}
+
+function renderDropdown() {
+  $modelDropdown.innerHTML = '';
+  const byProvider = {};
+  models.forEach(m => {
+    if (!byProvider[m.provider]) byProvider[m.provider] = [];
+    byProvider[m.provider].push(m);
+  });
+
+  const order = ['auto','anthropic','openai'];
+  const labels = { auto: 'Smart routing', anthropic: 'Anthropic', openai: 'OpenAI' };
+
+  order.forEach((prov, i) => {
+    const group = byProvider[prov];
+    if (!group) return;
+
+    if (i > 0) {
+      const $div = document.createElement('div');
+      $div.className = 'dropdown-divider';
+      $modelDropdown.appendChild($div);
+    }
+
+    const $hdr = document.createElement('div');
+    $hdr.className = 'dropdown-provider-header';
+    const $dot = document.createElement('span');
+    $dot.className = `provider-dot ${prov}`;
+    $hdr.appendChild($dot);
+    $hdr.appendChild(document.createTextNode(labels[prov]));
+    $modelDropdown.appendChild($hdr);
+
+    group.forEach(m => {
+      const $item = document.createElement('div');
+      $item.className = 'dropdown-item' + (selectedModel && selectedModel.id === m.id ? ' selected' : '');
+      $item.setAttribute('role','option');
+      $item.setAttribute('aria-selected', selectedModel && selectedModel.id === m.id ? 'true' : 'false');
+
+      const $info = document.createElement('div');
+      $info.className = 'dropdown-item-info';
+
+      const $name = document.createElement('div');
+      $name.className = 'dropdown-item-name';
+      $name.textContent = m.id;
+
+      const $desc = document.createElement('div');
+      $desc.className = 'dropdown-item-desc';
+      $desc.textContent = m.description;
+
+      $info.appendChild($name);
+      $info.appendChild($desc);
+      $item.appendChild($info);
+
+      if (selectedModel && selectedModel.id === m.id) {
+        const $check = document.createElement('span');
+        $check.className = 'dropdown-check';
+        $check.textContent = '✓';
+        $item.appendChild($check);
+      }
+
+      $item.addEventListener('click', () => {
+        setSelectedModel(m);
+        closeDropdown();
+      });
+      $modelDropdown.appendChild($item);
+    });
+  });
+}
+
+function openDropdown() {
+  renderDropdown();
+  $modelDropdown.classList.add('visible');
+  $modelSelectorBtn.classList.add('open');
+  $modelSelectorBtn.setAttribute('aria-expanded','true');
+}
+
+function closeDropdown() {
+  $modelDropdown.classList.remove('visible');
+  $modelSelectorBtn.classList.remove('open');
+  $modelSelectorBtn.setAttribute('aria-expanded','false');
+}
+
+function toggleDropdown() {
+  $modelDropdown.classList.contains('visible') ? closeDropdown() : openDropdown();
+}
+
+// ── Send ──────────────────────────────────────────────────────────────────────
+// Both transports live here. Switched at the top of the file via STREAM_MODE.
+// - true  → SSE consumer (incremental token paint, ~30fps throttled)
+// - false → single JSON read (lets gateway background tasks fire)
+async function sendMessage() {
+  const content = $messageInput.value.trim();
+  if (!content || !selectedModel || !apiKey() || isStreaming) return;
+
+  // Ensure active conversation
+  if (!activeId || !conversations[activeId]) {
+    createConversation(content);
+  }
+  showChat();
+
+  const conv = conversations[activeId];
+  conv.messages.push({ role: 'user', content });
+  persistConversations();
+  renderSidebar();
+
+  appendMessageBubble('user', content);
+  $messageInput.value = '';
+  autoResizeTextarea();
+
+  isStreaming = true;
+  updateSendBtn();
+  $providerDot.classList.add('pulsing');
+
+  const $bubble = appendMessageBubble('assistant', '', selectedModel.provider, selectedModel.id, true);
+  let accumulated = '';
+  // routedModel = the real model the gateway dispatched to. Stays null on
+  // streaming (SSE chunks don't carry routing_decision — see history.md:148)
+  // and on non-auto requests where selected == routed.
+  let routedModel = null;
+
+  try {
+    const body = {
+      model: selectedModel.id,
+      stream: STREAM_MODE,
+      messages: conv.messages.map(m => ({ role: m.role, content: m.content })),
+    };
+
+    const resp = await fetch('/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey(),
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({ error: { message: resp.statusText } }));
+      throw new Error(err?.error?.message || `HTTP ${resp.status}`);
+    }
+
+    if (STREAM_MODE) {
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      // Time-throttled paint — repaints directly in the read loop so streaming
+      // is visible. (A prior requestAnimationFrame scheduler did not paint
+      // until the loop ended.) Throttling to ~30fps avoids re-parsing
+      // markdown per token.
+      let lastPaint = 0;
+      function paint() {
+        const now = performance.now();
+        if (now - lastPaint < 33) return;
+        lastPaint = now;
+        $bubble.innerHTML = renderMarkdown(accumulated) + '<span class="streaming-cursor"></span>';
+        scrollToBottom();
+      }
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data:')) continue;
+          const raw = line.slice(5).trim();
+          if (raw === '[DONE]') break;
+          try {
+            const chunk = JSON.parse(raw);
+            if (chunk.error) throw new Error(chunk.error.message);
+            const delta = chunk.choices?.[0]?.delta?.content;
+            if (delta) {
+              accumulated += delta;
+              paint();
+            }
+          } catch (e) {
+            if (!(e instanceof SyntaxError)) throw e;
+            // SyntaxError = JSON.parse on a malformed/empty SSE line — skip it
+          }
+        }
+      }
+    } else {
+      const data = await resp.json();
+      if (data?.error) throw new Error(data.error.message || 'Unknown error');
+      accumulated = data?.choices?.[0]?.message?.content || '';
+
+      // Auto-mode requests carry routing_decision back from the gateway. We
+      // re-tint the bubble using the routed model (haiku=orange / sonnet=green
+      // / opus=purple) and rewrite the role label to `auto (claude-haiku-4-5)`
+      // so the user can see at a glance which tier answered. The small badge
+      // stays as the selected id only.
+      const rd = data?.routing_decision;
+      if (rd?.model_used && rd.model_used !== selectedModel.id) {
+        routedModel = rd.model_used;
+        const $msg = $bubble.closest('.message');
+        if ($msg) {
+          const colourCls = modelClass(routedModel, rd.provider || selectedModel.provider);
+          $msg.className = `message assistant${colourCls ? ' ' + colourCls : ''}`;
+          const $role = $msg.querySelector('.message-role');
+          if ($role) $role.textContent = `${selectedModel.id} (${routedModel})`;
+        }
+      }
+    }
+
+    // Finalise bubble — placeholder cursor from appendMessageBubble (or the
+    // last streaming-paint cursor) gets replaced here with the final render.
+    $bubble.innerHTML = renderMarkdown(accumulated);
+    highlightCode($bubble);
+    maybeMakeCollapsible($bubble);
+    scrollToBottom();
+
+    conv.messages.push({
+      role: 'assistant',
+      content: accumulated,
+      provider: selectedModel.provider,
+      model: selectedModel.id,
+      routedModel,
+    });
+    persistConversations();
+
+  } catch (err) {
+    $bubble.closest('.message').className = 'message error';
+    $bubble.innerHTML = escapeHtml(err.message || 'Something went wrong.');
+    const meta = $bubble.previousElementSibling;
+    if (meta) meta.querySelector('.message-role').textContent = 'Error';
+  } finally {
+    isStreaming = false;
+    $providerDot.classList.remove('pulsing');
+    updateSendBtn();
+    scrollToBottom();
+  }
+}
+
+// ── Settings ─────────────────────────────────────────────────────────────────
+function openSettings() {
+  $apiKeyInput.value = apiKey();
+  $settingsOverlay.classList.add('visible');
+  setTimeout(() => $apiKeyInput.focus(), 50);
+}
+
+function closeSettings() {
+  $settingsOverlay.classList.remove('visible');
+}
+
+function saveSettings() {
+  const key = $apiKeyInput.value.trim();
+  if (key) localStorage.setItem(STORAGE_KEY_KEY, key);
+  else localStorage.removeItem(STORAGE_KEY_KEY);
+  closeSettings();
+  updateSendBtn();
+}
+
+// ── Textarea auto-resize ───────────────────────────────────────────────────
+function autoResizeTextarea() {
+  $messageInput.style.height = 'auto';
+  $messageInput.style.height = Math.min($messageInput.scrollHeight, 200) + 'px';
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+async function init() {
+  loadConversations();
+  renderSidebar();
+
+  // Load models
+  try {
+    const resp = await fetch('/ui/models');
+    if (resp.ok) {
+      const data = await resp.json();
+      models = data.models || [];
+    }
+  } catch { /* server not ready yet */ }
+
+  // Restore selected model — default to "auto" if no saved choice or stale id.
+  const savedModelId = localStorage.getItem(STORAGE_KEY_MODEL);
+  if (savedModelId) {
+    const m = models.find(x => x.id === savedModelId);
+    if (m) setSelectedModel(m);
+  }
+  if (!selectedModel) {
+    const auto = models.find(x => x.id === 'auto');
+    if (auto) setSelectedModel(auto);
+    else if (models.length) setSelectedModel(models[0]);
+  }
+
+  updateSendBtn();
+
+  // Restore last active conversation
+  const ids = Object.keys(conversations);
+  if (ids.length) {
+    activeId = ids[ids.length - 1];
+    showChat();
+    renderMessages();
+  }
+}
+
+// ── Event listeners ───────────────────────────────────────────────────────
+$newChatBtn.addEventListener('click', () => {
+  activeId = null;
+  renderSidebar();
+  showEmpty();
+  $messageInput.focus();
+});
+
+$messageInput.addEventListener('input', () => {
+  autoResizeTextarea();
+  updateSendBtn();
+});
+
+$messageInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+$sendBtn.addEventListener('click', sendMessage);
+
+$modelSelectorBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  toggleDropdown();
+});
+
+document.addEventListener('click', e => {
+  if (!$modelDropdown.contains(e.target) && e.target !== $modelSelectorBtn) {
+    closeDropdown();
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeDropdown();
+    closeSettings();
+  }
+});
+
+$settingsBtn.addEventListener('click', openSettings);
+$settingsCancel.addEventListener('click', closeSettings);
+$settingsSave.addEventListener('click', saveSettings);
+$apiKeyInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveSettings(); });
+
+$settingsOverlay.addEventListener('click', e => {
+  if (e.target === $settingsOverlay) closeSettings();
+});
+
+$keyWarning.addEventListener('click', openSettings);
+
+// Hint cards
+document.querySelectorAll('.hint-card').forEach($card => {
+  $card.addEventListener('click', () => {
+    $messageInput.value = $card.dataset.prompt;
+    autoResizeTextarea();
+    updateSendBtn();
+    $messageInput.focus();
+  });
+});
+
+// marked config
+if (typeof marked !== 'undefined') {
+  marked.setOptions({ breaks: true, gfm: true });
+}
+
+init();
+</script>
+</body>
+</html>
