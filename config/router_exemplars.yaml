@@ -1,0 +1,395 @@
+# Router exemplar database — Phase 1.2
+#
+# This file is the hand-curated exemplar corpus for the cascade router's
+# embedding tier (tier 2). Each row is a *prototype* of one of the four
+# locked categories. The router embeds the user's last turn and looks up
+# the nearest neighbour here; if cosine similarity passes the threshold
+# AND a polarity-flip check, the exemplar's category wins.
+#
+# Locked category set (see memory/project_router_phase1_decisions.md):
+#
+#   fast-qa         → claude-haiku-4-5     (short factual, lookups, brief summaries)
+#   code            → claude-sonnet-4-6    (coding, debugging, refactors)
+#   deep-reasoning  → claude-opus-4-7      (multi-step reasoning, architecture)
+#   long-context    → claude-opus-4-7      (large attached documents — orthogonal axis)
+#
+# Composition rules (see research/phase_1_2_exemplar_db.md):
+#   - 30–50 distinct prototypes per category (~150–200 total)
+#   - Each query semantically distinct from its siblings (no paraphrases)
+#   - Each category includes >= 1 negation pair (positive + negative variant)
+#   - Include multi-modal edges that pressure-test the threshold + polarity check
+#
+# Idempotence: scripts/seed_exemplars.py keys on sha256(query) — re-running with
+# no edits is a no-op. Editing a query's text creates a new row; stale rows are
+# cleaned by the seed script.
+
+exemplars:
+  # ---------------------------------------------------------------------------
+  # fast-qa — short factual, lookups, brief summarization
+  # ---------------------------------------------------------------------------
+
+  - query: "What is the capital of Australia?"
+    category: fast-qa
+    notes: "Direct factual lookup"
+
+  - query: "When did World War II end?"
+    category: fast-qa
+    notes: "Date question"
+
+  - query: "Define photosynthesis in one sentence."
+    category: fast-qa
+    notes: "Definition, explicitly brief"
+
+  - query: "How many ounces are in a kilogram?"
+    category: fast-qa
+    notes: "Unit conversion"
+
+  - query: "Who wrote 'One Hundred Years of Solitude'?"
+    category: fast-qa
+    notes: "Authorship lookup"
+
+  - query: "What does the HTTP status code 401 mean?"
+    category: fast-qa
+    notes: "Multi-modal edge: tech lookup that could pull toward code, but the answer is a fact"
+
+  - query: "What's the boiling point of water in Fahrenheit?"
+    category: fast-qa
+    notes: "Constant lookup"
+
+  - query: "Is a tomato a fruit or a vegetable?"
+    category: fast-qa
+    notes: "Yes/no-ish quick answer"
+
+  - query: "What does the acronym DNS stand for?"
+    category: fast-qa
+    notes: "Acronym expansion"
+
+  - query: "Translate 'good morning' to Japanese."
+    category: fast-qa
+    notes: "Short translation"
+
+  - query: "List the primary colors."
+    category: fast-qa
+    notes: "Brief enumeration"
+
+  - query: |
+      TL;DR this paragraph: Global supply chains in 2024 faced sustained pressure from
+      shipping route disruptions in the Red Sea, drought-driven Panama Canal throughput
+      cuts, and a recovering but uneven post-pandemic labour market. Many firms
+      responded with nearshoring and dual-sourcing strategies, accepting higher unit
+      costs in exchange for reduced single-route exposure.
+    category: fast-qa
+    notes: "Brief summarization — plain TL;DR signal"
+
+  - query: "Summarize this article in two sentences."
+    category: fast-qa
+    notes: "NEGATION PAIR A — summarization positive"
+
+  - query: "Don't summarize — give me the full original text of the article verbatim."
+    category: fast-qa
+    notes: "NEGATION PAIR B — explicit anti-summary; polarity flip must fall through fast-qa"
+
+  - query: "Spell-check this sentence: 'Their going too the store latter.'"
+    category: fast-qa
+    notes: "Surface-level correction"
+
+  - query: "What time zone is Tokyo in?"
+    category: fast-qa
+    notes: "Reference lookup"
+
+  - query: "Rephrase this sentence to be more concise: 'In light of the fact that it was raining, we decided that it would be best to stay indoors.'"
+    category: fast-qa
+    notes: "Lightweight rewrite"
+
+  - query: "Briefly explain what a black hole is — one paragraph max."
+    category: fast-qa
+    notes: "POLARITY EDGE — topic looks deep-reasoning, but 'briefly/one paragraph' keeps it fast-qa"
+
+  # ---------------------------------------------------------------------------
+  # code — writing code, debugging, refactoring, code review, build/tooling
+  # ---------------------------------------------------------------------------
+
+  - query: "Write a Python function that validates an email address."
+    category: code
+    notes: "Generation — function"
+
+  - query: "Implement binary search in TypeScript."
+    category: code
+    notes: "Algorithm implementation"
+
+  - query: |
+      Refactor this function to remove the nested for-loops:
+
+      def find_pairs(items, target):
+          result = []
+          for i in range(len(items)):
+              for j in range(i + 1, len(items)):
+                  if items[i] + items[j] == target:
+                      result.append((items[i], items[j]))
+          return result
+    category: code
+    notes: "Refactor task"
+
+  - query: |
+      Why does this Go code panic?
+
+      goroutine 1 [running]:
+      main.main()
+              /app/main.go:14 +0x45
+      panic: runtime error: index out of range [3] with length 3
+
+      func main() {
+          xs := []int{1, 2, 3}
+          fmt.Println(xs[3])
+      }
+    category: code
+    notes: "Debugging from stack trace"
+
+  - query: "Convert this JavaScript class to a React functional component with hooks: class Counter extends React.Component { state = { n: 0 }; render() { return <button onClick={() => this.setState({ n: this.state.n + 1 })}>{this.state.n}</button>; } }"
+    category: code
+    notes: "Translation/refactor"
+
+  - query: |
+      Add type hints to this Python function:
+
+      def merge(a, b):
+          out = {}
+          for k, v in a.items():
+              out[k] = v
+          for k, v in b.items():
+              out[k] = v
+          return out
+    category: code
+    notes: "Annotation task"
+
+  - query: "Write a SQL query to find the top 10 customers by total order value."
+    category: code
+    notes: "SQL generation"
+
+  - query: "Fix this off-by-one error in my Rust iterator: for i in 0..=v.len() { println!(\"{}\", v[i]); }"
+    category: code
+    notes: "Bug fix"
+
+  - query: "Generate a Dockerfile for a Node 20 + pnpm app that serves on port 3000."
+    category: code
+    notes: "Build artifact generation"
+
+  - query: |
+      Review this pull request diff for security issues:
+
+      - def get_user(user_id):
+      -     return db.query(f"SELECT * FROM users WHERE id = {user_id}")
+      + def get_user(user_id: str):
+      +     return db.query(f"SELECT * FROM users WHERE id = '{user_id}'")
+    category: code
+    notes: "Code review — SQL injection still present"
+
+  - query: "Write a regex that matches IPv4 addresses but not 127.0.0.1."
+    category: code
+    notes: "Regex task with exclusion"
+
+  - query: "How do I configure CORS in FastAPI?"
+    category: code
+    notes: "MULTI-MODAL EDGE — how-to feels like fast-qa but the answer is config code"
+
+  - query: |
+      My pytest fixture isn't being picked up — what's wrong?
+
+      # conftest.py
+      @pytest.fixture
+      def db_session():
+          return create_session()
+
+      # test_users.py (different directory)
+      def test_user_count(db_session):
+          assert db_session.query(User).count() == 0
+    category: code
+    notes: "Test/debug"
+
+  - query: |
+      Write a unit test for this function:
+
+      def is_palindrome(s: str) -> bool:
+          s = s.lower().replace(" ", "")
+          return s == s[::-1]
+    category: code
+    notes: "Test generation"
+
+  - query: "Help me write a function that parses a CSV file."
+    category: code
+    notes: "NEGATION PAIR A — code generation positive"
+
+  - query: "Don't write code — just explain in words how I'd parse a CSV file in Python."
+    category: code
+    notes: "NEGATION PAIR B — explicit 'no code, explain'; polarity flip must fall through code"
+
+  - query: |
+      Port this Bash script to PowerShell:
+
+      #!/bin/bash
+      for f in *.log; do
+        gzip "$f"
+        mv "$f.gz" archive/
+      done
+    category: code
+    notes: "Cross-language translation"
+
+  - query: "I'm getting 'TypeError: cannot read property 'map' of undefined' — explain what this error means and how to fix it."
+    category: code
+    notes: "POLARITY EDGE — part lookup, part fix; both signals present, floor stays at code"
+
+  # ---------------------------------------------------------------------------
+  # deep-reasoning — multi-step reasoning, architecture, planning, derivations
+  # ---------------------------------------------------------------------------
+
+  - query: "Design a rate limiter that survives node restarts and handles a 10x traffic spike — walk me through the tradeoffs."
+    category: deep-reasoning
+    notes: "Architecture/design with constraints"
+
+  - query: "Should we migrate our monolith to microservices? Walk me through the decision."
+    category: deep-reasoning
+    notes: "Strategic decision reasoning"
+
+  - query: "Prove that the sum of the first n odd numbers equals n squared."
+    category: deep-reasoning
+    notes: "Math derivation / proof"
+
+  - query: "A train leaves Chicago at 60 mph heading east. Two hours later another leaves at 75 mph from the same station going the same direction. When does the second catch up? Show your work."
+    category: deep-reasoning
+    notes: "Multi-step word problem; 'show your work' is a strong signal"
+
+  - query: "Why does our p99 latency spike every Tuesday at 3am but median stays flat? Walk me through possible root causes."
+    category: deep-reasoning
+    notes: "Root-cause reasoning from observed pattern"
+
+  - query: "Compare event sourcing vs CRUD for a banking ledger. Which would you pick and why?"
+    category: deep-reasoning
+    notes: "Architectural tradeoff with justification"
+
+  - query: "Given that our database is 80% reads and 20% writes, design a caching strategy and justify your choice of cache invalidation approach."
+    category: deep-reasoning
+    notes: "Design with quantitative constraints"
+
+  - query: "Plan a 6-month roadmap for migrating a 2M-line Python 2 codebase to Python 3, accounting for team capacity and risk."
+    category: deep-reasoning
+    notes: "Long-horizon planning with multiple constraints"
+
+  - query: "Why does the Byzantine Generals Problem matter for distributed consensus? Explain the reasoning, not just the definition."
+    category: deep-reasoning
+    notes: "Conceptual reasoning — explicit anti-fast-qa framing"
+
+  - query: "If we double the number of shards in our database, what happens to write throughput and why? Account for hot keys."
+    category: deep-reasoning
+    notes: "Reasoning with caveats — 'account for X' signal"
+
+  - query: "Walk me through how I'd debug a memory leak in a long-running Go service — assume I've already ruled out goroutine leaks."
+    category: deep-reasoning
+    notes: "Multi-step diagnosis with constraint that rules out the obvious path"
+
+  - query: "Reason through whether we should adopt GraphQL given our team has 3 backend devs and 12 mobile clients."
+    category: deep-reasoning
+    notes: "Decision under team constraints"
+
+  - query: "Derive the time complexity of merge sort from first principles."
+    category: deep-reasoning
+    notes: "Algorithmic derivation — 'from first principles' signal"
+
+  - query: "Think step-by-step: how would you design an A/B testing framework for a checkout flow where conversions take days to materialize?"
+    category: deep-reasoning
+    notes: "Stepwise design with long feedback loop constraint"
+
+  - query: "Analyze the tradeoffs between optimistic and pessimistic locking for our inventory system."
+    category: deep-reasoning
+    notes: "NEGATION PAIR A — analytical positive"
+
+  - query: "Don't analyze the tradeoffs — just tell me which locking strategy to use for inventory."
+    category: deep-reasoning
+    notes: "NEGATION PAIR B — explicit 'skip analysis, give answer'; polarity flip should fall through to fast-qa"
+
+  - query: "A patient presents with persistent fatigue, joint pain, and a butterfly-shaped facial rash. Reason through the differential diagnosis."
+    category: deep-reasoning
+    notes: "Domain reasoning, non-code, multi-symptom synthesis"
+
+  - query: "Walk me through whether using setTimeout(fn, 0) to defer work in JavaScript is a good idea or an anti-pattern, and under what conditions each is true."
+    category: deep-reasoning
+    notes: "POLARITY EDGE — could pull toward code, but verdict-with-conditions framing makes it reasoning"
+
+  # ---------------------------------------------------------------------------
+  # long-context — operations OVER large attached/pasted documents
+  #
+  # Orthogonal axis (per memory/project_router_phase1_decisions.md). The defining
+  # signal is "operating on a big blob the user has given or will give us", not
+  # the topic. If heuristic detects long-context, it wins regardless of tier.
+  # ---------------------------------------------------------------------------
+
+  - query: "Summarize this 200-page legal contract and flag any unusual indemnification clauses."
+    category: long-context
+    notes: "Document summarization with semantic find"
+
+  - query: "I've attached our entire codebase — find every place we call the deprecated oldApi.fetch() and propose replacements."
+    category: long-context
+    notes: "Whole-codebase scan + propose"
+
+  - query: "Extract every action item assigned to 'Priya' from this 3-hour meeting transcript."
+    category: long-context
+    notes: "Long-transcript entity extraction"
+
+  - query: "Given the attached 50-page RFP, draft a one-page response that addresses each requirement."
+    category: long-context
+    notes: "Long input → short output, full coverage required"
+
+  - query: "This is a 500-line server log — find the request that caused the cascading failure and trace it forward."
+    category: long-context
+    notes: "Log forensics over long blob"
+
+  - query: "Read this entire research paper and tell me what's novel compared to prior work cited in section 2."
+    category: long-context
+    notes: "Long doc, cross-reference within document"
+
+  - query: "I'm pasting our company's full employee handbook below. Answer: what's the policy on remote work during natural disasters?"
+    category: long-context
+    notes: "Long doc pinpoint Q&A — needle in haystack"
+
+  - query: "Compare these two 80-page versions of our terms of service and list every substantive change."
+    category: long-context
+    notes: "Long doc diff between two versions"
+
+  - query: "Here's the full Pride and Prejudice text. Identify every scene where Mr. Darcy speaks to Elizabeth, with chapter references."
+    category: long-context
+    notes: "Literary corpus, full enumeration"
+
+  - query: "This is a 100k-token Slack export from #engineering for Q1. Synthesize the top 5 recurring complaints."
+    category: long-context
+    notes: "Chat-log synthesis"
+
+  - query: "Given the 30-file pull request diff below, write release notes grouped by user-facing impact."
+    category: long-context
+    notes: "Multi-file diff synthesis"
+
+  - query: "I've attached 12 customer interview transcripts. Cluster the pain points into themes."
+    category: long-context
+    notes: "Multi-document thematic clustering"
+
+  - query: "Review this 200-page architectural design doc for internal inconsistencies between sections."
+    category: long-context
+    notes: "Long doc internal consistency check"
+
+  - query: "This is a 4-hour earnings call transcript. What did the CFO say about margin pressure?"
+    category: long-context
+    notes: "Long transcript pinpoint"
+
+  - query: "Translate this entire 60-page user manual from English to Spanish, preserving section structure."
+    category: long-context
+    notes: "Long doc bulk transform"
+
+  - query: "Summarize this attached document."
+    category: long-context
+    notes: "NEGATION PAIR A — document operation positive"
+
+  - query: "Don't read the attached document — just answer my question from general knowledge: what's the capital of France?"
+    category: long-context
+    notes: "NEGATION PAIR B — explicit 'ignore attachment'; polarity flip must fall through long-context to fast-qa"
+
+  - query: "I'm pasting a function below — explain what it does."
+    category: long-context
+    notes: "POLARITY EDGE — short snippet framed as 'I'm pasting'; raises bar for near-threshold matches"
