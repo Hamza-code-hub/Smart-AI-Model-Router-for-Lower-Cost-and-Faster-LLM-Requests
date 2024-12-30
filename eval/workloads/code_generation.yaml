@@ -1,0 +1,120 @@
+# Phase 2.4 — code_generation workload
+#
+# Short coding tasks, HumanEval-style. Each prompt asks for a small function
+# or refactor; expected_contains is a soft surface check (substring in the
+# response), not a real correctness gate — the LLM-as-judge layer (Phase 2.5)
+# is what graders quality. Until then these substrings catch obvious
+# regressions like a wrong tier producing a chatty non-code response.
+
+name: code_generation
+version: 1
+description: Short coding tasks (HumanEval-style)
+default_max_tokens: 400
+default_temperature: 0.0
+
+prompts:
+  - id: cg-001
+    messages:
+      - role: user
+        content: |
+          Write a Python function `is_palindrome(s: str) -> bool` that returns
+          True if s is a palindrome ignoring case and non-alphanumeric
+          characters. Just the function, no explanation.
+    expected_category: code
+    expected_contains: ["def is_palindrome", "return"]
+
+  - id: cg-002
+    messages:
+      - role: user
+        content: |
+          Write a Python function `fizzbuzz(n: int) -> list[str]` that returns
+          a list of length n where each element is "Fizz" if divisible by 3,
+          "Buzz" if divisible by 5, "FizzBuzz" if divisible by both, otherwise
+          the number as a string. 1-indexed.
+    expected_category: code
+    expected_contains: ["def fizzbuzz", "FizzBuzz"]
+
+  - id: cg-003
+    messages:
+      - role: user
+        content: |
+          Write a TypeScript function `groupBy<T, K>(arr: T[], keyFn: (x: T) => K): Map<K, T[]>`
+          that groups items by the result of keyFn. Just the function.
+    expected_category: code
+    expected_contains: ["function groupBy", "Map"]
+
+  - id: cg-004
+    messages:
+      - role: user
+        content: |
+          Refactor this Python snippet to use a list comprehension:
+
+              result = []
+              for x in nums:
+                  if x % 2 == 0:
+                      result.append(x * x)
+
+          Just the refactor.
+    expected_category: code
+    expected_contains: ["for x in nums", "if x % 2"]
+
+  - id: cg-005
+    messages:
+      - role: user
+        content: |
+          Write a SQL query that returns the top 5 customers by total order
+          amount in the last 30 days. Assume tables `customers(id, name)` and
+          `orders(id, customer_id, total, created_at)`.
+    expected_category: code
+    expected_contains: ["SELECT", "JOIN", "GROUP BY"]
+
+  - id: cg-006
+    messages:
+      - role: user
+        content: |
+          Find the bug in this Python function and return only the corrected
+          version:
+
+              def average(xs):
+                  return sum(xs) / len(xs) - 1
+
+          The intent is to compute the arithmetic mean.
+    expected_category: code
+    expected_contains: ["sum(xs) / len(xs)"]
+
+  - id: cg-007
+    messages:
+      - role: user
+        content: |
+          Write a Python function `merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]`
+          that merges overlapping intervals. Sort by start ascending.
+    expected_category: code
+    expected_contains: ["def merge_intervals", "sort"]
+
+  - id: cg-008
+    messages:
+      - role: user
+        content: |
+          Explain what this regex matches in one sentence, then nothing else:
+          ^\d{3}-\d{2}-\d{4}$
+    expected_category: code
+    expected_contains: ["digit"]
+    notes: "Polarity-edge — explanation, not code synthesis. Both code or fast-qa are defensible."
+
+  - id: cg-009
+    messages:
+      - role: user
+        content: |
+          Write a Rust function `fn fibonacci(n: u32) -> u64` that returns the
+          nth Fibonacci number iteratively (no recursion).
+    expected_category: code
+    expected_contains: ["fn fibonacci", "u64"]
+
+  - id: cg-010
+    messages:
+      - role: user
+        content: |
+          Convert this curl command to an httpx async call in Python:
+          curl -X POST -H "Authorization: Bearer XYZ" -d '{"q":"hello"}' https://api.example.com/search
+    expected_category: code
+    expected_contains: ["httpx", "AsyncClient", "post"]

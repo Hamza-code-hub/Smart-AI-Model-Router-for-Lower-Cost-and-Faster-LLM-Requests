@@ -1,0 +1,27 @@
+# Phase 2.4 — router_correctness workload
+#
+# Folds the Phase 1.3 hand-labeled router eval into the same workload format
+# so the new runner can drive it. This is the "does the router pick the
+# right category" workload — measure misroute rate / per-tier hit rate, not
+# response quality.
+#
+# **The 67-query corpus still lives in eval/router_eval.yaml** — this
+# workload's loader pulls from that file at workload load time rather than
+# duplicating the rows. Edit router_eval.yaml; this workload picks up the
+# new rows automatically.
+#
+# The classifier-only sweeps (scripts/run_router_eval.py,
+# scripts/sweep_router_threshold.py) keep working unchanged against the
+# original file. This workload is for the *full provider stack* — it
+# actually pays the LLM bill for the chosen route, unlike the classifier
+# sweep which just measures the routing decision.
+
+name: router_correctness
+version: 1
+description: Phase 1.3 hand-labeled router queries — does auto pick the right category
+default_max_tokens: 120
+default_temperature: 0.0
+
+# Special key — read by the loader fallback in gateway.eval.workloads.
+# The loader unpacks each entry from eval/router_eval.yaml into a Prompt.
+source_router_eval: eval/router_eval.yaml

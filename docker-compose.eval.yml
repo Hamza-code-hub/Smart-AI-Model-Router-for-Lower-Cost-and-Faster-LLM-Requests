@@ -1,0 +1,29 @@
+# Phase 2.4 — optional LiteLLM proxy for cross-gateway eval.
+#
+# This file is NOT loaded by default. Use it only when running comparison
+# evals against LiteLLM:
+#
+#     docker compose -f docker-compose.eval.yml up -d litellm
+#     EVAL_GATEWAY_URL=http://localhost:8000 \
+#       LITELLM_URL=http://localhost:4000 \
+#       LITELLM_API_KEY=$LITELLM_PROXY_API_KEY \
+#       python -m gateway.eval --workload mixed_realistic \
+#         --target gateway:auto --target litellm:gpt-4o-mini
+#
+# The LiteLLM image picks up provider keys from .env (same file the gateway
+# uses) so both proxies hit the same upstream credentials — that's the
+# point of a fair comparison.
+
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-stable
+    ports:
+      - "4000:4000"
+    env_file: .env
+    environment:
+      LITELLM_LOG: WARNING
+      LITELLM_MASTER_KEY: ${LITELLM_PROXY_API_KEY:-sk-litellm-local}
+    volumes:
+      - ./observability/litellm/config.yaml:/app/config.yaml:ro
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    restart: unless-stopped

@@ -1,0 +1,99 @@
+# Phase 2.4 — simple_qa workload
+#
+# Short factual Q&A. Single-turn. Expected to hit fast-qa under the cascade
+# router. Used both as a router-correctness check and as the cost-floor case
+# (cheapest model that should still get these right).
+#
+# Disjoint from eval/router_eval.yaml — this workload is for cost/quality
+# measurement, not router-correctness sweeps.
+
+name: simple_qa
+version: 1
+description: Short factual Q&A — definitions, lookups, conversions
+default_max_tokens: 80
+default_temperature: 0.0
+
+prompts:
+  - id: sq-001
+    messages:
+      - role: user
+        content: "What is the capital of Australia?"
+    expected_category: fast-qa
+    expected_contains: ["Canberra"]
+
+  - id: sq-002
+    messages:
+      - role: user
+        content: "Who wrote the play 'Hamlet'?"
+    expected_category: fast-qa
+    expected_contains: ["Shakespeare"]
+
+  - id: sq-003
+    messages:
+      - role: user
+        content: "In what year did the Berlin Wall fall?"
+    expected_category: fast-qa
+    expected_contains: ["1989"]
+
+  - id: sq-004
+    messages:
+      - role: user
+        content: "Define photosynthesis in one sentence."
+    expected_category: fast-qa
+    expected_contains: ["light"]
+
+  - id: sq-005
+    messages:
+      - role: user
+        content: "How many bytes are in a kilobyte (SI definition)?"
+    expected_category: fast-qa
+    expected_contains: ["1000"]
+
+  - id: sq-006
+    messages:
+      - role: user
+        content: "What does the acronym HTTP stand for?"
+    expected_category: fast-qa
+    expected_contains: ["hypertext", "transfer"]
+
+  - id: sq-007
+    messages:
+      - role: user
+        content: "Which element has the chemical symbol Au?"
+    expected_category: fast-qa
+    expected_contains: ["gold"]
+
+  - id: sq-008
+    messages:
+      - role: user
+        content: "How many continents are there?"
+    expected_category: fast-qa
+    expected_contains: ["seven", "7"]
+
+  - id: sq-009
+    messages:
+      - role: user
+        content: "What is the boiling point of water in Celsius at sea level?"
+    expected_category: fast-qa
+    expected_contains: ["100"]
+
+  - id: sq-010
+    messages:
+      - role: user
+        content: "Who is generally credited with inventing the World Wide Web?"
+    expected_category: fast-qa
+    expected_contains: ["Berners-Lee"]
+
+  - id: sq-011
+    messages:
+      - role: user
+        content: "What is the largest planet in our solar system?"
+    expected_category: fast-qa
+    expected_contains: ["Jupiter"]
+
+  - id: sq-012
+    messages:
+      - role: user
+        content: "What is 17 multiplied by 23?"
+    expected_category: fast-qa
+    expected_contains: ["391"]

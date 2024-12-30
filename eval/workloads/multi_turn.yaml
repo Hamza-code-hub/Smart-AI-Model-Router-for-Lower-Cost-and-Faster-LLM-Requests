@@ -1,0 +1,56 @@
+# Phase 2.4 — multi_turn workload
+#
+# Conversations that should exercise:
+#   - the sticky-upward router (an early fast-qa-shaped turn followed by
+#     escalating turns should drag the routed model up the quality tier
+#     and stay there for the rest of the conversation)
+#   - the compaction path (a long enough sequence to trip the per-route
+#     token threshold on deep-reasoning)
+#
+# Each prompt is a sequence of user turns. The runner sends them one at a
+# time on a single X-Conversation-Id, threading assistant replies into the
+# next turn's context.
+
+name: multi_turn
+version: 1
+description: Multi-turn conversations that exercise sticky routing + compaction
+default_max_tokens: 300
+# No default_temperature: Opus 4-7/4-8 (deep-reasoning + long-context
+# routes) reject `temperature` as a deprecated parameter. Let provider
+# defaults take over so the same workload runs across all categories.
+
+prompts:
+  - id: mt-001
+    conversation_id: mt-001-travel
+    notes: "starts fast-qa, escalates to deep-reasoning planning"
+    turns:
+      - "Hi! What's the capital of Italy?"
+      - "How far is it from Florence?"
+      - "I'm planning a 10-day trip. Help me design an itinerary that balances historical sites in Rome and Florence with one rest day, given I want to avoid weekends in the Vatican Museums. Walk through the tradeoffs."
+      - "Now revise that plan to include a side trip to Pompeii without removing any of the Florence days. Explain your reasoning."
+
+  - id: mt-002
+    conversation_id: mt-002-debug
+    notes: "starts fast-qa, jumps to code debugging"
+    turns:
+      - "What is a Python decorator?"
+      - "Here's my decorator — why is the wrapped function losing its __name__?"
+      - "Write a fixed version using functools.wraps, and explain why the original broke."
+      - "Now adapt the same pattern for an async function."
+
+  - id: mt-003
+    conversation_id: mt-003-reasoning
+    notes: "stays in deep-reasoning the whole way"
+    turns:
+      - "Compare and contrast monolithic and microservice architectures for a startup with under 10 engineers."
+      - "Now defend microservices specifically against my objection that they add deployment complexity that startup teams can't afford."
+      - "And what happens to that recommendation if the team grows to 30 engineers in 18 months?"
+
+  - id: mt-004
+    conversation_id: mt-004-mix
+    notes: "code-shaped turn followed by simple follow-ups — should stay at code (no downgrade)"
+    turns:
+      - "Write a Python function to detect cycles in a directed graph."
+      - "What's the time complexity of that?"
+      - "And space complexity?"
+      - "Thanks. What does DFS stand for?"

@@ -1,0 +1,36 @@
+# Phase 2.5 — minimal smoke workload for the judge wiring.
+#
+# Three short prompts spread across categories so we exercise:
+#   - a correct fast-qa response (judge should pass it cleanly)
+#   - a correct code response (judge should still pass)
+#   - a polarity-edge prompt (the model might mis-answer; judge should
+#     either pass it or flag it depending on what came back)
+
+name: judge_smoke
+version: 1
+description: Smoke workload for Phase 2.5 LLM-as-judge wiring
+default_max_tokens: 200
+default_temperature: 0.0
+
+prompts:
+  - id: js-001
+    messages:
+      - role: user
+        content: "What is the capital of Australia?"
+    expected_category: fast-qa
+    expected_contains: ["Canberra"]
+
+  - id: js-002
+    messages:
+      - role: user
+        content: "Write a one-line Python function `square(n)` that returns n*n."
+    expected_category: code
+    expected_contains: ["def square", "n*n", "n * n", "return"]
+
+  - id: js-003
+    messages:
+      - role: user
+        content: "Do NOT include any code. In plain English, briefly explain what a Python list comprehension is."
+    expected_category: fast-qa
+    expected_contains: ["list comprehension", "for"]
+    notes: "instruction-following test — judge should mark down if the model emits code"

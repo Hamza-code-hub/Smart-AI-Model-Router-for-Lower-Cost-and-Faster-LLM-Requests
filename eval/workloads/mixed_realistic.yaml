@@ -1,0 +1,26 @@
+# Phase 2.4 — mixed_realistic workload
+#
+# Weighted blend of the per-category workloads, sampled by seed for repeat-
+# ability. Weights reflect a hand-waved guess at the production traffic
+# shape: simple Q&A dominates, code is the second-largest bucket, multi-turn
+# is meaningful but smaller, long-context is the rare expensive case.
+#
+# Bump `total_prompts` for longer runs; the deterministic seed means a
+# larger total is a superset of a smaller one (extending the run produces
+# the same first N prompts).
+
+name: mixed_realistic
+version: 1
+description: Weighted realistic blend across simple_qa / code / long_context / multi_turn
+seed: 7
+total_prompts: 20
+
+mix:
+  - workload: simple_qa
+    weight: 0.50
+  - workload: code_generation
+    weight: 0.30
+  - workload: multi_turn
+    weight: 0.15
+  - workload: long_context
+    weight: 0.05

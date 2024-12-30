@@ -1,0 +1,30 @@
+# Phase 2.4 — long_context workload
+#
+# Needle-in-haystack. The runner synthesizes each prompt from this spec at
+# load time — see gateway.eval.workloads._gen_needle_in_haystack. Keeps the
+# YAML tiny while letting us scale haystack_size_chars without committing a
+# 50k-token blob to git.
+#
+# The spec talks about 50k-token haystacks. v1 ships ~8k chars (~2k tokens)
+# to keep runs cheap on hobby budgets — bump via this file when running
+# proper benchmark passes.
+
+name: long_context
+version: 1
+description: Needle-in-haystack — locate a fact buried in a long document
+default_max_tokens: 64
+# Don't pin temperature: Opus 4-7/4-8 (the long-context and deep-reasoning
+# providers) refuse `temperature` as a deprecated parameter. Let provider
+# defaults stand.
+
+generator:
+  # Heuristic tier-1 fires `long-context` above 20k chars (see
+  # LONG_CONTEXT_CHAR_THRESHOLD in classifier.py). Sit just over that so
+  # every prompt actually exercises the long-context route instead of
+  # leaking into the LLM-tier classifier (which then tries to *answer*
+  # the question instead of classifying it).
+  type: needle_in_haystack
+  haystack_size_chars: 24000
+  num_prompts: 6
+  seed: 17
+  depths: [0.1, 0.5, 0.9]

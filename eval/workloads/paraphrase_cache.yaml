@@ -1,0 +1,70 @@
+name: paraphrase_cache
+version: 1
+description: "Paraphrase pairs to exercise the semantic cache (route: fast-qa)"
+default_max_tokens: 80
+default_temperature: 0.0
+
+prompts:
+  # Group A — primes (cold path)
+  - id: pc-a1-prime
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "What is the capital of France?"
+    expected_contains: ["paris"]
+  - id: pc-a2-prime
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "Who wrote the play Hamlet?"
+    expected_contains: ["shakespeare"]
+  - id: pc-a3-prime
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "What is the chemical symbol for gold?"
+    expected_contains: ["au"]
+  - id: pc-a4-prime
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "How many continents are there on Earth?"
+    expected_contains: ["seven", "7"]
+  - id: pc-a5-prime
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "What is the speed of light in vacuum?"
+    expected_contains: ["299", "300"]
+
+  # Group B — paraphrases of the same questions (should hit cache)
+  - id: pc-b1-para
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "What's the capital city of France?"
+    expected_contains: ["paris"]
+  - id: pc-b2-para
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "Who is the author of Hamlet?"
+    expected_contains: ["shakespeare"]
+  - id: pc-b3-para
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "What's gold's chemical symbol?"
+    expected_contains: ["au"]
+  - id: pc-b4-para
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "How many continents exist?"
+    expected_contains: ["seven", "7"]
+  - id: pc-b5-para
+    expected_category: fast-qa
+    messages:
+      - role: user
+        content: "How fast does light travel in a vacuum?"
+    expected_contains: ["299", "300"]
