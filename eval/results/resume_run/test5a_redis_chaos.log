@@ -1,0 +1,15 @@
+=== Test 5a: Redis chaos ===
+--- before ---
+before: 200 1.918644s
+--- pausing Redis ---
+llm-router-redis-1
+--- during outage ---
+during 1: 200 6.539638s
+during 2: 200 6.401662s
+during 3: 200 6.765855s
+during 4: 200 6.310188s
+during 5: 200 6.505181s
+--- unpausing Redis ---
+llm-router-redis-1
+--- after recovery ---
+after: 200 1.485682s

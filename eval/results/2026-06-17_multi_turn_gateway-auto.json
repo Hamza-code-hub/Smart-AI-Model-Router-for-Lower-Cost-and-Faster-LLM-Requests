@@ -1,0 +1,502 @@
+{
+  "run_metadata": {
+    "date": "2026-06-17T06:20:10+00:00",
+    "workload": {
+      "name": "multi_turn",
+      "version": 1,
+      "fingerprint": "35b0bc3d1faea333",
+      "source": "eval/workloads/multi_turn.yaml",
+      "n_prompts": 4
+    },
+    "targets": [
+      "gateway:auto"
+    ],
+    "gateway_url": "http://localhost:8000"
+  },
+  "results_by_target": {
+    "gateway:auto": {
+      "label": "gateway-auto",
+      "summary": {
+        "target": "gateway-auto",
+        "n_prompts": 4,
+        "n_calls": 15,
+        "n_errors": 0,
+        "n_cached": 0,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.074391,
+        "tokens": {
+          "prompt": 6073,
+          "completion": 4028
+        },
+        "latency_ms": {
+          "p50": 4423.45,
+          "p95": 6695.24,
+          "p99": 7247.01,
+          "max": 7384.95
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 0,
+          "n_pass": 0,
+          "rate": null
+        },
+        "routing": {
+          "tiers": {
+            "embedding": 4,
+            "heuristic": 5,
+            "llm": 6
+          },
+          "categories": {
+            "long-context": 1,
+            "fast-qa": 5,
+            "deep-reasoning": 5,
+            "code": 4
+          },
+          "escalations": 1,
+          "category_match": {
+            "checked": 0,
+            "match": 0,
+            "rate": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "mt-001",
+          "is_multi_turn": true,
+          "turns": 4,
+          "expected_category": null,
+          "expected_contains": [],
+          "quality_check": {
+            "checked": false,
+            "pass": null,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "The capital of Italy is **Rome** (Roma in Italian). It's also the country's largest city and home to historic landmarks like the Colosseum, the Vatican City, and the Trevi Fountain.",
+              "prompt_tokens": 25,
+              "completion_tokens": 70,
+              "latency_ms": 1833.4054579900112,
+              "cost_usd": 0.001875,
+              "model": "claude-opus-4-7",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "long-context",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "long-context",
+                "similarity": 0.5297326287706924,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_011gXrBkXo6CP83YU9sPcZFJ"
+              },
+              "turn": 1,
+              "user_text_preview": "Hi! What's the capital of Italy?"
+            },
+            {
+              "response_text": "Rome is approximately **280 kilometers (about 175 miles)** from Florence.\n\nBy train, it typically takes around **2-3 hours** on a direct high-speed train, making it a popular day trip or short journey between the two cities.",
+              "prompt_tokens": 74,
+              "completion_tokens": 58,
+              "latency_ms": 1599.1835430031642,
+              "cost_usd": 0.000364,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_017wv4dzw5kNGJ42agkzoBoZ"
+              },
+              "turn": 2,
+              "user_text_preview": "How far is it from Florence?"
+            },
+            {
+              "response_text": "Great trip to plan! Let me walk you through a solid framework, then give you a sample itinerary with the tradeoffs explained.\n\n## Key Constraint: Vatican Museums on a Weekday\n\nThe Vatican Museums are notoriously crowded on weekends (and free-entry last Sundays of the month are chaos). So we need to anchor your Rome days around a weekday Vatican visit. Since I don't know your start day, I'll build this assuming you can shift it—just make sure the Vatican day lands Tuesday–Friday.\n\n## Sample 10-Day Itinerary\n\n**Days 1–5: Rome**\n- **Day 1** – Arrival, easy evening: Trastevere dinner, gentle walk. (Low energy after travel.)\n- **Day 2** – Ancient Rome: Colosseum, Roman Forum, Palatine Hill. Book timed entry.\n- **Day 3** –",
+              "prompt_tokens": 252,
+              "completion_tokens": 300,
+              "latency_ms": 5270.844876009505,
+              "cost_usd": 0.00876,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "deep-reasoning",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "deep-reasoning",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01N5PvGTvKW3dSUwWnx61q8r"
+              },
+              "turn": 3,
+              "user_text_preview": "I'm planning a 10-day trip. Help me design an itinerary that balances historical sites in Rome and Florence with one rest day, given I want to avoid weekends in the Vatican Museums. Walk through the t…"
+            },
+            {
+              "response_text": "I'd love to revise this, but I have to flag something first: **I never actually finished the original itinerary.** My last response cut off at Day 3, so we only have a partial plan (Days 1–2 of Rome). Before I bolt on a Pompeii trip, let me reconstruct the full plan—otherwise the revision would be built on a foundation neither of us can see.\n\nLet me lay out the complete picture, then show where Pompeii fits.\n\n## The Core Tension with Pompeii\n\nHere's the key reasoning issue you should know upfront:\n\n**Pompeii is ~240 km south of Rome**, in the opposite direction from Florence (which is north). It's near Naples, about **1 hour by high-speed train from Rome** to Naples, then a local train to Pompeii. Realistically it's a **full, long day** (12+ hours door to door).\n\nSo the tradeoff is stark: …",
+              "prompt_tokens": 595,
+              "completion_tokens": 300,
+              "latency_ms": 6399.648959006299,
+              "cost_usd": 0.010475,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "deep-reasoning",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": 0.85
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01MYCxWu3xq8kwUQ2xU1CG8Q"
+              },
+              "turn": 4,
+              "user_text_preview": "Now revise that plan to include a side trip to Pompeii without removing any of the Florence days. Explain your reasoning."
+            }
+          ],
+          "notes": "starts fast-qa, escalates to deep-reasoning planning"
+        },
+        {
+          "id": "mt-002",
+          "is_multi_turn": true,
+          "turns": 4,
+          "expected_category": null,
+          "expected_contains": [],
+          "quality_check": {
+            "checked": false,
+            "pass": null,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "# Python Decorators\n\nA **decorator** is a function that modifies or enhances another function or class without permanently changing its source code. It's a way to \"wrap\" a function with additional functionality.\n\n## Basic Concept\n\nDecorators use the `@` symbol and are placed above a function definition:\n\n```python\n@decorator_name\ndef my_function():\n    pass\n```\n\nThis is equivalent to:\n\n```python\ndef my_function():\n    pass\n\nmy_function = decorator_name(my_function)\n```\n\n## Simple Example\n\n```python\ndef my_decorator(func):\n    def wrapper():\n        print(\"Something before the function\")\n        func()\n        print(\"Something after the function\")\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\"Hello!\")\n\nsay_hello()\n```\n\n**Output:**\n```\nSomething before the function\nHello!\nSom…",
+              "prompt_tokens": 13,
+              "completion_tokens": 300,
+              "latency_ms": 2351.014738000231,
+              "cost_usd": 0.001513,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01XVwJCECdjpTVRABAN2U8RF"
+              },
+              "turn": 1,
+              "user_text_preview": "What is a Python decorator?"
+            },
+            {
+              "response_text": "When you wrap a function with a decorator in Python, the original function’s metadata, such as its `__name__` and `__doc__`, are replaced by those of the wrapper function. This is why, by default, the wrapped function \"loses\" its original `__name__`.\n\nTo preserve this metadata, you can use the `functools.wraps` decorator from the `functools` module, which is designed to update the wrapper function with the wrapped function’s original metadata.\n\nHere's how you can use `functools.wraps` to fix this issue:\n\n```python\nimport functools\n\ndef my_decorator(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@my_decorator\ndef my_function():\n    \"\"\"This is my_function's docstring.\"\"\"\n  …",
+              "prompt_tokens": 298,
+              "completion_tokens": 300,
+              "latency_ms": 5550.034634012263,
+              "cost_usd": 0.003745,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "code",
+                "escalation_count": 1,
+                "switched_from": "fast-qa",
+                "raw_category": "code",
+                "similarity": null,
+                "confidence": 0.95
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DrduQayDRDmySWh3CzDfhITCm9V9n"
+              },
+              "turn": 2,
+              "user_text_preview": "Here's my decorator — why is the wrapped function losing its __name__?"
+            },
+            {
+              "response_text": "Certainly! Let's first examine a common issue with decorators and see how we can fix it using `functools.wraps`.\n\n### Original Problematic Decorator\n\nHere's what a typical simple decorator might look like, but without using `functools.wraps`:\n\n```python\ndef my_decorator(func):\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@my_decorator\ndef my_function():\n    \"\"\"This is my_function's docstring.\"\"\"\n    print(\"Hello, World!\")\n\nprint(my_function.__name__)  # Outputs: wrapper\nprint(my_function.__doc__)   # Outputs: None\n```\n\n### Why It Breaks\n\n- **Metadata Loss**: By default, when you assign `func = my_decorator(func)`, the `wrapper` function returned by the decorator replaces the original function (`my_funct…",
+              "prompt_tokens": 622,
+              "completion_tokens": 300,
+              "latency_ms": 4423.4477019927,
+              "cost_usd": 0.004555,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "code",
+                "escalation_count": 1,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": null,
+                "confidence": 0.95
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DrduVQsyyrjJ4zgTer7GU9YYSGdPW"
+              },
+              "turn": 3,
+              "user_text_preview": "Write a fixed version using functools.wraps, and explain why the original broke."
+            },
+            {
+              "response_text": "Certainly! Dealing with asynchronous functions requires a slight adjustment to ensure that the `wrapper` can handle `async`/`await` syntax correctly. Here’s how you can adapt a decorator for an asynchronous function using `functools.wraps`:\n\n### Asynchronous Function Decorator\n\n```python\nimport functools\nimport asyncio\n\ndef my_async_decorator(func):\n    @functools.wraps(func)\n    async def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__}\")\n        # If needed, you can add asynchronous operations here before calling func\n        result = await func(*args, **kwargs)\n        # You can also add asynchronous operations here after the func call\n        return result\n    return wrapper\n\n@my_async_decorator\nasync def my_async_function():\n    \"\"\"This is my_async_function's docstrin…",
+              "prompt_tokens": 940,
+              "completion_tokens": 300,
+              "latency_ms": 4436.527040990768,
+              "cost_usd": 0.00535,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "code",
+                "escalation_count": 1,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": null,
+                "confidence": 0.85
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DrduaiymF13yKG9ythtEwbVoh4ZA3"
+              },
+              "turn": 4,
+              "user_text_preview": "Now adapt the same pattern for an async function."
+            }
+          ],
+          "notes": "starts fast-qa, jumps to code debugging"
+        },
+        {
+          "id": "mt-003",
+          "is_multi_turn": true,
+          "turns": 3,
+          "expected_category": null,
+          "expected_contains": [],
+          "quality_check": {
+            "checked": false,
+            "pass": null,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "# Monolith vs. Microservices for a Small Startup\n\n## Quick Verdict\n**For most startups under 10 engineers, start with a monolith.** This isn't a popular opinion in hype cycles, but it's well-supported by experience (even Amazon, Segment, and others have publicly reversed microservice decisions at small scale).\n\n---\n\n## Comparison\n\n| Dimension | Monolith | Microservices |\n|-----------|----------|---------------|\n| **Initial velocity** | Fast — one codebase, one deploy | Slow — service boundaries, contracts, infra |\n| **Operational overhead** | Low | High (orchestration, monitoring, networking) |\n| **Debugging** | Easier — single stack trace, local repro | Harder — distributed tracing required |\n| **Deployment** | Simple, but all-or-nothing | Independent, but coordination-heavy |\n| **Scaling…",
+              "prompt_tokens": 37,
+              "completion_tokens": 300,
+              "latency_ms": 5114.850441008457,
+              "cost_usd": 0.007685,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "deep-reasoning",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "deep-reasoning",
+                "similarity": 0.6103409164940775,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_0113KBBuf9JhCfEkSzJGXTS7"
+              },
+              "turn": 1,
+              "user_text_preview": "Compare and contrast monolithic and microservice architectures for a startup with under 10 engineers."
+            },
+            {
+              "response_text": "# Defending Microservices Against the Deployment Complexity Objection\n\nYour objection is valid—but let me push back on a few of its assumptions.\n\n## 1. \"Deployment complexity\" is mostly a solved, commoditized problem now\n\nThe objection assumes you're hand-rolling Kubernetes, service meshes, and CI/CD pipelines. You're not—or shouldn't be:\n\n- **Managed platforms** (Railway, Render, Fly.io, AWS App Runner, Google Cloud Run) deploy a containerized service with a `git push`. The marginal cost of service #2 over service #1 is close to zero.\n- A monolith on these platforms and 5 microservices on these platforms have **roughly the same deployment ceremony**. The complexity you're imagining is the 2015 version of microservices.\n\n## 2. Deployment complexity is front-loaded; monolith pain is back-lo…",
+              "prompt_tokens": 374,
+              "completion_tokens": 300,
+              "latency_ms": 4950.1422610046575,
+              "cost_usd": 0.00937,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "deep-reasoning",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "deep-reasoning",
+                "similarity": 0.5951133257015555,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01XikpBnCKfVgBLGcyQQnqwp"
+              },
+              "turn": 2,
+              "user_text_preview": "Now defend microservices specifically against my objection that they add deployment complexity that startup teams can't afford."
+            },
+            {
+              "response_text": "# How the Recommendation Changes at 30 Engineers in 18 Months\n\nThis growth trajectory **materially changes my earlier \"start with a monolith\" advice**—not by reversing it, but by changing *what you build into the monolith now*.\n\n## The Core Tension Has Flipped\n\nAt <10 engineers, the binding constraint is **feature velocity**—shipping fast to find product-market fit. A monolith wins.\n\nAt 30 engineers, the binding constraint becomes **coordination cost**—too many people committing to the same codebase, stepping on each other, blocked by shared deploys, fighting merge conflicts and flaky shared test suites. This is where monoliths visibly degrade.\n\nThe crossover point in practice tends to land somewhere around **15–25 engineers**, which means your 18-month horizon puts you *right at the trans…",
+              "prompt_tokens": 707,
+              "completion_tokens": 300,
+              "latency_ms": 7384.947657003067,
+              "cost_usd": 0.011035,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "deep-reasoning",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "deep-reasoning",
+                "similarity": null,
+                "confidence": 0.85
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01JTYcPH5t9dSYAVaDDSsGRm"
+              },
+              "turn": 3,
+              "user_text_preview": "And what happens to that recommendation if the team grows to 30 engineers in 18 months?"
+            }
+          ],
+          "notes": "stays in deep-reasoning the whole way"
+        },
+        {
+          "id": "mt-004",
+          "is_multi_turn": true,
+          "turns": 4,
+          "expected_category": null,
+          "expected_contains": [],
+          "quality_check": {
+            "checked": false,
+            "pass": null,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "Detecting cycles in a directed graph can be achieved using Depth-First Search (DFS). Here's a Python function that implements this method:\n\n```python\nfrom collections import defaultdict\n\ndef add_edge(graph, u, v):\n    graph[u].append(v)\n\ndef is_cyclic_util(v, visited, rec_stack, graph):\n    # Mark the current node as visited and add it to the recursion stack\n    visited[v] = True\n    rec_stack[v] = True\n\n    # Recur for all neighbours\n    # If any neighbour is visited and in the recStack then graph is cyclic\n    for neighbour in graph[v]:\n        if not visited[neighbour]:\n            if is_cyclic_util(neighbour, visited, rec_stack, graph):\n                return True\n        elif rec_stack[neighbour]:\n            return True\n\n    # Remove the vertex from recursion stack\n    rec_stack[v] =…",
+              "prompt_tokens": 19,
+              "completion_tokens": 300,
+              "latency_ms": 4242.385928009753,
+              "cost_usd": 0.0030475,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "code",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-Drduv9uKxJV024G0SJumL0mVOSmj3"
+              },
+              "turn": 1,
+              "user_text_preview": "Write a Python function to detect cycles in a directed graph."
+            },
+            {
+              "response_text": "# Time Complexity Analysis\n\nThe time complexity of the cycle detection algorithm is **O(V + E)**, where:\n- **V** = number of vertices\n- **E** = number of edges\n\n## Breakdown:\n\n1. **DFS Traversal**: O(V + E)\n   - Each vertex is visited exactly once: O(V)\n   - Each edge is explored exactly once: O(E)\n\n2. **Outer Loop**: O(V)\n   - Iterates through all vertices to ensure all connected components are checked\n\n3. **Overall**: O(V) + O(V + E) = **O(V + E)**\n\n## Space Complexity:\n\n- **O(V)** for:\n  - `visited` array\n  - `rec_stack` array\n  - Recursion call stack (worst case: O(V) for a chain graph)\n  - Adjacency list storage: O(V + E)\n\n## Example:\n\n```python\n# Time complexity demonstration\n# Graph with 5 vertices and 5 edges\ngraph = defaultdict(list)\nadd_edge(graph, 0, 1)   # Edge 1\nadd_edge(graph…",
+              "prompt_tokens": 394,
+              "completion_tokens": 300,
+              "latency_ms": 2436.7442699876847,
+              "cost_usd": 0.001894,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_011SoeoVkgh1nmxu3fk6y3yJ"
+              },
+              "turn": 2,
+              "user_text_preview": "What's the time complexity of that?"
+            },
+            {
+              "response_text": "# Space Complexity Analysis\n\nThe space complexity is **O(V + E)**, where:\n- **V** = number of vertices\n- **E** = number of edges\n\n## Breakdown:\n\n1. **Adjacency List (Graph Storage)**: O(V + E)\n   - V nodes + E edges stored in the graph structure\n\n2. **Visited Array**: O(V)\n   - Boolean array to track visited vertices\n\n3. **Recursion Stack (Call Stack)**: O(V)\n   - In worst case (chain/linear graph), recursion depth = V\n   - Example: 0→1→2→3→4 requires O(V) stack space\n\n4. **Rec_Stack Array**: O(V)\n   - Boolean array for recursion stack tracking\n\n5. **Total Auxiliary Space**: O(V)\n   - visited + rec_stack + call stack\n\n## Overall Space Complexity:\n\n```\nO(V + E) for adjacency list storage\n+ O(V) for visited array\n+ O(V) for rec_stack array\n+ O(V) for recursion call stack\n____________________…",
+              "prompt_tokens": 704,
+              "completion_tokens": 300,
+              "latency_ms": 3628.812487993855,
+              "cost_usd": 0.002204,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": 0.85
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_014KEbh5ZsFMrK9xJZUEnmtq"
+              },
+              "turn": 3,
+              "user_text_preview": "And space complexity?"
+            },
+            {
+              "response_text": "# DFS Stands For\n\n**DFS = Depth-First Search**\n\n## How It Works:\n\nDFS is a graph traversal algorithm that explores as far as possible along each branch before backtracking.\n\n## Key Characteristics:\n\n1. **Depth-First**: Goes deep into the graph before exploring siblings\n2. **Uses a Stack**: Either explicit stack or recursion call stack\n3. **Last-In-First-Out (LIFO)**: Most recently discovered node is explored first\n\n## Visual Example:\n\n```\nGraph:      0\n           / \\\n          1   2\n         /\n        3\n\nDFS Traversal Order: 0 → 1 → 3 → (backtrack) → 2\n```\n\n## Comparison with BFS (Breadth-First Search):\n\n```python\n# DFS: Goes deep first\n# Order: 0 → 1 → 3 → (backtrack) → 2\n\n# BFS: Goes level by level\n# Order: 0 → 1 → 2 → 3\n```\n\n## Common Uses:\n\n- Cycle detection (what we used it for)\n- Top…",
+              "prompt_tokens": 1019,
+              "completion_tokens": 300,
+              "latency_ms": 2931.663856987143,
+              "cost_usd": 0.002519,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": 0.5079482491047242,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01TQmrNHiCS11n1CWxjZHGvr"
+              },
+              "turn": 4,
+              "user_text_preview": "Thanks. What does DFS stand for?"
+            }
+          ],
+          "notes": "code-shaped turn followed by simple follow-ups — should stay at code (no downgrade)"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,424 @@
+{
+  "run_metadata": {
+    "date": "2026-06-19T06:02:07+00:00",
+    "workload": {
+      "name": "paraphrase_cache",
+      "version": 1,
+      "fingerprint": "8983d5c3a9c15acd",
+      "source": "eval/workloads/paraphrase_cache.yaml",
+      "n_prompts": 10
+    },
+    "targets": [
+      "gateway:fast-qa"
+    ],
+    "gateway_url": "http://localhost:8000"
+  },
+  "results_by_target": {
+    "gateway:fast-qa": {
+      "label": "gateway-fast-qa",
+      "summary": {
+        "target": "gateway-fast-qa",
+        "n_prompts": 10,
+        "n_calls": 10,
+        "n_errors": 0,
+        "n_cached": 10,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.002428,
+        "tokens": {
+          "prompt": 148,
+          "completion": 456
+        },
+        "latency_ms": {
+          "p50": 3.07,
+          "p95": 35.63,
+          "p99": 38.51,
+          "max": 39.23
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 10,
+          "n_pass": 10,
+          "rate": 1.0
+        },
+        "judge": {
+          "n": 0,
+          "n_errors": 0,
+          "mean_overall": null,
+          "mean_correctness": null,
+          "pass_rate": null,
+          "by_judge_model": {}
+        },
+        "routing": {
+          "tiers": {},
+          "categories": {},
+          "escalations": 0,
+          "category_match": {
+            "checked": 0,
+            "match": 0,
+            "rate": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "pc-a1-prime",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "paris"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "The capital of France is Paris.",
+              "prompt_tokens": 14,
+              "completion_tokens": 10,
+              "latency_ms": 31.220453995047137,
+              "cost_usd": 6.4e-05,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01SBu98fcSCKgedXbMs3M4dY"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the capital of France?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-a2-prime",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "William Shakespeare wrote Hamlet. It was written early in his career, likely between 1600 and 1601, and remains one of his most famous and frequently performed works.",
+              "prompt_tokens": 14,
+              "completion_tokens": 40,
+              "latency_ms": 21.8147239938844,
+              "cost_usd": 0.000214,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01SA3mSds33UfraMGCRBiVRs"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play Hamlet?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-a3-prime",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "au"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "The chemical symbol for gold is **Au**.\n\nThis comes from its Latin name, \"aurum.\"",
+              "prompt_tokens": 15,
+              "completion_tokens": 24,
+              "latency_ms": 3.5103679983876646,
+              "cost_usd": 0.000135,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01BBz7EQRaxdsGCTb7LBm5ux"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the chemical symbol for gold?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-a4-prime",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "seven",
+            "7"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": [
+              "seven"
+            ]
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "There are **7 continents** on Earth:\n\n1. Africa\n2. Antarctica\n3. Asia\n4. Europe\n5. North America\n6. Oceania (Australia)\n7. South America\n\nNote: Some educational systems use a 6-continent model (combining North and South America, or Europe and Asia), but the 7-continent model is most",
+              "prompt_tokens": 16,
+              "completion_tokens": 80,
+              "latency_ms": 39.22970200073905,
+              "cost_usd": 0.000416,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01UVfrWF3MTMdmn919v1SNvj"
+              },
+              "turn": 1,
+              "user_text_preview": "How many continents are there on Earth?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-a5-prime",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "299",
+            "300"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "The speed of light in vacuum is approximately **299,792,458 meters per second** (m/s), or about **300,000 km/s**.\n\nIt's commonly rounded to **3 × 10⁸ m/s** for calculations.\n\nThis value is denoted by the letter **c** and is a fundamental constant in physics.",
+              "prompt_tokens": 16,
+              "completion_tokens": 80,
+              "latency_ms": 3.395049017854035,
+              "cost_usd": 0.000416,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01EoB51YhqpoHRF2CzrqcLg6"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the speed of light in vacuum?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-b1-para",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "paris"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "The capital city of France is Paris.",
+              "prompt_tokens": 15,
+              "completion_tokens": 11,
+              "latency_ms": 2.6706710050348192,
+              "cost_usd": 7e-05,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_0194C9o5Y4iTRuDBc47U4s5m"
+              },
+              "turn": 1,
+              "user_text_preview": "What's the capital city of France?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-b2-para",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "William Shakespeare is the author of Hamlet. The play was written early in his career, likely between 1600 and 1601, and remains one of his most famous and frequently performed works.",
+              "prompt_tokens": 15,
+              "completion_tokens": 44,
+              "latency_ms": 2.688467997359112,
+              "cost_usd": 0.000235,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_017xyGNPd3zJnsrkLo16Q9YZ"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is the author of Hamlet?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-b3-para",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "au"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "Gold's chemical symbol is **Au**.",
+              "prompt_tokens": 14,
+              "completion_tokens": 11,
+              "latency_ms": 2.7363400149624795,
+              "cost_usd": 6.9e-05,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_018bH4UPcccSCkYMJg7siaH1"
+              },
+              "turn": 1,
+              "user_text_preview": "What's gold's chemical symbol?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-b4-para",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "seven",
+            "7"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": [
+              "seven"
+            ]
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "There are **7 continents** in the most widely used model:\n\n1. Africa\n2. Antarctica\n3. Asia\n4. Europe\n5. North America\n6. Oceania (Australia)\n7. South America\n\nHowever, some countries use different models:\n- **6-continent model**: Combines Europe and Asia into Eurasia, or North and",
+              "prompt_tokens": 13,
+              "completion_tokens": 80,
+              "latency_ms": 2.6074289926327765,
+              "cost_usd": 0.000413,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_0163cP7psQDymhfUAg4qm3ju"
+              },
+              "turn": 1,
+              "user_text_preview": "How many continents exist?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pc-b5-para",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "299",
+            "300"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": null,
+          "calls": [
+            {
+              "response_text": "Light travels at approximately **299,792 kilometers per second** (186,282 miles per second) in a vacuum.\n\nThis speed is often rounded to **300,000 km/s** for practical purposes and is denoted by the letter *c* in physics equations. It's the fastest speed at which anything can travel in the universe.",
+              "prompt_tokens": 16,
+              "completion_tokens": 76,
+              "latency_ms": 2.5881279725581408,
+              "cost_usd": 0.000396,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01VCyHAmpjH86FmjVjmoRmJk"
+              },
+              "turn": 1,
+              "user_text_preview": "How fast does light travel in a vacuum?"
+            }
+          ],
+          "notes": null
+        }
+      ]
+    }
+  }
+}

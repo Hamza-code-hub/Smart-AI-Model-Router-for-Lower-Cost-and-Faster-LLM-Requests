@@ -1,0 +1,217 @@
+Loaded 67 eval queries from router_eval.yaml
+Threshold: 0.45  Tier-3 model: fast-qa
+Warming embedding model + bringing up infra…
+2026-06-19 05:15:15 [info     ] embeddings.loading             model=sentence-transformers/all-MiniLM-L6-v2
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2833.12it/s]
+2026-06-19 05:15:17 [info     ] embeddings.loaded              dim=384 model=sentence-transformers/all-MiniLM-L6-v2
+2026-06-19 05:15:18 [info     ] embeddings.warmed
+
+2026-06-19 05:15:18 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [ 1/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.6ms  "What's the population of Iceland?"
+2026-06-19 05:15:18 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [ 2/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.2ms  'Define entropy in one sentence.'
+2026-06-19 05:15:18 [debug    ] anthropic.complete             input_tokens=304 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:18 [debug    ] router.classify                category=fast-qa confidence=0.99 tier=llm
+  [ 3/67] ✓ tier=llm       expected=fast-qa        predicted=fast-qa         857.1ms  'Convert 100 km/h to mph.'
+2026-06-19 05:15:19 [debug    ] anthropic.complete             input_tokens=302 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa confidence=0.99 tier=llm
+  [ 4/67] ✓ tier=llm       expected=fast-qa        predicted=fast-qa         629.8ms  'Who painted the Mona Lisa?'
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [ 5/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.2ms  'What does CPU stand for?'
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa similarity=0.98252147331962 tier=embedding
+  [ 6/67] ✓ tier=embedding expected=fast-qa        predicted=fast-qa          17.7ms  'What year did the Berlin Wall fall?'
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [ 7/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.2ms  "Translate 'thank you' to French."
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa similarity=0.5189838100085381 tier=embedding
+  [ 8/67] ✓ tier=embedding expected=fast-qa        predicted=fast-qa          18.4ms  'Is broccoli a flower?'
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [ 9/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.2ms  'List the planets in order from the sun.'
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [10/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.1ms  "What's the freezing point of mercury?"
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [11/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.1ms  'How tall is Mount Everest in meters?'
+2026-06-19 05:15:19 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [12/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.1ms  "What's the default port for PostgreSQL?"
+2026-06-19 05:15:20 [debug    ] anthropic.complete             input_tokens=310 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:20 [debug    ] router.classify                category=fast-qa confidence=0.98 tier=llm
+  [13/67] ✓ tier=llm       expected=fast-qa        predicted=fast-qa         911.2ms  "Spell-check: 'Wensday's meeting was canceled.'"
+2026-06-19 05:15:21 [debug    ] anthropic.complete             input_tokens=320 model=claude-haiku-4-5 output_tokens=60
+2026-06-19 05:15:21 [debug    ] router.classify                category=fast-qa confidence=0.98 tier=llm
+  [14/67] ✓ tier=llm       expected=fast-qa        predicted=fast-qa        1175.7ms  "Rephrase to be shorter: 'Due to the circumstances surroundin"
+2026-06-19 05:15:22 [debug    ] anthropic.complete             input_tokens=311 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:22 [debug    ] router.classify                category=fast-qa confidence=0.98 tier=llm
+  [15/67] ✓ tier=llm       expected=fast-qa        predicted=fast-qa         964.6ms  'Give me a one-sentence TL;DR of why the Roman Empire fell.'
+2026-06-19 05:15:22 [debug    ] router.classify                category=fast-qa similarity=0.63609729028328 tier=embedding
+  [16/67] ✓ tier=embedding expected=fast-qa        predicted=fast-qa          12.7ms  'Capital of New Zealand?'
+2026-06-19 05:15:22 [debug    ] router.classify                category=fast-qa tier=heuristic
+  [17/67] ✓ tier=heuristic expected=fast-qa        predicted=fast-qa           0.2ms  "What's git rebase in one sentence?"
+2026-06-19 05:15:23 [debug    ] anthropic.complete             input_tokens=316 model=claude-haiku-4-5 output_tokens=19
+2026-06-19 05:15:23 [debug    ] router.classify                category=code confidence=0.95 tier=llm
+  [18/67] ✓ tier=llm       expected=code           predicted=code            716.9ms  'Write a Bash one-liner to find all files larger than 100MB i'
+2026-06-19 05:15:23 [debug    ] router.classify                category=code tier=heuristic
+  [19/67] ✓ tier=heuristic expected=code           predicted=code              0.2ms  'Implement a debounce function in JavaScript.'
+2026-06-19 05:15:23 [debug    ] router.classify                category=code similarity=0.8428371046282601 tier=embedding
+  [20/67] ✓ tier=embedding expected=code           predicted=code             16.1ms  'Refactor this to use a list comprehension:\n\nresult = []\nfor '
+2026-06-19 05:15:24 [debug    ] anthropic.complete             input_tokens=327 model=claude-haiku-4-5 output_tokens=64
+2026-06-19 05:15:24 [debug    ] router.classify                category=code confidence=0.93 tier=llm
+  [21/67] ✓ tier=llm       expected=code           predicted=code           1308.6ms  'Why does my Rust async function never resolve?\n\nasync fn fet'
+2026-06-19 05:15:24 [debug    ] router.classify                category=code similarity=0.7603362572092963 tier=embedding
+  [22/67] ✓ tier=embedding expected=code           predicted=code             19.2ms  'Convert this curl command to a Python requests call: curl -X'
+2026-06-19 05:15:25 [debug    ] anthropic.complete             input_tokens=312 model=claude-haiku-4-5 output_tokens=19
+2026-06-19 05:15:25 [debug    ] router.classify                category=code confidence=0.98 tier=llm
+  [23/67] ✓ tier=llm       expected=code           predicted=code            642.1ms  'Add error handling to this function: def divide(a, b): retur'
+2026-06-19 05:15:25 [debug    ] router.classify                category=code tier=heuristic
+  [24/67] ✓ tier=heuristic expected=code           predicted=code              0.2ms  "Write a SQL query to find users who haven't logged in for th"
+2026-06-19 05:15:26 [debug    ] anthropic.complete             input_tokens=326 model=claude-haiku-4-5 output_tokens=19
+2026-06-19 05:15:26 [debug    ] router.classify                category=code confidence=0.95 tier=llm
+  [25/67] ✓ tier=llm       expected=code           predicted=code            708.8ms  "There's a bug in my React useEffect — it runs on every rende"
+2026-06-19 05:15:26 [debug    ] anthropic.complete             input_tokens=306 model=claude-haiku-4-5 output_tokens=19
+2026-06-19 05:15:26 [debug    ] router.classify                category=code confidence=0.95 tier=llm
+  [26/67] ✓ tier=llm       expected=code           predicted=code            696.6ms  'Generate a GitHub Actions workflow that runs pytest on every'
+2026-06-19 05:15:26 [debug    ] router.classify                category=code tier=heuristic
+  [27/67] ✓ tier=heuristic expected=code           predicted=code              0.1ms  "Audit this Express route for OWASP top-10 issues: app.get('/"
+2026-06-19 05:15:26 [debug    ] router.classify                category=code tier=heuristic
+  [28/67] ✓ tier=heuristic expected=code           predicted=code              0.1ms  'Write a regex for parsing semver tags like v1.2.3-rc.1+build'
+2026-06-19 05:15:27 [debug    ] anthropic.complete             input_tokens=307 model=claude-haiku-4-5 output_tokens=19
+2026-06-19 05:15:27 [debug    ] router.classify                category=code confidence=0.88 tier=llm
+  [29/67] ✓ tier=llm       expected=code           predicted=code            646.2ms  'How do I set up structured logging in a Spring Boot app?'
+2026-06-19 05:15:29 [debug    ] anthropic.complete             input_tokens=314 model=claude-haiku-4-5 output_tokens=19
+2026-06-19 05:15:29 [debug    ] router.classify                category=code confidence=0.88 tier=llm
+  [30/67] ✓ tier=llm       expected=code           predicted=code           1657.8ms  "My alembic migration is failing with 'column already exists'"
+2026-06-19 05:15:29 [debug    ] router.classify                category=code tier=heuristic
+  [31/67] ✓ tier=heuristic expected=code           predicted=code              0.2ms  'Write a Jest test that mocks fetch and asserts the URL it wa'
+2026-06-19 05:15:29 [debug    ] anthropic.complete             input_tokens=315 model=claude-haiku-4-5 output_tokens=19
+2026-06-19 05:15:29 [debug    ] router.classify                category=code confidence=0.93 tier=llm
+  [32/67] ✓ tier=llm       expected=code           predicted=code            673.0ms  'Help me set up a pre-commit hook that runs ruff and mypy on '
+2026-06-19 05:15:31 [debug    ] anthropic.complete             input_tokens=322 model=claude-haiku-4-5 output_tokens=64
+2026-06-19 05:15:31 [debug    ] router.classify                category=fast-qa confidence=0.95 tier=llm
+  [33/67] ✗ tier=llm       expected=code           predicted=fast-qa        1373.7ms  'Explain in plain English what this Python decorator does — n'
+2026-06-19 05:15:31 [debug    ] router.classify                category=code tier=heuristic
+  [34/67] ✓ tier=heuristic expected=code           predicted=code              0.3ms  "Port this Python script to Go:\n\nfor line in open('log.txt'):"
+2026-06-19 05:15:32 [debug    ] anthropic.complete             input_tokens=320 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:32 [debug    ] router.classify                category=deep-reasoning confidence=0.95 tier=llm
+  [35/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning 1318.1ms  "Walk me through why CAP theorem doesn't actually force a bin"
+2026-06-19 05:15:33 [debug    ] anthropic.complete             input_tokens=324 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:33 [debug    ] router.classify                category=deep-reasoning confidence=0.95 tier=llm
+  [36/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning  739.2ms  'We need to pick between Postgres and DynamoDB for a multi-re'
+2026-06-19 05:15:33 [debug    ] router.classify                category=deep-reasoning tier=heuristic
+  [37/67] ✓ tier=heuristic expected=deep-reasoning predicted=deep-reasoning    0.2ms  'Prove that the halting problem is undecidable.'
+2026-06-19 05:15:34 [debug    ] anthropic.complete             input_tokens=331 model=claude-haiku-4-5 output_tokens=64
+2026-06-19 05:15:34 [debug    ] router.classify                category=deep-reasoning confidence=0.95 tier=llm
+  [38/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning 1475.5ms  'Three rooms, three light switches, one bulb each, but you ca'
+2026-06-19 05:15:34 [debug    ] router.classify                category=deep-reasoning similarity=0.45481410891926366 tier=embedding
+  [39/67] ✓ tier=embedding expected=deep-reasoning predicted=deep-reasoning   19.0ms  'Our checkout funnel converts at 2.3% on desktop and 0.8% on '
+2026-06-19 05:15:34 [debug    ] router.classify                category=deep-reasoning tier=heuristic
+  [40/67] ✓ tier=heuristic expected=deep-reasoning predicted=deep-reasoning    0.3ms  'Should our team adopt a monorepo? We have 5 services, 3 fron'
+2026-06-19 05:15:35 [debug    ] anthropic.complete             input_tokens=322 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:35 [debug    ] router.classify                category=deep-reasoning confidence=0.93 tier=llm
+  [41/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning  702.0ms  'Compare leader-based vs leaderless replication for a write-h'
+2026-06-19 05:15:35 [debug    ] router.classify                category=deep-reasoning tier=heuristic
+  [42/67] ✓ tier=heuristic expected=deep-reasoning predicted=deep-reasoning    0.2ms  "Derive from first principles why quicksort's expected number"
+2026-06-19 05:15:36 [debug    ] anthropic.complete             input_tokens=329 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:36 [debug    ] router.classify                category=deep-reasoning confidence=0.93 tier=llm
+  [43/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning  718.1ms  'Plan a phased rollout for switching our auth provider from A'
+2026-06-19 05:15:36 [debug    ] anthropic.complete             input_tokens=326 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:36 [debug    ] router.classify                category=deep-reasoning confidence=0.93 tier=llm
+  [44/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning  747.9ms  'Reason through whether feature flags should be our primary d'
+2026-06-19 05:15:37 [debug    ] anthropic.complete             input_tokens=318 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:37 [debug    ] router.classify                category=deep-reasoning confidence=0.95 tier=llm
+  [45/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning 1062.9ms  'Why is exactly-once delivery in message queues a misleading '
+2026-06-19 05:15:38 [debug    ] anthropic.complete             input_tokens=331 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:38 [debug    ] router.classify                category=deep-reasoning confidence=0.93 tier=llm
+  [46/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning  692.5ms  'If we cut our cache TTL from 60s to 5s, walk through what ha'
+2026-06-19 05:15:38 [debug    ] router.classify                category=deep-reasoning tier=heuristic
+  [47/67] ✓ tier=heuristic expected=deep-reasoning predicted=deep-reasoning    0.2ms  'Analyze the tradeoffs between vertical and horizontal scalin'
+2026-06-19 05:15:38 [debug    ] router.classify                category=deep-reasoning tier=heuristic
+  [48/67] ✓ tier=heuristic expected=deep-reasoning predicted=deep-reasoning    0.1ms  "Don't list the tradeoffs — recommend whether we should rewri"
+2026-06-19 05:15:39 [debug    ] anthropic.complete             input_tokens=330 model=claude-haiku-4-5 output_tokens=16
+2026-06-19 05:15:39 [debug    ] router.classify                category=deep-reasoning confidence=0.92 tier=llm
+  [49/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning  607.0ms  'A 35-year-old reports recurring chest pain on exertion that '
+2026-06-19 05:15:40 [debug    ] anthropic.complete             input_tokens=329 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:40 [debug    ] router.classify                category=deep-reasoning confidence=0.93 tier=llm
+  [50/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning 1608.6ms  'Should we use OAuth2 device flow or PKCE for our CLI tool? A'
+2026-06-19 05:15:41 [debug    ] anthropic.complete             input_tokens=321 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:41 [debug    ] router.classify                category=deep-reasoning confidence=0.93 tier=llm
+  [51/67] ✓ tier=llm       expected=deep-reasoning predicted=deep-reasoning 1206.9ms  'Walk me through whether eventual consistency is acceptable f'
+2026-06-19 05:15:41 [debug    ] router.classify                category=long-context similarity=0.638233482837677 tier=embedding
+  [52/67] ✓ tier=embedding expected=long-context   predicted=long-context     17.5ms  "I'm pasting our entire engineering wiki below — find every p"
+2026-06-19 05:15:41 [debug    ] router.classify                category=long-context similarity=0.45397281646728516 tier=embedding
+  [53/67] ✓ tier=embedding expected=long-context   predicted=long-context     20.8ms  'Here are 8 customer support ticket transcripts from last qua'
+2026-06-19 05:15:42 [debug    ] anthropic.complete             input_tokens=318 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:42 [debug    ] router.classify                category=long-context confidence=0.95 tier=llm
+  [54/67] ✓ tier=llm       expected=long-context   predicted=long-context    673.8ms  'Below is the full text of a 60-page lease agreement. List ev'
+2026-06-19 05:15:43 [debug    ] anthropic.complete             input_tokens=322 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:43 [debug    ] router.classify                category=long-context confidence=0.95 tier=llm
+  [55/67] ✓ tier=llm       expected=long-context   predicted=long-context    866.6ms  "I'm attaching our 200MB git log as a file — identify the com"
+2026-06-19 05:15:44 [debug    ] anthropic.complete             input_tokens=318 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:44 [debug    ] router.classify                category=long-context confidence=0.95 tier=llm
+  [56/67] ✓ tier=llm       expected=long-context   predicted=long-context    695.0ms  'Read this 100-page user research report and pull out every q'
+2026-06-19 05:15:44 [debug    ] router.classify                category=long-context similarity=0.5554061134923504 tier=embedding
+  [57/67] ✓ tier=embedding expected=long-context   predicted=long-context     16.2ms  'Compare these two 40-page API specs side by side and tell me'
+2026-06-19 05:15:44 [debug    ] router.classify                category=long-context similarity=0.5426960153191097 tier=embedding
+  [58/67] ✓ tier=embedding expected=long-context   predicted=long-context     18.3ms  "Given the full transcript of yesterday's 90-minute all-hands"
+2026-06-19 05:15:44 [debug    ] anthropic.complete             input_tokens=321 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:44 [debug    ] router.classify                category=long-context confidence=0.92 tier=llm
+  [59/67] ✓ tier=llm       expected=long-context   predicted=long-context    694.4ms  "I'm pasting our entire SQL schema for a 200-table data wareh"
+2026-06-19 05:15:46 [debug    ] anthropic.complete             input_tokens=312 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:46 [debug    ] router.classify                category=long-context confidence=0.95 tier=llm
+  [60/67] ✓ tier=llm       expected=long-context   predicted=long-context   1673.7ms  'Take this 250-page novel and identify all the chapters where'
+2026-06-19 05:15:47 [debug    ] anthropic.complete             input_tokens=316 model=claude-haiku-4-5 output_tokens=64
+2026-06-19 05:15:47 [debug    ] router.classify                category=long-context confidence=0.85 tier=llm
+  [61/67] ✓ tier=llm       expected=long-context   predicted=long-context   1010.9ms  'Below is a 500-comment GitHub issue thread. Synthesize the a'
+2026-06-19 05:15:48 [debug    ] anthropic.complete             input_tokens=322 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:48 [debug    ] router.classify                category=long-context confidence=0.95 tier=llm
+  [62/67] ✓ tier=llm       expected=long-context   predicted=long-context    686.1ms  "I've attached our company's full onboarding handbook. Summar"
+2026-06-19 05:15:49 [debug    ] anthropic.complete             input_tokens=316 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:49 [debug    ] router.classify                category=long-context confidence=0.92 tier=llm
+  [63/67] ✓ tier=llm       expected=long-context   predicted=long-context    744.5ms  'Here are 15 partner contracts as one bundle. Extract every t'
+2026-06-19 05:15:49 [debug    ] anthropic.complete             input_tokens=318 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:49 [debug    ] router.classify                category=long-context confidence=0.95 tier=llm
+  [64/67] ✓ tier=llm       expected=long-context   predicted=long-context    671.1ms  'Read this multi-hour podcast transcript and find every claim'
+2026-06-19 05:15:50 [debug    ] anthropic.complete             input_tokens=316 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:50 [debug    ] router.classify                category=long-context confidence=0.92 tier=llm
+  [65/67] ✓ tier=llm       expected=long-context   predicted=long-context    740.6ms  "Diff these two large config bundles I'm pasting and flag whi"
+2026-06-19 05:15:51 [debug    ] anthropic.complete             input_tokens=323 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:51 [debug    ] router.classify                category=long-context confidence=0.95 tier=llm
+  [66/67] ✓ tier=llm       expected=long-context   predicted=long-context    745.4ms  'Below is a 100-file codebase dump for one microservice. Iden'
+2026-06-19 05:15:51 [debug    ] anthropic.complete             input_tokens=309 model=claude-haiku-4-5 output_tokens=21
+2026-06-19 05:15:51 [debug    ] router.classify                category=fast-qa confidence=0.85 tier=llm
+  [67/67] ✓ tier=llm       expected=fast-qa        predicted=fast-qa         688.2ms  "Skip the attached agenda — what's the venue address for tomo"
+
+JSON written → eval/results/resume_run/test2_router_baseline_t045.json
+
+## Router eval baseline — 2026-06-19T05:15:51+00:00
+
+- Eval set: `eval/router_eval.yaml` (67 queries)
+- Embedding threshold: `0.45` · Tier-3 classifier: `fast-qa`
+- **Overall accuracy: 98.5%**
+
+### Per-tier breakdown
+
+| Tier | Fired | Correct | Hit rate | p50 latency |
+|---|---:|---:|---:|---:|
+| heuristic | 20 | 20 | 100.0% | 0.2ms |
+| embedding | 10 | 10 | 100.0% | 18.0ms |
+| llm | 37 | 36 | 97.3% | 740.5ms |
+
+### Per-category breakdown
+
+| Category | n | Correct | Accuracy | Misroute → |
+|---|---:|---:|---:|---|
+| fast-qa | 18 | 18 | 100.0% | — |
+| code | 17 | 16 | 94.1% | fast-qa: 1 |
+| deep-reasoning | 17 | 17 | 100.0% | — |
+| long-context | 15 | 15 | 100.0% | — |
+
+### Latency
+
+- p50: **646.2ms** · p95: **1445.0ms** · p99: **1663.2ms** · max: 1673.7ms
+- Budget per spec v3.3: p95 < 100ms
+
+### Misroutes (first 15)
+
+| # | Tier | Expected | Predicted | Sim/Conf | Query |
+|---:|---|---|---|---|---|
+| 33 | llm | code | fast-qa | conf=0.95 | `Explain in plain English what this Python decorator does — no code edits needed:` |
+

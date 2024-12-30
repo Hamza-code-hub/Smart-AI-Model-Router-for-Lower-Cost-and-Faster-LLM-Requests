@@ -1,0 +1,248 @@
+{
+  "run_metadata": {
+    "date": "2026-06-17T06:44:56+00:00",
+    "workload": {
+      "name": "judge_smoke",
+      "version": 1,
+      "fingerprint": "e5f98e53f9815d26",
+      "source": "eval/workloads/judge_smoke.yaml",
+      "n_prompts": 3
+    },
+    "targets": [
+      "gateway:auto"
+    ],
+    "gateway_url": "http://localhost:8000"
+  },
+  "results_by_target": {
+    "gateway:auto": {
+      "label": "gateway-auto",
+      "summary": {
+        "target": "gateway-auto",
+        "n_prompts": 3,
+        "n_calls": 3,
+        "n_errors": 0,
+        "n_cached": 3,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.001289,
+        "tokens": {
+          "prompt": 62,
+          "completion": 138
+        },
+        "latency_ms": {
+          "p50": 41.22,
+          "p95": 636.08,
+          "p99": 688.96,
+          "max": 702.18
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 3,
+          "n_pass": 3,
+          "rate": 1.0
+        },
+        "judge": {
+          "n": 3,
+          "n_errors": 0,
+          "mean_overall": 1.0,
+          "mean_correctness": 1.0,
+          "pass_rate": 1.0,
+          "by_judge_model": {
+            "claude-opus-4-7": 3
+          }
+        },
+        "routing": {
+          "tiers": {
+            "heuristic": 1,
+            "llm": 1,
+            "embedding": 1
+          },
+          "categories": {
+            "fast-qa": 1,
+            "code": 2
+          },
+          "escalations": 0,
+          "category_match": {
+            "checked": 3,
+            "match": 2,
+            "rate": 0.6667
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "js-001",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "canberra"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Canberra with accurate additional context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1898,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The capital of Australia is Canberra. It was purpose-built as the capital city and is located in the Australian Capital Territory (ACT), situated between the two largest cities, Sydney and Melbourne.",
+              "prompt_tokens": 14,
+              "completion_tokens": 45,
+              "latency_ms": 41.22166299202945,
+              "cost_usd": 0.000239,
+              "model": "claude-haiku-4-5",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01UuBtSShKiaJ1uATabHPmGW"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the capital of Australia?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "js-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "def square",
+            "n*n",
+            "n * n",
+            "return"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": [
+              "n*n"
+            ]
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correct one-line function matching all expected tokens.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1656,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "Certainly! Here is a one-line Python function that accomplishes that:\n\n```python\ndef square(n): return n * n\n```",
+              "prompt_tokens": 22,
+              "completion_tokens": 27,
+              "latency_ms": 702.1803030074807,
+              "cost_usd": 0.000325,
+              "model": "gpt-4o",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "code",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": null,
+                "confidence": 0.98
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DreIqCzYfHh5wZmzvtZ6qWk3evd7b"
+              },
+              "turn": 1,
+              "user_text_preview": "Write a one-line Python function `square(n)` that returns n*n."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "js-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "list comprehension",
+            "for"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": [
+              "for"
+            ]
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Accurate plain-English explanation without code, mentions list comprehension and iteration.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1779,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "A Python list comprehension is a concise way to create lists. It allows you to generate a new list by applying an expression to each item in an existing iterable, such as a list or range, and optionally filtering items with a condition. This approach is more compact and often more readable than using a traditional loop to build a list.",
+              "prompt_tokens": 26,
+              "completion_tokens": 66,
+              "latency_ms": 19.34393699048087,
+              "cost_usd": 0.000725,
+              "model": "gpt-4o",
+              "cached": true,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "code",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": 0.547299861907959,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DreIuFeaN5TV3I5j0gI8ILeYfrlnk"
+              },
+              "turn": 1,
+              "user_text_preview": "Do NOT include any code. In plain English, briefly explain what a Python list comprehension is."
+            }
+          ],
+          "notes": "instruction-following test — judge should mark down if the model emits code"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+=== Test 5c: Historical cross-provider failover from requests log ===
+ virtual_model | status_code | fallback_used | created_at 
+---------------+-------------+---------------+------------
+(0 rows)
+
+
+--- summary counts ---
+ fallback_rows 
+---------------
+             0
+(1 row)
+
+ total_rows 
+------------
+       1081
+(1 row)
+

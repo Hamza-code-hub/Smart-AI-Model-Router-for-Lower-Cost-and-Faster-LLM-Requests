@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Circuit Breaker &mdash; LLM Gateway Explainer</title>
+<style>
+  :root {
+    --bg: #0B0F1A;
+    --panel: #131A2B;
+    --panel-2: #1A2238;
+    --line: #243154;
+    --ink: #E6EAF2;
+    --ink-dim: #9AA6BF;
+    --indigo: #7B61FF;
+    --emerald: #0EA570;
+    --amber: #E0A458;
+    --red: #E26A6A;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    padding: 32px 24px 64px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 20px; margin: 36px 0 12px; letter-spacing: -0.01em; }
+  h3 { font-size: 15px; margin: 22px 0 8px; color: var(--ink); }
+  p { margin: 8px 0 12px; }
+  .sub { color: var(--ink-dim); font-size: 14px; margin-bottom: 24px; }
+  .hero {
+    background: linear-gradient(135deg, #131A2B 0%, #1A2238 100%);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+  }
+  .stat-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
+  .stat { min-width: 150px; }
+  .stat .v { font-size: 26px; font-weight: 600; color: var(--indigo); letter-spacing: -0.01em; }
+  .stat .l { font-size: 12px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--panel-2); font-weight: 600; color: var(--ink-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.mono, .mono { font-family: var(--mono); }
+  .ok { color: var(--emerald); }
+  .warn { color: var(--amber); }
+  .bad { color: var(--red); }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 14px;
+  }
+  pre {
+    font-family: var(--mono);
+    background: #0A0E18;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    color: var(--ink);
+    margin: 8px 0 14px;
+    line-height: 1.45;
+  }
+  code {
+    font-family: var(--mono);
+    background: rgba(123, 97, 255, 0.10);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .pill {
+    display: inline-block; padding: 2px 10px; border-radius: 999px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+    background: var(--panel-2); color: var(--ink-dim); border: 1px solid var(--line);
+    font-family: var(--mono);
+  }
+  .pill.closed { background: rgba(14, 165, 112, 0.14); color: var(--emerald); border-color: rgba(14, 165, 112, 0.4); }
+  .pill.half { background: rgba(224, 164, 88, 0.14); color: var(--amber); border-color: rgba(224, 164, 88, 0.4); }
+  .pill.open { background: rgba(226, 106, 106, 0.14); color: var(--red); border-color: rgba(226, 106, 106, 0.4); }
+  .bullet {
+    background: var(--panel-2);
+    border-left: 3px solid var(--indigo);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  .callout {
+    background: rgba(224, 164, 88, 0.08);
+    border-left: 3px solid var(--amber);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+  .diagram { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin: 12px 0; }
+  .legend { font-size: 12px; color: var(--ink-dim); margin-top: 6px; }
+  .meta { font-size: 13px; color: var(--ink-dim); }
+  .meta b { color: var(--ink); font-weight: 600; }
+  ul.tight { margin: 6px 0 12px; padding-left: 22px; }
+  ul.tight li { margin: 4px 0; font-size: 14px; }
+  .file { font-family: var(--mono); font-size: 12px; color: var(--ink-dim); }
+  .kw { color: #C792EA; }
+  .str { color: #C3E88D; }
+  .com { color: #6A7891; font-style: italic; }
+  .num { color: #F78C6C; }
+  .fn  { color: #82AAFF; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="pill">LLM Gateway &middot; explainer</span>
+    <h1 style="margin-top:8px;">Circuit Breaker</h1>
+    <div class="sub">Why we stop calling a degraded provider &mdash; and how we know when to start again.</div>
+    <div style="font-size:14.5px;">
+      The breaker sits between the failover loop and the actual provider call. When a target accumulates
+      enough recent failures, it <b>trips</b>: future requests skip that target without touching the
+      network. After a cooldown, one probe call is allowed through &mdash; success closes the breaker,
+      another failure re-opens it for the full duration.
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="v">5</div><div class="l">Failures to trip</div></div>
+      <div class="stat"><div class="v">30&nbsp;s</div><div class="l">Rolling window</div></div>
+      <div class="stat"><div class="v">60&nbsp;s</div><div class="l">Open cooldown</div></div>
+      <div class="stat"><div class="v">1</div><div class="l">Half-open probe</div></div>
+    </div>
+  </div>
+
+  <h2>The three states</h2>
+  <p>
+    One entry per <code>(provider, model)</code> pair. Each entry is independent &mdash; Anthropic Haiku
+    being unhealthy says nothing about OpenAI gpt-4o.
+  </p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 920 320" width="100%" style="display:block; max-height: 360px;">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#9AA6BF"/>
+        </marker>
+        <marker id="arrowGood" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0EA570"/>
+        </marker>
+        <marker id="arrowBad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#E26A6A"/>
+        </marker>
+      </defs>
+
+      <!-- CLOSED -->
+      <g>
+        <circle cx="140" cy="160" r="68" fill="rgba(14,165,112,0.14)" stroke="#0EA570" stroke-width="2"/>
+        <text x="140" y="155" text-anchor="middle" fill="#0EA570" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="16" font-weight="700">CLOSED</text>
+        <text x="140" y="178" text-anchor="middle" fill="#9AA6BF" font-size="12">calls pass through</text>
+      </g>
+
+      <!-- OPEN -->
+      <g>
+        <circle cx="460" cy="160" r="68" fill="rgba(226,106,106,0.14)" stroke="#E26A6A" stroke-width="2"/>
+        <text x="460" y="155" text-anchor="middle" fill="#E26A6A" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="16" font-weight="700">OPEN</text>
+        <text x="460" y="178" text-anchor="middle" fill="#9AA6BF" font-size="12">calls refused</text>
+      </g>
+
+      <!-- HALF_OPEN -->
+      <g>
+        <circle cx="780" cy="160" r="68" fill="rgba(224,164,88,0.14)" stroke="#E0A458" stroke-width="2"/>
+        <text x="780" y="155" text-anchor="middle" fill="#E0A458" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="13" font-weight="700">HALF_OPEN</text>
+        <text x="780" y="178" text-anchor="middle" fill="#9AA6BF" font-size="12">one probe allowed</text>
+      </g>
+
+      <!-- CLOSED -> OPEN (top) -->
+      <path d="M 200 130 Q 300 70 400 130" fill="none" stroke="#E26A6A" stroke-width="2" marker-end="url(#arrowBad)"/>
+      <text x="300" y="68" text-anchor="middle" fill="#E26A6A" font-size="12.5">5 failures in 30 s</text>
+
+      <!-- OPEN -> HALF_OPEN (top) -->
+      <path d="M 520 130 Q 620 70 720 130" fill="none" stroke="#9AA6BF" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="620" y="68" text-anchor="middle" fill="#9AA6BF" font-size="12.5">60 s cooldown elapsed</text>
+
+      <!-- HALF_OPEN -> CLOSED (big arc back) -->
+      <path d="M 720 200 Q 460 290 200 200" fill="none" stroke="#0EA570" stroke-width="2" marker-end="url(#arrowGood)"/>
+      <text x="460" y="305" text-anchor="middle" fill="#0EA570" font-size="12.5">probe succeeds &rarr; reset</text>
+
+      <!-- HALF_OPEN -> OPEN (loop back small arc) -->
+      <path d="M 738 220 Q 600 250 500 220" fill="none" stroke="#E26A6A" stroke-width="2" marker-end="url(#arrowBad)"/>
+      <text x="618" y="262" text-anchor="middle" fill="#E26A6A" font-size="12.5">probe fails &rarr; reopen 60 s</text>
+    </svg>
+    <div class="legend">
+      State machine defined at <span class="file">src/gateway/breaker.py:27&ndash;30</span>.
+      Transitions logged as <code>breaker.opened</code> / <code>breaker.half_open</code> / <code>breaker.closed</code> / <code>breaker.reopened</code>.
+    </div>
+  </div>
+
+  <h2>Trip conditions</h2>
+
+  <pre><span class="com"># src/gateway/breaker.py:22&ndash;24</span>
+<span class="kw">FAILURE_THRESHOLD</span>      = <span class="num">5</span>
+<span class="kw">FAILURE_WINDOW_SECONDS</span> = <span class="num">30.0</span>
+<span class="kw">OPEN_DURATION_SECONDS</span>  = <span class="num">60.0</span></pre>
+
+  <p><code>record_failure(provider, model)</code> at <span class="file">breaker.py:78&ndash;102</span>:</p>
+  <ol style="padding-left:22px;">
+    <li>Prune the entry's failure-timestamp list to entries inside the last 30 s.</li>
+    <li>Append <code>now</code>.</li>
+    <li>If <code>len(failures) &ge; 5</code> and state is <span class="pill closed">CLOSED</span> &rarr; flip to <span class="pill open">OPEN</span>, log <code>breaker.opened</code>.</li>
+  </ol>
+  <div class="bullet">
+    &ldquo;5 failures in <i>any rolling</i> 30-second window&rdquo; &mdash; a burst of 5 in 2 s trips it;
+    one failure every 7 s for 5 minutes does not, because older timestamps age out of the window before the count reaches 5.
+  </div>
+  <div class="callout">
+    A failure while <span class="pill half">HALF_OPEN</span> bypasses the threshold entirely:
+    one bad probe re-opens immediately and resets the cooldown to a full 60 s
+    (<span class="file">breaker.py:82&ndash;88</span>). No second chances.
+  </div>
+
+  <h2>The half-open dance &mdash; a timeline</h2>
+
+  <div class="diagram">
+    <svg viewBox="0 0 920 230" width="100%" style="display:block;">
+      <!-- baseline -->
+      <line x1="40" y1="120" x2="900" y2="120" stroke="#243154" stroke-width="1"/>
+
+      <!-- tick marks -->
+      <g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11" fill="#9AA6BF">
+        <line x1="60"  y1="115" x2="60"  y2="125" stroke="#9AA6BF"/>
+        <text x="60"  y="145" text-anchor="middle">t = 0 s</text>
+        <line x1="220" y1="115" x2="220" y2="125" stroke="#9AA6BF"/>
+        <text x="220" y="145" text-anchor="middle">+30 s</text>
+        <line x1="380" y1="115" x2="380" y2="125" stroke="#9AA6BF"/>
+        <text x="380" y="145" text-anchor="middle">trip</text>
+        <line x1="780" y1="115" x2="780" y2="125" stroke="#9AA6BF"/>
+        <text x="780" y="145" text-anchor="middle">+60 s</text>
+        <line x1="870" y1="115" x2="870" y2="125" stroke="#9AA6BF"/>
+        <text x="870" y="145" text-anchor="middle">probe</text>
+      </g>
+
+      <!-- failure dots in window -->
+      <g fill="#E26A6A">
+        <circle cx="100" cy="120" r="6"/>
+        <circle cx="180" cy="120" r="6"/>
+        <circle cx="250" cy="120" r="6"/>
+        <circle cx="320" cy="120" r="6"/>
+        <circle cx="370" cy="120" r="6"/>
+      </g>
+      <text x="225" y="90" text-anchor="middle" fill="#E26A6A" font-size="12">5 failures inside the 30&nbsp;s window</text>
+
+      <!-- closed band -->
+      <rect x="60" y="160" width="320" height="22" rx="4" fill="rgba(14,165,112,0.18)" stroke="#0EA570"/>
+      <text x="220" y="176" text-anchor="middle" fill="#0EA570" font-size="12" font-family="ui-monospace,Menlo,Consolas,monospace">CLOSED &mdash; calls pass</text>
+
+      <!-- open band -->
+      <rect x="380" y="160" width="400" height="22" rx="4" fill="rgba(226,106,106,0.18)" stroke="#E26A6A"/>
+      <text x="580" y="176" text-anchor="middle" fill="#E26A6A" font-size="12" font-family="ui-monospace,Menlo,Consolas,monospace">OPEN &mdash; allow() returns False, no network call</text>
+
+      <!-- half_open band -->
+      <rect x="780" y="160" width="120" height="22" rx="4" fill="rgba(224,164,88,0.18)" stroke="#E0A458"/>
+      <text x="840" y="176" text-anchor="middle" fill="#E0A458" font-size="12" font-family="ui-monospace,Menlo,Consolas,monospace">HALF_OPEN</text>
+
+      <!-- annotations -->
+      <text x="380" y="208" text-anchor="middle" fill="#9AA6BF" font-size="11">5th failure flips the breaker; opened_at = now</text>
+      <text x="780" y="208" text-anchor="middle" fill="#9AA6BF" font-size="11">next allow() after t+60s flips to HALF_OPEN</text>
+    </svg>
+    <div class="legend">
+      During the OPEN band, every failover-loop iteration that asks for this target gets <code>allow() = False</code> and
+      <code>continue</code>s straight to the next target. The breaker is not a queue &mdash; it is a gate.
+    </div>
+  </div>
+
+  <h2>What counts as a failure</h2>
+  <p>
+    The breaker only records failures that the <i>failover policy</i> considers worth retrying. From
+    <span class="file">src/gateway/routes/chat.py:382&ndash;383</span>:
+  </p>
+  <pre><span class="kw">except</span> ProviderError <span class="kw">as</span> exc:
+    <span class="kw">if</span> should_failover(exc):
+        breaker.record_failure(target.provider, target.model)</pre>
+
+  <table>
+    <thead>
+      <tr><th>Status code</th><th>Counts toward trip?</th><th>Why</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono">408, 425, 429</td><td><span class="ok">yes</span></td><td>Timeout / rate-limited &mdash; transient. Likely to recover; worth backing off.</td></tr>
+      <tr><td class="mono">500, 502, 503, 504</td><td><span class="ok">yes</span></td><td>Upstream server failure. Same rationale.</td></tr>
+      <tr><td class="mono">400</td><td><span class="bad">no</span></td><td>Malformed request. Re-sending will fail identically; tripping would block healthy traffic.</td></tr>
+      <tr><td class="mono">401, 403</td><td><span class="bad">no</span></td><td>Auth problem. Same.</td></tr>
+      <tr><td class="mono">404</td><td><span class="bad">no</span></td><td>Model not found. Treated as deterministic today &mdash; this is the gap discussed in Question&nbsp;2.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    Failover policy and breaker share the same <code>should_failover()</code> predicate. They are deliberately coupled:
+    if it is not worth retrying on the other provider, it is not worth counting toward the trip threshold either.
+  </div>
+
+  <h2>How the request path uses it</h2>
+  <p>
+    The breaker gate runs <i>before</i> the provider call. If the gate is closed for that target, the loop
+    skips it entirely &mdash; no socket opened, no token spent.
+  </p>
+
+  <pre><span class="com"># src/gateway/routes/chat.py:368&ndash;397 &mdash; non-streaming path</span>
+<span class="kw">for</span> i, target <span class="kw">in</span> enumerate(targets):
+    <span class="kw">if not</span> breaker.allow(target.provider, target.model):
+        logger.info(<span class="str">"chat.breaker_skip"</span>, provider=target.provider, model=target.model)
+        <span class="kw">continue</span>                                  <span class="com"># skipped without network call</span>
+    breaker_blocked_all = <span class="kw">False</span>
+
+    <span class="kw">try</span>:
+        response = <span class="kw">await</span> provider.complete(request, target.model)
+    <span class="kw">except</span> ProviderError <span class="kw">as</span> exc:
+        <span class="kw">if</span> should_failover(exc):
+            breaker.record_failure(target.provider, target.model)
+        <span class="kw">if</span> i &lt; len(targets) - <span class="num">1</span> <span class="kw">and</span> should_failover(exc):
+            <span class="kw">continue</span>                              <span class="com"># try the fallback target</span>
+        <span class="kw">raise</span> HTTPException(...)
+
+    breaker.record_success(target.provider, target.model)</pre>
+
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0;">Non-streaming &mdash; <span class="file">chat.py:368&ndash;397</span></h3>
+      <p style="font-size:13.5px; color: var(--ink-dim); margin:6px 0 0;">
+        Gate the target &rarr; call &rarr; record success or failure. Identical structure to the streaming variant
+        below; only the call shape differs.
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Streaming &mdash; <span class="file">_stream_with_failover, chat.py:167&ndash;211</span></h3>
+      <p style="font-size:13.5px; color: var(--ink-dim); margin:6px 0 0;">
+        Same breaker logic, plus the &ldquo;peek the first chunk&rdquo; pattern so a provider that returns non-200
+        on the first event becomes a clean failover &mdash; not a half-sent stream.
+      </p>
+    </div>
+  </div>
+
+  <h3>Per-request flow</h3>
+  <p>
+    What the same code looks like as a decision diagram &mdash; one pass through the cascade, gates and
+    state writes called out.
+  </p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 960 760" width="100%" style="display:block;">
+      <defs>
+        <marker id="fcArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#9AA6BF"/>
+        </marker>
+        <marker id="fcArrowGood" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0EA570"/>
+        </marker>
+        <marker id="fcArrowBad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#E26A6A"/>
+        </marker>
+        <marker id="fcArrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#E0A458"/>
+        </marker>
+      </defs>
+
+      <style>
+        .nbox  { fill: #131A2B; stroke: #243154; stroke-width: 1.5; }
+        .nstart{ fill: rgba(123,97,255,0.14); stroke: #7B61FF; stroke-width: 1.5; }
+        .ndiam { fill: rgba(224,164,88,0.10); stroke: #E0A458; stroke-width: 1.5; }
+        .nok   { fill: rgba(14,165,112,0.14); stroke: #0EA570; stroke-width: 1.5; }
+        .nbad  { fill: rgba(226,106,106,0.14); stroke: #E26A6A; stroke-width: 1.5; }
+        .nlbl  { fill: #E6EAF2; font-family: ui-monospace,Menlo,Consolas,monospace; font-size: 12.5px; }
+        .nsub  { fill: #9AA6BF; font-family: -apple-system,Segoe UI,Roboto,sans-serif; font-size: 11px; }
+        .edge  { stroke: #9AA6BF; stroke-width: 1.6; fill: none; }
+        .egood { stroke: #0EA570; stroke-width: 1.6; fill: none; }
+        .ebad  { stroke: #E26A6A; stroke-width: 1.6; fill: none; }
+        .eamb  { stroke: #E0A458; stroke-width: 1.6; fill: none; }
+        .elbl  { fill: #9AA6BF; font-family: ui-monospace,Menlo,Consolas,monospace; font-size: 11.5px; }
+        .elbl.good { fill: #0EA570; }
+        .elbl.bad  { fill: #E26A6A; }
+        .elbl.amb  { fill: #E0A458; }
+      </style>
+
+      <!-- Start -->
+      <g>
+        <rect x="380" y="14" width="200" height="44" rx="22" class="nstart"/>
+        <text x="480" y="40" text-anchor="middle" class="nlbl" fill="#C9BFFF" font-weight="700">request arrives</text>
+      </g>
+
+      <!-- targets = [primary, fallback] -->
+      <g>
+        <rect x="340" y="84" width="280" height="48" rx="6" class="nbox"/>
+        <text x="480" y="105" text-anchor="middle" class="nlbl">targets = attempts(route)</text>
+        <text x="480" y="122" text-anchor="middle" class="nsub">[primary, fallback]</text>
+      </g>
+
+      <!-- For each target loop label -->
+      <g>
+        <rect x="380" y="158" width="200" height="38" rx="6" class="nbox"/>
+        <text x="480" y="182" text-anchor="middle" class="nlbl">for target in targets</text>
+      </g>
+
+      <!-- Diamond: breaker.allow() -->
+      <g>
+        <polygon points="480,220 660,290 480,360 300,290" class="ndiam"/>
+        <text x="480" y="284" text-anchor="middle" class="nlbl" fill="#E0A458" font-weight="700">breaker.allow(target)?</text>
+        <text x="480" y="302" text-anchor="middle" class="nsub">CLOSED or cooldown expired</text>
+      </g>
+
+      <!-- breaker open branch (left) -->
+      <g>
+        <rect x="40" y="266" width="220" height="48" rx="6" class="nbox"/>
+        <text x="150" y="287" text-anchor="middle" class="nlbl" fill="#9AA6BF">log breaker_skip,</text>
+        <text x="150" y="304" text-anchor="middle" class="nlbl" fill="#9AA6BF">continue to next target</text>
+      </g>
+
+      <!-- provider.complete() -->
+      <g>
+        <rect x="370" y="388" width="220" height="48" rx="6" class="nbox"/>
+        <text x="480" y="409" text-anchor="middle" class="nlbl">provider.complete()</text>
+        <text x="480" y="425" text-anchor="middle" class="nsub">POST to upstream</text>
+      </g>
+
+      <!-- Diamond: success? -->
+      <g>
+        <polygon points="480,460 660,520 480,580 300,520" class="ndiam"/>
+        <text x="480" y="516" text-anchor="middle" class="nlbl" fill="#E0A458" font-weight="700">ProviderError?</text>
+      </g>
+
+      <!-- Success path -->
+      <g>
+        <rect x="710" y="496" width="230" height="68" rx="6" class="nok"/>
+        <text x="825" y="518" text-anchor="middle" class="nlbl" fill="#0EA570" font-weight="700">record_success</text>
+        <text x="825" y="535" text-anchor="middle" class="nsub">state &rarr; CLOSED</text>
+        <text x="825" y="551" text-anchor="middle" class="nsub">return response</text>
+      </g>
+
+      <!-- Diamond: should_failover(exc)? -->
+      <g>
+        <polygon points="480,610 660,670 480,730 300,670" class="ndiam"/>
+        <text x="480" y="660" text-anchor="middle" class="nlbl" fill="#E0A458" font-weight="700">should_failover(exc)?</text>
+        <text x="480" y="678" text-anchor="middle" class="nsub">408 / 425 / 429 / 5xx</text>
+      </g>
+
+      <!-- Right path: not failover-eligible -->
+      <g>
+        <rect x="710" y="640" width="230" height="68" rx="6" class="nbad"/>
+        <text x="825" y="662" text-anchor="middle" class="nlbl" fill="#E26A6A" font-weight="700">raise HTTPException</text>
+        <text x="825" y="679" text-anchor="middle" class="nsub">no breaker write</text>
+        <text x="825" y="695" text-anchor="middle" class="nsub">e.g. 400, 401, 404</text>
+      </g>
+
+      <!-- Left path: failover-eligible -->
+      <g>
+        <rect x="40" y="640" width="220" height="68" rx="6" class="nbox"/>
+        <text x="150" y="662" text-anchor="middle" class="nlbl" fill="#E26A6A">record_failure</text>
+        <text x="150" y="678" text-anchor="middle" class="nsub">5th in window? &rarr; OPEN</text>
+        <text x="150" y="695" text-anchor="middle" class="nsub">more targets &rarr; next</text>
+      </g>
+
+      <!-- Edges -->
+      <!-- start -> targets -->
+      <path d="M 480 58 L 480 84" class="edge" marker-end="url(#fcArrow)"/>
+      <!-- targets -> loop -->
+      <path d="M 480 132 L 480 158" class="edge" marker-end="url(#fcArrow)"/>
+      <!-- loop -> diamond allow -->
+      <path d="M 480 196 L 480 220" class="edge" marker-end="url(#fcArrow)"/>
+
+      <!-- allow no -> skip box -->
+      <path d="M 300 290 L 260 290" class="ebad" marker-end="url(#fcArrowBad)"/>
+      <text x="280" y="278" text-anchor="middle" class="elbl bad">no</text>
+
+      <!-- skip -> back up to loop header -->
+      <path d="M 150 266 L 150 178 L 380 178" class="ebad" marker-end="url(#fcArrowBad)"/>
+
+      <!-- allow yes -> provider.complete -->
+      <path d="M 480 360 L 480 388" class="egood" marker-end="url(#fcArrowGood)"/>
+      <text x="498" y="378" class="elbl good">yes</text>
+
+      <!-- complete -> error? diamond -->
+      <path d="M 480 436 L 480 460" class="edge" marker-end="url(#fcArrow)"/>
+
+      <!-- error? no -> success -->
+      <path d="M 660 520 L 710 520" class="egood" marker-end="url(#fcArrowGood)"/>
+      <text x="685" y="510" text-anchor="middle" class="elbl good">no</text>
+
+      <!-- error? yes -> failover? diamond -->
+      <path d="M 480 580 L 480 610" class="ebad" marker-end="url(#fcArrowBad)"/>
+      <text x="498" y="600" class="elbl bad">yes</text>
+
+      <!-- failover? no -> raise -->
+      <path d="M 660 670 L 710 670" class="ebad" marker-end="url(#fcArrowBad)"/>
+      <text x="685" y="660" text-anchor="middle" class="elbl bad">no</text>
+
+      <!-- failover? yes -> record_failure -->
+      <path d="M 300 670 L 260 670" class="eamb" marker-end="url(#fcArrowAmber)"/>
+      <text x="280" y="660" text-anchor="middle" class="elbl amb">yes</text>
+
+      <!-- record_failure -> back up to loop header (continue) -->
+      <path d="M 40 670 L 20 670 L 20 178 L 380 178" class="eamb" marker-end="url(#fcArrowAmber)"/>
+      <text x="32" y="420" text-anchor="middle" class="elbl amb" transform="rotate(-90 32 420)">continue &rarr; next target</text>
+    </svg>
+    <div class="legend">
+      <span style="color: var(--emerald);">Green</span> = success path &middot;
+      <span style="color: var(--red);">Red</span> = error / raise &middot;
+      <span style="color: var(--amber);">Amber</span> = failover loop continuation.
+      Diamonds are the three decisions: <b>can we try this target?</b>, <b>did it error?</b>, <b>is the error worth failing over on?</b>
+      Source: <span class="file">src/gateway/routes/chat.py:368&ndash;401</span>.
+    </div>
+  </div>
+
+  <h3>The &ldquo;all breakers open&rdquo; case</h3>
+  <p>
+    The <code>breaker_blocked_all</code> flag (<span class="file">chat.py:366, 372</span>) tracks whether
+    <i>any</i> target in the cascade got a real attempt. If every target was breaker-blocked, the request never
+    touched a provider &mdash; that is a different failure mode from &ldquo;we tried, they all 503&rsquo;d&rdquo;
+    and the gateway returns a distinct error so ops can tell them apart.
+  </p>
+
+  <h2>Observability</h2>
+
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0;">Admin endpoint &mdash; <code>GET /admin/breakers</code></h3>
+      <p style="font-size:13.5px;">Returns one row per <code>(provider, model)</code> pair the breaker has seen. Backed by <code>state_of()</code> and the entry map at <span class="file">breaker.py:42</span>.</p>
+      <pre><span class="com"># test 5d snapshot</span>
+openai     gpt-4o                  closed  0
+anthropic  claude-opus-4-7         closed  0
+anthropic  claude-haiku-4-5        closed  0
+anthropic  claude-opus-4-8         closed  0</pre>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Prometheus gauge</h3>
+      <p style="font-size:13.5px;">
+        <code>gateway_circuit_breaker_state{provider, model}</code> defined at
+        <span class="file">metrics.py:83&ndash;87</span>. Values:
+        <span class="pill closed">0 closed</span>
+        <span class="pill half">1 half_open</span>
+        <span class="pill open">2 open</span>.
+      </p>
+      <p style="font-size:13.5px; color: var(--ink-dim);">
+        Snapshotted under the breaker&rsquo;s lock on every Prom scrape
+        (<code>_refresh_breaker_gauge</code> at <span class="file">metrics.py:140</span>) &mdash; the
+        hot path never has to write a metric on state change.
+      </p>
+    </div>
+  </div>
+
+  <h2>Honest caveat &mdash; single-node only</h2>
+  <div class="callout">
+    From <span class="file">breaker.py:9&ndash;11</span>:
+    <i>&ldquo;In-memory, single-node only (matches the spec&rsquo;s v2 assumption). A multi-node deployment
+    would need Redis-backed state, but a hobby gateway doesn&rsquo;t.&rdquo;</i>
+  </div>
+  <p>
+    Each gateway process has its own <code>_entries: dict[(provider, model), _Entry]</code> guarded by a
+    <code>threading.Lock</code>. With one instance this is correct and fast. With <code>N</code> instances behind
+    a load balancer, each holds an independent opinion of Anthropic&rsquo;s health &mdash; one might be tripped
+    while another is hammering away &mdash; and the effective trip threshold is <code>5 &times; N</code>.
+  </p>
+  <p>
+    A multi-node port would push failure timestamps into Redis, similar to how the rate-limit token bucket
+    already does. For now: single node is the assumption; this is a known boundary, not a bug.
+  </p>
+
+  <h2>How the three resilience layers stack together</h2>
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Lives in</th><th>Decides</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Failover policy</b></td>
+        <td><span class="file">fallback.py</span></td>
+        <td><i>Which</i> errors are worth retrying on a different provider, and the order of targets to try.</td>
+      </tr>
+      <tr>
+        <td><b>Streaming swap-before-bytes</b></td>
+        <td><span class="file">_stream_with_failover</span></td>
+        <td><i>When</i> a swap is still safe during a streaming response (always before the first downstream byte).</td>
+      </tr>
+      <tr>
+        <td><b>Circuit breaker</b></td>
+        <td><span class="file">breaker.py</span></td>
+        <td><i>Whether</i> to even try a target right now, based on its recent failure history.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Each request walks all three:
+    <b>breaker</b> decides if the target gets an attempt &rarr;
+    <b>failover policy</b> decides what to do on error &rarr;
+    <b>streaming peek</b> decides whether the swap is still safe.
+    Test 5 verifies them as separate sub-tests (5a/b chaos, 5c failover, 5d breakers) because they fail
+    independently and should be reasoned about separately.
+  </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Test 4 &mdash; Cache Effectiveness on Paraphrase &amp; Repeat Workload</title>
+<style>
+  :root {
+    --bg: #0B0F1A;
+    --panel: #131A2B;
+    --panel-2: #1A2238;
+    --line: #243154;
+    --ink: #E6EAF2;
+    --ink-dim: #9AA6BF;
+    --indigo: #7B61FF;
+    --emerald: #0EA570;
+    --amber: #E0A458;
+    --red: #E26A6A;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding: 32px 24px 64px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 20px; margin: 32px 0 12px; letter-spacing: -0.01em; }
+  h3 { font-size: 15px; margin: 20px 0 8px; color: var(--ink); }
+  .sub { color: var(--ink-dim); font-size: 14px; margin-bottom: 24px; }
+  .hero {
+    background: linear-gradient(135deg, #131A2B 0%, #1A2238 100%);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .stat-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 14px; }
+  .stat { min-width: 140px; }
+  .stat .v { font-size: 26px; font-weight: 600; color: var(--indigo); letter-spacing: -0.01em; }
+  .stat .l { font-size: 12px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+  th, td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { background: var(--panel-2); font-weight: 600; color: var(--ink-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.mono, .mono { font-family: var(--mono); }
+  .ok { color: var(--emerald); }
+  .warn { color: var(--amber); }
+  .bad { color: var(--red); }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 14px;
+  }
+  pre {
+    font-family: var(--mono);
+    background: #0A0E18;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .bar-bg { background: #0A0E18; border: 1px solid var(--line); height: 18px; border-radius: 4px; overflow: hidden; display: flex; }
+  .bar-cold { background: var(--amber); height: 100%; }
+  .bar-warm { background: var(--emerald); height: 100%; }
+  .legend { font-size: 12px; color: var(--ink-dim); margin-top: 6px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; margin-right: 14px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .chart {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 10px;
+  }
+  .grid-conf { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .meta { font-size: 13px; color: var(--ink-dim); }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .pill {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+    background: var(--panel-2); color: var(--ink-dim); border: 1px solid var(--line);
+  }
+  .pill.warn { background: rgba(224, 164, 88, 0.12); color: var(--amber); border-color: rgba(224, 164, 88, 0.4); }
+  .bullet {
+    background: var(--panel-2);
+    border-left: 3px solid var(--indigo);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  .callout {
+    background: rgba(224, 164, 88, 0.08);
+    border-left: 3px solid var(--amber);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .callout b { color: var(--amber); }
+  footer { color: var(--ink-dim); font-size: 12px; margin-top: 36px; text-align: center; }
+  code { font-family: var(--mono); background: #0A0E18; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="pill">Test 4 &middot; Cache Effectiveness</span>
+    <h1 style="margin-top:8px;">Exact-match Redis cache &mdash; 320&times; latency reduction on warm path</h1>
+    <div class="sub">
+      OpenAI-compatible LLM gateway &middot; <code>cache:exact:</code> SHA-256(model + system + messages + temperature) keys &middot; 24h TTL
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="v">100%</div><div class="l">Hit rate on repeat (10/10)</div></div>
+      <div class="stat"><div class="v">961 &rarr; 3 ms</div><div class="l">p50 cold &rarr; warm</div></div>
+      <div class="stat"><div class="v">99.7%</div><div class="l">p50 latency reduction</div></div>
+      <div class="stat"><div class="v">$0.00</div><div class="l">Provider cost on cached hit</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Resume bullet</h3>
+    <div class="bullet">
+      Built an exact-match Redis cache (SHA-256 fingerprint of model + system + messages + temperature, 24 h TTL,
+      temperature gate at 0.3) that delivered a <b>100% hit rate</b> on a 10-prompt repeat workload, collapsing
+      <b>p50 latency from 961 ms to 3 ms</b> (320&times; speedup, 99.7% reduction) and zeroing out provider cost on
+      cached requests. Cache key is deterministic; cached responses set <code>cached: true</code> on the body for
+      downstream observability.
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>Honest caveat &mdash; semantic cache.</b>
+    The handoff plan called for a pgvector semantic cache to hit lexically-different paraphrases at threshold 0.95.
+    The schema is provisioned (<code>semantic_cache_entries</code> table from the Phase 2.2 migration) but the lookup
+    path is not yet wired into the request handler &mdash; <code>grep</code> finds zero Python references to the table.
+    The cold pass below shows <b>0% hit rate on paraphrase pairs</b> as a result: every paraphrase fell through to the
+    Anthropic Haiku call. That is a real measurement of the current build, not a regression. Wiring the semantic-cache
+    lookup is tracked in <code>future_work.md</code>.
+  </div>
+
+  <h2>Methodology</h2>
+  <div class="card meta">
+    <p style="margin-top:0;">
+      Workload: <code>eval/workloads/paraphrase_cache.yaml</code> &mdash; 10 prompts, split into two groups of 5.
+      Group&nbsp;A (<code>pc-a*-prime</code>) is the prime set; Group&nbsp;B (<code>pc-b*-para</code>) is a
+      paraphrase of each Group&nbsp;A item (e.g. <i>&ldquo;What is the capital of France?&rdquo;</i> &harr;
+      <i>&ldquo;What's the capital city of France?&rdquo;</i>). All routed through the <code>fast-qa</code> virtual
+      model &rarr; <code>claude-haiku-4-5</code>, <code>temperature=0</code>, <code>max_tokens=80</code>.
+    </p>
+    <p>
+      <b>Pass 1 (cold)</b> &mdash; cleared <code>semantic_cache_entries</code> via
+      <code>DELETE FROM semantic_cache_entries WHERE route_key='fast-qa'</code>, then ran the full 10-prompt workload.
+      This measures: (a) cold-path latency for the prime calls, and (b) whether the planned semantic cache fires on
+      the paraphrases. <b>Pass 2 (warm)</b> &mdash; re-ran the same 10 prompts immediately, with the exact-match
+      Redis cache primed by Pass&nbsp;1.
+    </p>
+    <p style="margin-bottom:0;">
+      Source workload: <span class="mono">eval/workloads/paraphrase_cache.yaml</span> &middot;
+      Raw JSON (pass 2): <span class="mono">eval/results/resume_run/test4_paraphrase_cache_pass2.json</span> &middot;
+      Pass-1 summary: <span class="mono">eval/results/resume_run/test4_cache.log</span>
+    </p>
+  </div>
+
+  <h2>Summary: cold vs warm</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Pass</th>
+        <th>Calls</th>
+        <th>Cached</th>
+        <th>p50 ms</th>
+        <th>p95 ms</th>
+        <th>p99 ms</th>
+        <th>max ms</th>
+        <th>Quality</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pass&nbsp;1 &mdash; cold (cache empty)</td>
+        <td class="mono">10</td>
+        <td class="mono warn">0 / 10</td>
+        <td class="mono">960.77</td>
+        <td class="mono">1532.64</td>
+        <td class="mono">1544.22</td>
+        <td class="mono">1547.12</td>
+        <td class="mono ok">10/10</td>
+      </tr>
+      <tr>
+        <td>Pass&nbsp;2 &mdash; warm (repeat run)</td>
+        <td class="mono">10</td>
+        <td class="mono ok"><b>10 / 10</b></td>
+        <td class="mono"><b>3.00</b></td>
+        <td class="mono">36.30</td>
+        <td class="mono">38.65</td>
+        <td class="mono">39.34</td>
+        <td class="mono ok">10/10</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="legend">All quality checks (substring match against <code>expected_contains</code>) passed in both passes &mdash; cached responses are byte-identical to the cold responses, so correctness is preserved by construction.</div>
+
+  <h2>Per-prompt latency: cold vs warm</h2>
+  <div class="card">
+    <div style="display:flex; flex-direction:column; gap:10px;">
+
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-a1-prime</code> &mdash; &ldquo;What is the capital of France?&rdquo;</span><span class="mono">678 ms &rarr; 31 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:44%;"></div><div class="bar-warm" style="width:2%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-a2-prime</code> &mdash; &ldquo;Who wrote the play Hamlet?&rdquo;</span><span class="mono">848 ms &rarr; 22 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:55%;"></div><div class="bar-warm" style="width:1.4%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-a3-prime</code> &mdash; &ldquo;What is the chemical symbol for gold?&rdquo;</span><span class="mono">577 ms &rarr; 4 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:37%;"></div><div class="bar-warm" style="width:0.3%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-a4-prime</code> &mdash; &ldquo;How many continents are there on Earth?&rdquo;</span><span class="mono">1515 ms &rarr; 39 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:98%;"></div><div class="bar-warm" style="width:2.5%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-a5-prime</code> &mdash; &ldquo;What is the speed of light in vacuum?&rdquo;</span><span class="mono">1502 ms &rarr; 3 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:97%;"></div><div class="bar-warm" style="width:0.2%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-b1-para</code> &mdash; &ldquo;What's the capital city of France?&rdquo;</span><span class="mono">702 ms &rarr; 3 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:45%;"></div><div class="bar-warm" style="width:0.2%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-b2-para</code> &mdash; &ldquo;Who is the author of Hamlet?&rdquo;</span><span class="mono">1026 ms &rarr; 3 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:66%;"></div><div class="bar-warm" style="width:0.2%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-b3-para</code> &mdash; &ldquo;What's gold's chemical symbol?&rdquo;</span><span class="mono">896 ms &rarr; 3 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:58%;"></div><div class="bar-warm" style="width:0.2%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-b4-para</code> &mdash; &ldquo;How many continents exist?&rdquo;</span><span class="mono">1547 ms &rarr; 3 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:100%;"></div><div class="bar-warm" style="width:0.2%;"></div></div>
+      </div>
+      <div>
+        <div class="meta" style="display:flex; justify-content:space-between;"><span><code>pc-b5-para</code> &mdash; &ldquo;How fast does light travel in a vacuum?&rdquo;</span><span class="mono">1127 ms &rarr; 3 ms</span></div>
+        <div class="bar-bg"><div class="bar-cold" style="width:73%;"></div><div class="bar-warm" style="width:0.2%;"></div></div>
+      </div>
+
+    </div>
+    <div class="legend" style="margin-top:10px;">
+      <span><span class="swatch" style="background:var(--amber);"></span>Cold (cache miss &rarr; Anthropic Haiku call)</span>
+      <span><span class="swatch" style="background:var(--emerald);"></span>Warm (Redis cache hit)</span>
+      <span class="mono" style="margin-left:8px;">bar widths normalized to 1547 ms (max cold latency)</span>
+    </div>
+  </div>
+
+  <h2>Cost impact</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Calls</th>
+        <th>Prompt tok</th>
+        <th>Completion tok</th>
+        <th>Provider cost</th>
+        <th>$ / 1k calls</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cold (Anthropic Haiku, all 10 calls)</td>
+        <td class="mono">10</td>
+        <td class="mono">148</td>
+        <td class="mono">456</td>
+        <td class="mono">$0.00243</td>
+        <td class="mono">$0.243</td>
+      </tr>
+      <tr>
+        <td>Warm (cache hit, all 10 calls)</td>
+        <td class="mono">10</td>
+        <td class="mono">0</td>
+        <td class="mono">0</td>
+        <td class="mono ok"><b>$0.00000</b></td>
+        <td class="mono ok"><b>$0.000</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="legend">
+    On a cache hit, the gateway returns the stored <code>ChatCompletionResponse</code> without invoking any provider,
+    so provider cost is exactly zero. The eval reporter still echoes prompt/completion tokens for downstream accounting,
+    but no provider request is made &mdash; verifiable via the <code>cached: true</code> field on each row of
+    <code>test4_paraphrase_cache_pass2.json</code>.
+  </div>
+
+  <h2>Why paraphrases didn't hit in Pass 1</h2>
+  <div class="card meta">
+    <p style="margin-top:0;">
+      The exact-match cache keys on a SHA-256 of <code>virtual_model + system + json(messages) + temperature</code>.
+      Any lexical change to the user message produces a different key. So:
+    </p>
+    <pre>pc-a1-prime  "What is the capital of France?"        &rarr; key A
+pc-b1-para   "What's the capital city of France?"     &rarr; key B  (different)
+pc-a1-prime  (re-sent in pass 2, byte-identical)      &rarr; key A  (HIT)</pre>
+    <p style="margin-bottom:0;">
+      A semantic cache &mdash; embed the user message with MiniLM-L6-v2, ANN-search against a pgvector HNSW index of
+      prior queries at cosine &gt; 0.95, return the stored response if found &mdash; would let paraphrases of the same
+      question reuse the same answer. The DB schema for this exists (<code>semantic_cache_entries</code>) but the
+      lookup code is not yet checked into <code>src/gateway/cache/</code>.
+    </p>
+  </div>
+
+  <h2>What I would do with another week</h2>
+  <div class="card meta">
+    <ul style="margin:0; padding-left:20px;">
+      <li>Implement the pgvector semantic-cache lookup in <code>src/gateway/cache/semantic.py</code> &mdash; on miss for the exact cache, embed the user turn, ANN-search at threshold 0.95, return cached response on match.</li>
+      <li>Re-run this exact workload to measure the paraphrase hit rate properly. Expected: 4&ndash;5 of the 5 Group&nbsp;B paraphrases hit at 0.95.</li>
+      <li>Add a <code>cache_layer</code> label (<code>exact</code> vs <code>semantic</code> vs <code>miss</code>) to the Prometheus <code>gateway_requests_total</code> metric so cache effectiveness is graphable per-route in Grafana.</li>
+      <li>Sweep the semantic-cache threshold (0.90&ndash;0.98) the same way the router threshold was swept (see Test&nbsp;2) &mdash; the cost of a false-positive cache hit (wrong-answer served) deserves its own number.</li>
+    </ul>
+  </div>
+
+  <footer>
+    Generated 2026-06-18 &middot;
+    Workload: <span class="mono">eval/workloads/paraphrase_cache.yaml</span> &middot;
+    Raw JSON: <span class="mono">eval/results/resume_run/test4_paraphrase_cache_pass2.json</span>
+  </footer>
+
+</div>
+</body>
+</html>

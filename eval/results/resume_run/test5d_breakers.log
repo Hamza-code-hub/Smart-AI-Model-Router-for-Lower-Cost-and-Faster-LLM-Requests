@@ -1,0 +1,28 @@
+{
+    "breakers": [
+        {
+            "provider": "openai",
+            "model": "gpt-4o",
+            "state": "closed",
+            "failures": 0
+        },
+        {
+            "provider": "anthropic",
+            "model": "claude-opus-4-7",
+            "state": "closed",
+            "failures": 0
+        },
+        {
+            "provider": "anthropic",
+            "model": "claude-haiku-4-5",
+            "state": "closed",
+            "failures": 0
+        },
+        {
+            "provider": "anthropic",
+            "model": "claude-opus-4-8",
+            "state": "closed",
+            "failures": 0
+        }
+    ]
+}

@@ -1,0 +1,107 @@
+[warm] priming exact-match cache...
+[level] concurrency=1, n=200
+{
+  "concurrency": 1,
+  "n": 200,
+  "elapsed_s": 9.998,
+  "rps": 20.0,
+  "ok": 200,
+  "cached_hits": 200,
+  "status_counts": {
+    "200": 200
+  },
+  "retry_after_samples": [],
+  "p50_ms": 50.03,
+  "p95_ms": 53.01,
+  "p99_ms": 59.74,
+  "mean_ms": 49.94,
+  "max_ms": 60.74
+}
+[level] concurrency=4, n=200
+{
+  "concurrency": 4,
+  "n": 200,
+  "elapsed_s": 2.616,
+  "rps": 76.45,
+  "ok": 200,
+  "cached_hits": 200,
+  "status_counts": {
+    "200": 200
+  },
+  "retry_after_samples": [],
+  "p50_ms": 50.05,
+  "p95_ms": 61.33,
+  "p99_ms": 66.9,
+  "mean_ms": 51.52,
+  "max_ms": 69.12
+}
+[level] concurrency=16, n=200
+{
+  "concurrency": 16,
+  "n": 200,
+  "elapsed_s": 0.974,
+  "rps": 205.43,
+  "ok": 200,
+  "cached_hits": 200,
+  "status_counts": {
+    "200": 200
+  },
+  "retry_after_samples": [],
+  "p50_ms": 63.56,
+  "p95_ms": 170.18,
+  "p99_ms": 181.96,
+  "mean_ms": 73.78,
+  "max_ms": 192.16
+}
+[level] concurrency=32, n=200
+{
+  "concurrency": 32,
+  "n": 200,
+  "elapsed_s": 1.308,
+  "rps": 152.86,
+  "ok": 180,
+  "cached_hits": 180,
+  "status_counts": {
+    "200": 180,
+    "429": 20
+  },
+  "retry_after_samples": [
+    "1",
+    "1",
+    "1",
+    "1",
+    "1"
+  ],
+  "p50_ms": 148.63,
+  "p95_ms": 446.24,
+  "p99_ms": 607.34,
+  "mean_ms": 190.61,
+  "max_ms": 647.83
+}
+[level] concurrency=64, n=200
+{
+  "concurrency": 64,
+  "n": 200,
+  "elapsed_s": 0.778,
+  "rps": 256.97,
+  "ok": 18,
+  "cached_hits": 18,
+  "status_counts": {
+    "200": 18,
+    "429": 182
+  },
+  "retry_after_samples": [
+    "1",
+    "1",
+    "1",
+    "1",
+    "1"
+  ],
+  "p50_ms": 162.94,
+  "p95_ms": 305.87,
+  "p99_ms": 368.23,
+  "mean_ms": 172.73,
+  "max_ms": 301.77
+}
+
+[done] wrote eval\results\resume_run\test3_load.json

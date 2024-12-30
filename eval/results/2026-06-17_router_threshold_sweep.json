@@ -1,0 +1,640 @@
+{
+  "run_metadata": {
+    "date": "2026-06-17T00:48:18+00:00",
+    "eval_set": "eval/router_eval.yaml",
+    "classifier_virtual_model": "fast-qa",
+    "thresholds_swept": [
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.85
+    ]
+  },
+  "sweep": [
+    {
+      "threshold": 0.3,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9254,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.08
+          },
+          "embedding": {
+            "fired": 32,
+            "correct": 28,
+            "hit_rate": 0.875,
+            "p50_ms": 11.67
+          },
+          "llm": {
+            "fired": 15,
+            "correct": 14,
+            "hit_rate": 0.9333,
+            "p50_ms": 798.11
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 16,
+            "accuracy": 0.8889,
+            "misroute_to": {
+              "deep-reasoning": 1,
+              "long-context": 1
+            }
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 13,
+            "accuracy": 0.8667,
+            "misroute_to": {
+              "deep-reasoning": 2
+            }
+          }
+        },
+        "latency_ms": {
+          "p50": 11.36,
+          "p95": 849.23,
+          "p99": 1053.24,
+          "max": 1171.14
+        }
+      }
+    },
+    {
+      "threshold": 0.35,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9552,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.09
+          },
+          "embedding": {
+            "fired": 25,
+            "correct": 23,
+            "hit_rate": 0.92,
+            "p50_ms": 9.73
+          },
+          "llm": {
+            "fired": 22,
+            "correct": 21,
+            "hit_rate": 0.9545,
+            "p50_ms": 713.58
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 13,
+            "accuracy": 0.8667,
+            "misroute_to": {
+              "deep-reasoning": 2
+            }
+          }
+        },
+        "latency_ms": {
+          "p50": 9.78,
+          "p95": 879.04,
+          "p99": 1390.88,
+          "max": 1637.95
+        }
+      }
+    },
+    {
+      "threshold": 0.4,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9552,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.09
+          },
+          "embedding": {
+            "fired": 16,
+            "correct": 14,
+            "hit_rate": 0.875,
+            "p50_ms": 10.51
+          },
+          "llm": {
+            "fired": 31,
+            "correct": 30,
+            "hit_rate": 0.9677,
+            "p50_ms": 699.5
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 13,
+            "accuracy": 0.8667,
+            "misroute_to": {
+              "deep-reasoning": 2
+            }
+          }
+        },
+        "latency_ms": {
+          "p50": 13.55,
+          "p95": 935.9,
+          "p99": 1269.86,
+          "max": 1516.37
+        }
+      }
+    },
+    {
+      "threshold": 0.45,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9851,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.09
+          },
+          "embedding": {
+            "fired": 8,
+            "correct": 8,
+            "hit_rate": 1.0,
+            "p50_ms": 10.82
+          },
+          "llm": {
+            "fired": 39,
+            "correct": 38,
+            "hit_rate": 0.9744,
+            "p50_ms": 709.59
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 15,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          }
+        },
+        "latency_ms": {
+          "p50": 636.01,
+          "p95": 1495.55,
+          "p99": 2758.0,
+          "max": 3837.63
+        }
+      }
+    },
+    {
+      "threshold": 0.5,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9851,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.1
+          },
+          "embedding": {
+            "fired": 6,
+            "correct": 6,
+            "hit_rate": 1.0,
+            "p50_ms": 12.22
+          },
+          "llm": {
+            "fired": 41,
+            "correct": 40,
+            "hit_rate": 0.9756,
+            "p50_ms": 744.21
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 15,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          }
+        },
+        "latency_ms": {
+          "p50": 670.48,
+          "p95": 1493.13,
+          "p99": 3746.62,
+          "max": 4919.54
+        }
+      }
+    },
+    {
+      "threshold": 0.55,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9851,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.11
+          },
+          "embedding": {
+            "fired": 4,
+            "correct": 4,
+            "hit_rate": 1.0,
+            "p50_ms": 11.77
+          },
+          "llm": {
+            "fired": 43,
+            "correct": 42,
+            "hit_rate": 0.9767,
+            "p50_ms": 858.05
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 15,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          }
+        },
+        "latency_ms": {
+          "p50": 684.19,
+          "p95": 1830.39,
+          "p99": 3517.49,
+          "max": 4974.47
+        }
+      }
+    },
+    {
+      "threshold": 0.6,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9851,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.08
+          },
+          "embedding": {
+            "fired": 2,
+            "correct": 2,
+            "hit_rate": 1.0,
+            "p50_ms": 10.03
+          },
+          "llm": {
+            "fired": 45,
+            "correct": 44,
+            "hit_rate": 0.9778,
+            "p50_ms": 723.05
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 15,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          }
+        },
+        "latency_ms": {
+          "p50": 672.07,
+          "p95": 1156.61,
+          "p99": 1644.67,
+          "max": 2000.55
+        }
+      }
+    },
+    {
+      "threshold": 0.65,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9851,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.07
+          },
+          "embedding": {
+            "fired": 0,
+            "correct": 0,
+            "hit_rate": null,
+            "p50_ms": null
+          },
+          "llm": {
+            "fired": 47,
+            "correct": 46,
+            "hit_rate": 0.9787,
+            "p50_ms": 740.06
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 15,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          }
+        },
+        "latency_ms": {
+          "p50": 688.44,
+          "p95": 1146.16,
+          "p99": 2191.11,
+          "max": 4166.09
+        }
+      }
+    },
+    {
+      "threshold": 0.7,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9851,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.12
+          },
+          "embedding": {
+            "fired": 0,
+            "correct": 0,
+            "hit_rate": null,
+            "p50_ms": null
+          },
+          "llm": {
+            "fired": 47,
+            "correct": 46,
+            "hit_rate": 0.9787,
+            "p50_ms": 730.81
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 15,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          }
+        },
+        "latency_ms": {
+          "p50": 688.86,
+          "p95": 1135.68,
+          "p99": 1482.11,
+          "max": 1615.52
+        }
+      }
+    },
+    {
+      "threshold": 0.85,
+      "summary": {
+        "n": 67,
+        "overall_accuracy": 0.9851,
+        "per_tier": {
+          "heuristic": {
+            "fired": 20,
+            "correct": 20,
+            "hit_rate": 1.0,
+            "p50_ms": 0.09
+          },
+          "embedding": {
+            "fired": 0,
+            "correct": 0,
+            "hit_rate": null,
+            "p50_ms": null
+          },
+          "llm": {
+            "fired": 47,
+            "correct": 46,
+            "hit_rate": 0.9787,
+            "p50_ms": 704.41
+          }
+        },
+        "per_category": {
+          "fast-qa": {
+            "n": 18,
+            "correct": 18,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "code": {
+            "n": 17,
+            "correct": 16,
+            "accuracy": 0.9412,
+            "misroute_to": {
+              "fast-qa": 1
+            }
+          },
+          "deep-reasoning": {
+            "n": 17,
+            "correct": 17,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          },
+          "long-context": {
+            "n": 15,
+            "correct": 15,
+            "accuracy": 1.0,
+            "misroute_to": {}
+          }
+        },
+        "latency_ms": {
+          "p50": 681.12,
+          "p95": 1184.04,
+          "p99": 1344.77,
+          "max": 1462.31
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+=== Test 5b: Postgres chaos (with 15s timeout) ===
+--- before ---
+before: 200 2.074822s
+--- pausing Postgres ---
+llm-router-postgres-1
+--- during outage (15s timeout per request) ---
+during 1: http=000 time=15.002607s
+during 1: client-side timeout
+during 2: http=000 time=15.015913s
+during 2: client-side timeout
+during 3: http=000 time=15.014269s
+during 3: client-side timeout
+during 4: http=000 time=15.014756s
+during 4: client-side timeout
+during 5: http=000 time=15.003844s
+during 5: client-side timeout
+--- unpausing Postgres ---
+llm-router-postgres-1
+--- after recovery ---
+after: 200 1.389174s

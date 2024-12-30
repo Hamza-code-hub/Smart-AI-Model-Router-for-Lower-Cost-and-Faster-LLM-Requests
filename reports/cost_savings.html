@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gateway cost savings — auto vs pinned targets</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #0B0F1A;
+    --panel: #121828;
+    --panel-2: #1A2236;
+    --ink: #E6EAF2;
+    --ink-dim: #9AA5BB;
+    --rule: #2A3450;
+    --indigo: #7B61FF;
+    --emerald: #0EA570;
+    --amber: #F5A524;
+    --red: #E5484D;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 28px 96px; }
+  header.hero { border-bottom: 1px solid var(--rule); padding-bottom: 24px; margin-bottom: 32px; }
+  h1 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  h2 { font-size: 20px; margin: 40px 0 14px; letter-spacing: -0.01em; }
+  .sub { color: var(--ink-dim); font-size: 14px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin: 16px 0 28px;
+  }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; color: var(--ink-dim); font-size: 13px; margin-bottom: 18px; }
+  .meta b { color: var(--ink); font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); }
+  th { color: var(--ink-dim); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.auto td { background: rgba(123,97,255,0.08); }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+  }
+  .tag.auto { background: rgba(123,97,255,0.18); color: #B6A4FF; }
+  .tag.pinned { background: rgba(245,165,36,0.14); color: #F5C572; }
+  .tag.direct { background: rgba(14,165,112,0.14); color: #6DD3A8; }
+  .delta-pos { color: var(--emerald); font-weight: 600; }
+  .delta-neg { color: var(--red); font-weight: 600; }
+  .delta-flat { color: var(--ink-dim); }
+  .bar-wrap { position: relative; height: 8px; background: var(--panel-2); border-radius: 4px; overflow: hidden; min-width: 120px; }
+  .bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--indigo); }
+  .bar.over { background: var(--red); }
+  .bar.under { background: var(--emerald); }
+  .note {
+    font-size: 13px; color: var(--ink-dim); margin-top: 12px;
+    border-left: 2px solid var(--amber); padding: 4px 12px;
+  }
+  .footnote { color: var(--ink-dim); font-size: 12px; margin-top: 28px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #C9D2E8; background: var(--panel-2); padding: 1px 6px; border-radius: 4px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 8px 0 16px; }
+  .stat { background: var(--panel-2); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; }
+  .stat .label { color: var(--ink-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat .val { font-size: 22px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .stat .val.win { color: #6DD3A8; }
+  .stat .val.loss { color: #F08A8C; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Gateway cost savings</h1>
+  <div class="sub">Cost of <code>gateway:auto</code> vs pinned-model and direct-provider targets, on identical workloads.</div>
+</header>
+
+<section>
+  <h2>mixed_realistic — 20 prompts</h2>
+  <div class="meta">
+    <span><b>Source</b> eval/results/resume_run/2026-06-19_mixed_realistic_*.json</span>
+    <span><b>Date</b> 2026-06-19</span>
+    <span><b>Quality</b> 100% on all targets</span>
+  </div>
+
+  <div class="summary-grid">
+    <div class="stat">
+      <div class="label">auto total cost</div>
+      <div class="val">$0.02754</div>
+    </div>
+    <div class="stat">
+      <div class="label">vs pinned Opus 4.8</div>
+      <div class="val win">−88.3%</div>
+    </div>
+    <div class="stat">
+      <div class="label">vs direct gpt-4o-mini</div>
+      <div class="val loss">+1166%</div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0">
+    <table>
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th></th>
+          <th class="num">Total cost (USD)</th>
+          <th class="num">$ vs auto</th>
+          <th class="num">Savings (auto vs this)</th>
+          <th>Relative cost</th>
+          <th class="num">p50 latency (ms)</th>
+          <th class="num">Quality</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="auto">
+          <td><span class="tag auto">auto</span></td>
+          <td>gateway:auto</td>
+          <td class="num">$0.027537</td>
+          <td class="num delta-flat">—</td>
+          <td class="num delta-flat">baseline</td>
+          <td><div class="bar-wrap"><div class="bar" style="width:11.7%"></div></div></td>
+          <td class="num">1010.67</td>
+          <td class="num">100%</td>
+        </tr>
+        <tr>
+          <td><span class="tag pinned">pinned</span></td>
+          <td>gateway:claude-opus-4-8</td>
+          <td class="num">$0.234665</td>
+          <td class="num delta-neg">+$0.207128</td>
+          <td class="num delta-pos">−88.3%</td>
+          <td><div class="bar-wrap"><div class="bar over" style="width:100%"></div></div></td>
+          <td class="num">3075.73</td>
+          <td class="num">100%</td>
+        </tr>
+        <tr>
+          <td><span class="tag direct">direct</span></td>
+          <td>direct:openai:gpt-4o-mini</td>
+          <td class="num">$0.002175</td>
+          <td class="num delta-pos">−$0.025362</td>
+          <td class="num delta-neg">+1166.1%</td>
+          <td><div class="bar-wrap"><div class="bar under" style="width:0.9%"></div></div></td>
+          <td class="num">1276.06</td>
+          <td class="num">100%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    auto is <b>~8.5× cheaper than always-Opus</b> at the same 100% quality, but ~12× more expensive than always-mini. The auto router routes mixed workloads to a mix of Opus / Sonnet / Haiku per category — gpt-4o-mini is the floor model and isn't picked.
+  </div>
+</section>
+
+<section>
+  <h2>simple_qa — 12 prompts</h2>
+  <div class="meta">
+    <span><b>Source</b> eval/results/2026-06-17_simple_qa_gateway-auto_gateway-claude-haiku-4-5_direct-openai-gpt-4o-m.json</span>
+    <span><b>Date</b> 2026-06-17</span>
+    <span><b>Quality</b> 91.7% on all targets</span>
+  </div>
+
+  <div class="summary-grid">
+    <div class="stat">
+      <div class="label">auto total cost</div>
+      <div class="val">$0.00292</div>
+    </div>
+    <div class="stat">
+      <div class="label">vs pinned Haiku 4.5</div>
+      <div class="val win">−4.4%</div>
+    </div>
+    <div class="stat">
+      <div class="label">vs direct gpt-4o-mini</div>
+      <div class="val loss">+1098.4%</div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0">
+    <table>
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th></th>
+          <th class="num">Total cost (USD)</th>
+          <th class="num">$ vs auto</th>
+          <th class="num">Savings (auto vs this)</th>
+          <th>Relative cost</th>
+          <th class="num">p50 latency (ms)</th>
+          <th class="num">Quality</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="auto">
+          <td><span class="tag auto">auto</span></td>
+          <td>gateway:auto</td>
+          <td class="num">$0.002924</td>
+          <td class="num delta-flat">—</td>
+          <td class="num delta-flat">baseline</td>
+          <td><div class="bar-wrap"><div class="bar" style="width:95.6%"></div></div></td>
+          <td class="num">4.34</td>
+          <td class="num">91.7%</td>
+        </tr>
+        <tr>
+          <td><span class="tag pinned">pinned</span></td>
+          <td>gateway:claude-haiku-4-5</td>
+          <td class="num">$0.003059</td>
+          <td class="num delta-neg">+$0.000135</td>
+          <td class="num delta-pos">−4.4%</td>
+          <td><div class="bar-wrap"><div class="bar over" style="width:100%"></div></div></td>
+          <td class="num">827.18</td>
+          <td class="num">91.7%</td>
+        </tr>
+        <tr>
+          <td><span class="tag direct">direct</span></td>
+          <td>direct:openai:gpt-4o-mini</td>
+          <td class="num">$0.000244 *</td>
+          <td class="num delta-pos">−$0.002680</td>
+          <td class="num delta-neg">+1098.4%</td>
+          <td><div class="bar-wrap"><div class="bar under" style="width:8.0%"></div></div></td>
+          <td class="num">1091.08</td>
+          <td class="num">91.7%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    Small savings here are expected — every prompt in <code>simple_qa</code> is classified as <code>fast-qa</code> and auto picks Haiku anyway. The win over pinned-Haiku comes from cache hits (12/12 cached in the auto run vs 0/12 in pinned). The p50 of 4ms is the cache-hit signature.<br>
+    <b>*</b> The eval run logged <code>$0</code> for direct OpenAI because cost accounting wasn't wired up for direct provider calls in that run. The <code>$0.000244</code> shown here is recomputed from the recorded token counts (194 prompt + 358 completion) at OpenAI's published rates of $0.15 / $0.60 per 1M tokens from <code>config/pricing.yaml</code>.
+  </div>
+</section>
+
+<section>
+  <h2>How to read this</h2>
+  <div class="card">
+    <p>"Savings (auto vs this)" answers <i>"if I had pinned to this single model instead of letting the gateway route, what would the same workload have cost?"</i></p>
+    <ul style="color: var(--ink-dim); padding-left: 18px;">
+      <li><b>Negative %</b> (green) = auto is cheaper.</li>
+      <li><b>Positive %</b> (red) = auto is more expensive than this target.</li>
+      <li>Quality is held constant within each workload, so cost deltas are apples-to-apples.</li>
+    </ul>
+    <p>Other eval runs in <code>eval/results/</code> are single-target (auto only), so no comparison is possible there. To add another row, run the multi-target eval harness against the same workload with a different <code>--target</code>.</p>
+  </div>
+</section>
+
+<div class="footnote">
+  Generated from <code>eval/results/2026-06-17_simple_qa_*.json</code> and <code>eval/results/resume_run/2026-06-19_mixed_realistic_*.json</code>.
+</div>
+
+</div>
+</body>
+</html>

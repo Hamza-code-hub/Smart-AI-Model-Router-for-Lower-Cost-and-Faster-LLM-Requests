@@ -1,0 +1,3389 @@
+{
+  "run_metadata": {
+    "date": "2026-06-19T05:07:44+00:00",
+    "workload": {
+      "name": "mixed_realistic",
+      "version": 1,
+      "fingerprint": "7550e2c9f8ef9bbb",
+      "source": "eval/workloads/mixed_realistic.yaml",
+      "n_prompts": 20
+    },
+    "targets": [
+      "gateway:auto",
+      "gateway:claude-opus-4-8",
+      "direct:openai:gpt-4o-mini"
+    ],
+    "gateway_url": "http://localhost:8000"
+  },
+  "results_by_target": {
+    "gateway:auto": {
+      "label": "gateway-auto",
+      "summary": {
+        "target": "gateway-auto",
+        "n_prompts": 20,
+        "n_calls": 23,
+        "n_errors": 0,
+        "n_cached": 0,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.027537,
+        "tokens": {
+          "prompt": 2677,
+          "completion": 2543
+        },
+        "latency_ms": {
+          "p50": 1010.67,
+          "p95": 5208.13,
+          "p99": 6189.89,
+          "max": 6452.87
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 19,
+          "n_pass": 19,
+          "rate": 1.0
+        },
+        "judge": {
+          "n": 20,
+          "n_errors": 0,
+          "mean_overall": 1.0,
+          "mean_correctness": 1.0,
+          "pass_rate": 1.0,
+          "by_judge_model": {
+            "claude-opus-4-7": 20
+          }
+        },
+        "routing": {
+          "tiers": {
+            "embedding": 9,
+            "heuristic": 13,
+            "llm": 1
+          },
+          "categories": {
+            "fast-qa": 16,
+            "code": 7
+          },
+          "escalations": 1,
+          "category_match": {
+            "checked": 19,
+            "match": 19,
+            "rate": 1.0
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "mix-001-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1783,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell in 1989. It was breached on November 9, 1989, marking a significant moment in the end of the Cold War.",
+              "prompt_tokens": 16,
+              "completion_tokens": 37,
+              "latency_ms": 1120.923379989108,
+              "cost_usd": 0.000201,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01HURwtFZNvydNbhues87zQk"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-002-simple_qa-sq-001",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "canberra"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Canberra with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1989,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The capital of Australia is Canberra. It was purpose-built as the capital city and is located in the Australian Capital Territory (ACT), between the major cities of Sydney and Melbourne.",
+              "prompt_tokens": 14,
+              "completion_tokens": 43,
+              "latency_ms": 1222.3235160054173,
+              "cost_usd": 0.000229,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_0169tjr7BK2GEEienBaGxuo5"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the capital of Australia?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-003-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with accurate additional context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1714,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is **100°C** (or 212°F).\n\nThis occurs at standard atmospheric pressure of 101.325 kPa (1 atmosphere).",
+              "prompt_tokens": 22,
+              "completion_tokens": 46,
+              "latency_ms": 5257.49176699901,
+              "cost_usd": 0.000252,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_0184xh4kGJjE8f5Pgt8tTZCn"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-004-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly credits Tim Berners-Lee with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1489,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He created it in 1989 while working at CERN (the European Organization for Nuclear Research) in Switzerland. Berners-Lee developed the foundational technologies including HTTP, HTML, and the first web browser, which together made the modern web possible.",
+              "prompt_tokens": 19,
+              "completion_tokens": 74,
+              "latency_ms": 998.4658939938527,
+              "cost_usd": 0.000389,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_013teLSDdQGjYP64gdQpYVMQ"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-005-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with accurate supporting details.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1824,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is **100°C** (212°F).\n\nThis occurs at standard atmospheric pressure of 101.325 kPa (1 atm). At higher altitudes where atmospheric pressure is lower, water boils at a lower temperature.",
+              "prompt_tokens": 22,
+              "completion_tokens": 63,
+              "latency_ms": 874.883120006416,
+              "cost_usd": 0.000337,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01UuwyRAhMsStEGm5A54YZs4"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-006-simple_qa-sq-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Shakespeare with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1555,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "William Shakespeare wrote Hamlet. It was written early in his career, likely between 1600 and 1601, and is one of his most famous tragedies.",
+              "prompt_tokens": 17,
+              "completion_tokens": 39,
+              "latency_ms": 801.4426180161536,
+              "cost_usd": 0.000212,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01MMEh5SGEp4j7qZGjnkY4UB"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play 'Hamlet'?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-007-simple_qa-sq-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Shakespeare with accurate brief context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1921,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "William Shakespeare wrote \"Hamlet.\" It was written early in his career, likely between 1600 and 1601, and remains one of his most famous and frequently performed works.",
+              "prompt_tokens": 17,
+              "completion_tokens": 41,
+              "latency_ms": 866.7876130202785,
+              "cost_usd": 0.000222,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01UjjQ93EgaXFm8Smex5U56j"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play 'Hamlet'?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-008-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with accurate supporting details.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1824,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is **100°C** (212°F).\n\nThis occurs at standard atmospheric pressure of 101.325 kPa (1 atm). At higher altitudes where atmospheric pressure is lower, water boils at a lower temperature.",
+              "prompt_tokens": 22,
+              "completion_tokens": 63,
+              "latency_ms": 947.2049169999082,
+              "cost_usd": 0.000337,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01YRysfWz89TQGwiY7gLpaTW"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-009-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly credits Tim Berners-Lee with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1614,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He created it in 1989 while working at CERN (the European Organization for Nuclear Research) in Switzerland. Berners-Lee developed the foundational technologies including HTTP, HTML, and the first web browser, laying the groundwork for the modern web as we know it today.",
+              "prompt_tokens": 19,
+              "completion_tokens": 80,
+              "latency_ms": 1133.9639899961185,
+              "cost_usd": 0.000419,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01Jvwc3kBVQ2QrGxX5SyHNuP"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-010-simple_qa-sq-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "light"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Accurate one-sentence definition that includes sunlight and key reactants/products.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1774,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "Photosynthesis is the process by which plants, algae, and some bacteria use sunlight to convert carbon dioxide and water into glucose and oxygen.",
+              "prompt_tokens": 16,
+              "completion_tokens": 35,
+              "latency_ms": 1010.6711210100912,
+              "cost_usd": 0.000191,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01FBcNZS793tNmgyWDnyxsue"
+              },
+              "turn": 1,
+              "user_text_preview": "Define photosynthesis in one sentence."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-011-code_generation-cg-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "httpx",
+            "asyncclient",
+            "post"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly converts curl to httpx AsyncClient POST with proper headers and JSON body.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2040,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "To convert the given `curl` command to an `httpx` asynchronous call in Python, you can use the `httpx.AsyncClient` for making asynchronous HTTP requests. Here's how you can achieve this:\n\n```python\nimport httpx\nimport asyncio\n\nasync def main():\n    # Define the headers and data as in the curl command\n    headers = {\n        \"Authorization\": \"Bearer XYZ\"\n    }\n    \n    data = {\n        \"q\": \"hello\"\n    }\n    \n    # Use AsyncClient for making the request\n    async with httpx.AsyncClient() as client:\n        response = await client.post(\"https://api.example.com/search\", headers=headers, json=data)\n        \n        # Printing response details\n        print(response.status_code)\n        print(response.json())\n\n# Run the coroutine\nasyncio.run(main())\n```\n\n### Key Points:\n- **Authorization Header…",
+              "prompt_tokens": 48,
+              "completion_tokens": 301,
+              "latency_ms": 4763.8959210016765,
+              "cost_usd": 0.00313,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "code",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "gpt-4o",
+                "provider": "openai"
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLfjnSknZnZ3vodedrw59jg72jcJ"
+              },
+              "turn": 1,
+              "user_text_preview": "Convert this curl command to an httpx async call in Python:\ncurl -X POST -H \"Authorization: Bearer XYZ\" -d '{\"q\":\"hello\"}' https://api.example.com/search\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-012-multi_turn-mt-004",
+          "is_multi_turn": true,
+          "turns": 4,
+          "expected_category": null,
+          "expected_contains": [],
+          "quality_check": {
+            "checked": false,
+            "pass": null,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies DFS as Depth-First Search with accurate supporting explanation.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1767,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "To detect cycles in a directed graph, you can use Depth-First Search (DFS). During the DFS traversal, the node is marked as visited once it is fully explored and is marked as being visited while it is being explored. If you reach a node that is currently being visited, then you have detected a cycle.\n\nBelow is a Python function that detects cycles in a directed graph using DFS:\n\n```python\ndef detect_cycle(graph):\n    \"\"\"Detects cycles in a directed graph.\n    \n    Parameters:\n    graph (dict): A dictionary representing the graph where keys are nodes and \n                  values are lists of adjacent nodes.\n    \n    Returns:\n    bool: True if there is a cycle in the graph, False otherwise.\n    \"\"\"\n    def dfs(node):\n        if node in visiting:\n            # If we are visiting this node an…",
+              "prompt_tokens": 19,
+              "completion_tokens": 479,
+              "latency_ms": 6452.872022986412,
+              "cost_usd": 0.0048375,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "code",
+                "escalation_count": 1,
+                "switched_from": "fast-qa",
+                "raw_category": "code",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "gpt-4o",
+                "provider": "openai"
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLfpvI3IOWMAYiLkvh3XN5esD85v"
+              },
+              "turn": 1,
+              "user_text_preview": "Write a Python function to detect cycles in a directed graph."
+            },
+            {
+              "response_text": "The time complexity of the cycle detection algorithm presented above is \\( O(V + E) \\), where:\n- \\( V \\) is the number of vertices (nodes) in the graph.\n- \\( E \\) is the number of edges in the graph.\n\n### Explanation\n\n- **DFS Traversal**: In the worst case, we visit every vertex and explore every edge exactly once. This makes the DFS traversal of the graph have a time complexity of \\( O(V + E) \\).\n- **Operations on Sets**: The operations of adding and removing elements from the sets `visiting` and `visited` (checking membership, etc.) are all \\( O(1) \\) operations on average due to the average time complexity of set operations in Python.\n\nThus, combining these components, the overall time complexity for detecting a cycle in a directed graph using this approach is \\( O(V + E) \\). This is ef…",
+              "prompt_tokens": 513,
+              "completion_tokens": 204,
+              "latency_ms": 2086.213422997389,
+              "cost_usd": 0.0033225,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "code",
+                "escalation_count": 1,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "gpt-4o",
+                "provider": "openai"
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLfw0o3IjsWj438rEGcBrLdZoLoZ"
+              },
+              "turn": 2,
+              "user_text_preview": "What's the time complexity of that?"
+            },
+            {
+              "response_text": "The space complexity of the cycle detection algorithm using DFS is \\( O(V) \\). Here's why:\n\n1. **Recursion Stack**: In the worst-case scenario, the recursion stack can grow to a depth of \\( V \\), where \\( V \\) is the number of vertices in the graph. This occurs when the graph is essentially a linear chain, such as when performing a DFS on a path or a tree-like structure.\n\n2. **Visited Sets**: We maintain two sets, `visited` and `visiting`. Each of these sets can contain up to \\( V \\) elements, representing the vertices. The space complexity due to these sets is \\( O(V) \\).\n\n3. **Graph Representation**: The input graph itself, represented as an adjacency list (which is a dictionary of lists), will also require space, but this is considered part of the input space, not auxiliary space.\n\nTher…",
+              "prompt_tokens": 729,
+              "completion_tokens": 235,
+              "latency_ms": 4479.030438000336,
+              "cost_usd": 0.0041725,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "code",
+                "escalation_count": 1,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": 0.85,
+                "model_used": "gpt-4o",
+                "provider": "openai"
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLg0mg6yTNmZ7I3H9sgQGcHcf6Td"
+              },
+              "turn": 3,
+              "user_text_preview": "And space complexity?"
+            },
+            {
+              "response_text": "DFS stands for Depth-First Search. It is a popular graph traversal algorithm used to explore the nodes and edges of a graph. The core idea of DFS is to start at a source node and explore as far along a branch as possible before backtracking. This means that DFS dives deep into the graph's branches, visiting nodes along one path before exploring alternative branches.\n\n### Key Characteristics of DFS:\n- **Traversal**: DFS can be performed recursively or iteratively using a stack data structure.\n- **Exploration**: The algorithm explores one neighbor of a node, then explores the neighbor's neighbor, and so on, going as deep as possible before backtracking.\n- **Applications**: DFS is used for various purposes such as cycle detection in graphs, solving puzzles (like mazes), pathfinding, topologic…",
+              "prompt_tokens": 980,
+              "completion_tokens": 202,
+              "latency_ms": 2372.0857500156853,
+              "cost_usd": 0.00447,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "code",
+                "escalation_count": 1,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "gpt-4o",
+                "provider": "openai"
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLg2nCZncvMSzoRFA5vpfc5MjLUm"
+              },
+              "turn": 4,
+              "user_text_preview": "Thanks. What does DFS stand for?"
+            }
+          ],
+          "notes": "code-shaped turn followed by simple follow-ups — should stay at code (no downgrade)"
+        },
+        {
+          "id": "mix-013-simple_qa-sq-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "light"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Accurate one-sentence definition containing 'light' and key elements.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1570,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy stored in glucose, while releasing oxygen as a byproduct.",
+              "prompt_tokens": 16,
+              "completion_tokens": 43,
+              "latency_ms": 895.365034986753,
+              "cost_usd": 0.000231,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_013B1L3gJNRuwEAoiKpHmRhv"
+              },
+              "turn": 1,
+              "user_text_preview": "Define photosynthesis in one sentence."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-014-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1306,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell in 1989. It was officially opened on November 9, 1989, marking a pivotal moment in the end of the Cold War and leading to the reunification of Germany in 1990.",
+              "prompt_tokens": 16,
+              "completion_tokens": 50,
+              "latency_ms": 876.434561010683,
+              "cost_usd": 0.000266,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01QhK5iP28t3Sku1miyZTpzX"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-015-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly answers 1989 with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1868,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell in 1989. It was officially breached on November 9, 1989, marking a symbolic and pivotal moment in the end of the Cold War and the beginning of German reunification.",
+              "prompt_tokens": 16,
+              "completion_tokens": 48,
+              "latency_ms": 1202.8106329962611,
+              "cost_usd": 0.000256,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_0145ZgHidyeD38WekhBznrfi"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-016-code_generation-cg-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "httpx",
+            "asyncclient",
+            "post"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly converts curl to async httpx with AsyncClient.post, proper headers and JSON body.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2303,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "To convert the given `curl` command into an `httpx` async call in Python, you can use the `httpx.AsyncClient` for making asynchronous HTTP requests. Here's how you can do it:\n\n```python\nimport httpx\nimport asyncio\n\nasync def make_request():\n    url = \"https://api.example.com/search\"\n    headers = {\n        \"Authorization\": \"Bearer XYZ\",\n        \"Content-Type\": \"application/json\"\n    }\n    data = {\n        \"q\": \"hello\"\n    }\n    \n    async with httpx.AsyncClient() as client:\n        response = await client.post(url, headers=headers, json=data)\n        print(response.text)\n\n# Run the async function\nasyncio.run(make_request())\n```\n\n### Explanation:\n- **AsyncClient**: We use `httpx.AsyncClient` for making async requests.\n- **Headers**: The headers dictionary includes the `Authorization` header…",
+              "prompt_tokens": 48,
+              "completion_tokens": 269,
+              "latency_ms": 3558.293018984841,
+              "cost_usd": 0.00281,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "code",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "gpt-4o",
+                "provider": "openai"
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLgE9vzc0gbXuSsVe9pHphyw4dHp"
+              },
+              "turn": 1,
+              "user_text_preview": "Convert this curl command to an httpx async call in Python:\ncurl -X POST -H \"Authorization: Bearer XYZ\" -d '{\"q\":\"hello\"}' https://api.example.com/search\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-017-simple_qa-sq-011",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "jupiter"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Jupiter with accurate supporting details.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1491,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "Jupiter is the largest planet in our solar system. It's a gas giant with a diameter of about 88,846 miles (142,984 kilometers), making it more than 11 times wider than Earth.",
+              "prompt_tokens": 17,
+              "completion_tokens": 48,
+              "latency_ms": 824.112596019404,
+              "cost_usd": 0.000257,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01SoQ8FLoizPCLRXFg66mzsu"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the largest planet in our solar system?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-018-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Tim Berners-Lee with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1889,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He created it in 1989 while working at CERN (the European Organization for Nuclear Research) in Switzerland, initially as a way to help scientists share information more easily.",
+              "prompt_tokens": 19,
+              "completion_tokens": 57,
+              "latency_ms": 909.5885809801985,
+              "cost_usd": 0.000304,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01EWaC1g85kQda3kwzRYvLK4"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-019-code_generation-cg-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "for x in nums",
+            "if x % 2"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correct list comprehension refactor, concise as requested.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1371,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "```python\nresult = [x * x for x in nums if x % 2 == 0]\n```",
+              "prompt_tokens": 50,
+              "completion_tokens": 23,
+              "latency_ms": 743.1602980068419,
+              "cost_usd": 0.000355,
+              "model": "gpt-4o",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "embedding",
+                "category": "code",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "code",
+                "similarity": 1.0,
+                "confidence": null,
+                "model_used": "gpt-4o",
+                "provider": "openai"
+              },
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLgOmZHeBblIO8nsxj9qRG027ujj"
+              },
+              "turn": 1,
+              "user_text_preview": "Refactor this Python snippet to use a list comprehension:\n\n    result = []\n    for x in nums:\n        if x % 2 == 0:\n            result.append(x * x)\n\nJust the refactor.\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-020-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with accurate supporting details.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1824,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is **100°C** (212°F).\n\nThis occurs at standard atmospheric pressure of 101.325 kPa (1 atm). At higher altitudes where atmospheric pressure is lower, water boils at a lower temperature.",
+              "prompt_tokens": 22,
+              "completion_tokens": 63,
+              "latency_ms": 787.1275520010386,
+              "cost_usd": 0.000337,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null,
+                "model_used": "claude-haiku-4-5",
+                "provider": "anthropic"
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01B4cXGCTj7DrPq3rH6ogbJU"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        }
+      ]
+    },
+    "gateway:claude-opus-4-8": {
+      "label": "gateway-claude-opus-4-8",
+      "summary": {
+        "target": "gateway-claude-opus-4-8",
+        "n_prompts": 20,
+        "n_calls": 23,
+        "n_errors": 0,
+        "n_cached": 0,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.234665,
+        "tokens": {
+          "prompt": 8543,
+          "completion": 7678
+        },
+        "latency_ms": {
+          "p50": 3075.73,
+          "p95": 11198.6,
+          "p99": 15453.16,
+          "max": 16602.31
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 19,
+          "n_pass": 19,
+          "rate": 1.0
+        },
+        "judge": {
+          "n": 20,
+          "n_errors": 0,
+          "mean_overall": 0.9915,
+          "mean_correctness": 1.0,
+          "pass_rate": 1.0,
+          "by_judge_model": {
+            "claude-opus-4-7": 20
+          }
+        },
+        "routing": {
+          "tiers": {},
+          "categories": {},
+          "escalations": 0,
+          "category_match": {
+            "checked": 0,
+            "match": 0,
+            "rate": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "mix-001-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with accurate additional context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2096,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell in **1989**, specifically on **November 9, 1989**. This event marked a pivotal moment in the end of the Cold War and eventually led to the reunification of Germany on October 3, 1990.",
+              "prompt_tokens": 21,
+              "completion_tokens": 75,
+              "latency_ms": 1958.0393609940074,
+              "cost_usd": 0.00198,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01GNDWA8P4LqLcH5r7WTJv3Y"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-002-simple_qa-sq-001",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "canberra"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Canberra with accurate supporting context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1559,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The capital of Australia is **Canberra**.\n\nA common misconception is that Sydney or Melbourne is the capital, since they are larger and more well-known cities. However, Canberra was specifically chosen as a compromise between these two rival cities and was purpose-built to serve as the nation's capital. It officially became the capital in 1913.",
+              "prompt_tokens": 16,
+              "completion_tokens": 108,
+              "latency_ms": 2820.2865190105513,
+              "cost_usd": 0.00278,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01YYKkxnHzRob21RHsLCVzdz"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the capital of Australia?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-003-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2001,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "At sea level (standard atmospheric pressure of 1 atmosphere, or 101.325 kPa), water boils at **100°C** (212°F).\n\nIt's worth noting that this temperature decreases at higher altitudes where atmospheric pressure is lower. For example, at high elevations like mountain tops, water can boil at noticeably lower temperatures.",
+              "prompt_tokens": 25,
+              "completion_tokens": 117,
+              "latency_ms": 2120.189909997862,
+              "cost_usd": 0.00305,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_018FM9tBPqqTTALeCmSy4HLw"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-004-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 0.9,
+            "overall": 0.97,
+            "passed": true,
+            "reasoning": "Correctly identifies Tim Berners-Lee with accurate context, though response appears slightly truncated at the end.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1762,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He proposed the concept in 1989 while working at CERN (the European Organization for Nuclear Research) in Switzerland, and implemented the first successful communication between a client and server via the internet in late 1990.\n\nHis key contributions included developing the foundational technologies that still underpin the web today:\n\n- **HTML** (HyperText Markup Language) for creating web pages\n- **HTTP** (HyperText Transfer Protocol) for transmitting data\n- **URLs** (Uniform Resource Locators) for addressing resources\n\nHe also created the first web browser and web server. Notably, Berners-Lee made the decision to release the underlying technology freely, without patents or royalties, which played a major role in th…",
+              "prompt_tokens": 25,
+              "completion_tokens": 337,
+              "latency_ms": 5472.113170020748,
+              "cost_usd": 0.00855,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01UiiX6XYb5ZXHv6itVciYvW"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-005-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2024,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "At sea level (standard atmospheric pressure of 1 atmosphere or 101.325 kPa), water boils at **100°C** (212°F).\n\nIt's worth noting that this temperature changes with altitude—as you go higher and atmospheric pressure decreases, water boils at lower temperatures. For example, at high elevations like Denver or in mountainous regions, water boils at noticeably lower temperatures, which is why cooking instructions sometimes include adjustments for high altitudes.",
+              "prompt_tokens": 25,
+              "completion_tokens": 159,
+              "latency_ms": 6751.395033992594,
+              "cost_usd": 0.0041,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_018Xh5JKL8PTQWjgXPJdiunh"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-006-simple_qa-sq-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Shakespeare with accurate additional context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1594,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The play *Hamlet* was written by **William Shakespeare**, the renowned English playwright and poet. It's believed to have been written around 1599–1601 and is one of his most famous tragedies. The full title is often given as *The Tragedy of Hamlet, Prince of Denmark*.",
+              "prompt_tokens": 22,
+              "completion_tokens": 96,
+              "latency_ms": 2424.142743984703,
+              "cost_usd": 0.00251,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_013N5GSsPAdSc2p1tvApQ8S2"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play 'Hamlet'?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-007-simple_qa-sq-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Shakespeare with accurate supplementary details.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1757,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The play *Hamlet* was written by **William Shakespeare**, the renowned English playwright and poet. It's believed to have been written around 1600–1601. The full title is often given as *The Tragedy of Hamlet, Prince of Denmark*, and it's one of Shakespeare's most famous works, known for its exploration of themes like revenge, mortality, and madness—as well as the iconic soliloquy beginning \"To be, or not to be.\"",
+              "prompt_tokens": 22,
+              "completion_tokens": 146,
+              "latency_ms": 3075.734227983048,
+              "cost_usd": 0.00376,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01TYyrW6oS9FjZGQqBVsVMv1"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play 'Hamlet'?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-008-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with helpful context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1760,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "At sea level (standard atmospheric pressure of 1 atmosphere, or 101.325 kPa), water boils at **100°C** (212°F).\n\nIt's worth noting that boiling point changes with altitude and atmospheric pressure—at higher elevations where air pressure is lower, water boils at a lower temperature.",
+              "prompt_tokens": 25,
+              "completion_tokens": 105,
+              "latency_ms": 2129.387578985188,
+              "cost_usd": 0.00275,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_017f4yXZ6Dkr993DmCvmwAUu"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-009-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 0.9,
+            "overall": 0.97,
+            "passed": true,
+            "reasoning": "Correctly identifies Tim Berners-Lee with accurate context, though response appears truncated at the end.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2032,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He proposed the idea in 1989 while working at CERN (the European Organization for Nuclear Research) and developed the foundational technologies, including HTML, URLs, and HTTP. He created the first web browser and web server, with the first website going live in 1991.\n\nIt's worth noting a common point of confusion: Berners-Lee invented the World Wide Web, but not the internet itself. The internet—the underlying network infrastructure—was developed earlier, with key contributions from people like Vint Cerf and Bob Kahn, who developed the TCP/IP protocols in the 1970s. The Web is essentially a system of interlinked documents and resources that runs *on top of* the internet.\n\nBerners-Lee notably chose not to patent his i…",
+              "prompt_tokens": 25,
+              "completion_tokens": 290,
+              "latency_ms": 5571.459659986431,
+              "cost_usd": 0.007375,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01XPNKCcHrLLLFMESd42vC1z"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-010-simple_qa-sq-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "light"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Accurate one-sentence definition including light.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2222,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy, water, and carbon dioxide into glucose and oxygen, using chlorophyll to capture sunlight.",
+              "prompt_tokens": 20,
+              "completion_tokens": 67,
+              "latency_ms": 1355.84296201705,
+              "cost_usd": 0.001775,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01UW8qibKu5JRoSaA4ZquG9a"
+              },
+              "turn": 1,
+              "user_text_preview": "Define photosynthesis in one sentence."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-011-code_generation-cg-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "httpx",
+            "asyncclient",
+            "post"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly converts curl to httpx async with AsyncClient and post, including all headers and JSON body.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1832,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "# Converting curl to httpx async\n\nHere's the equivalent `httpx` async call in Python:\n\n```python\nimport httpx\nimport asyncio\n\nasync def search():\n    url = \"https://api.example.com/search\"\n    headers = {\n        \"Authorization\": \"Bearer XYZ\",\n        \"Content-Type\": \"application/json\",\n    }\n    data = {\"q\": \"hello\"}\n\n    async with httpx.AsyncClient() as client:\n        response = await client.post(url, headers=headers, json=data)\n        response.raise_for_status()\n        return response.json()\n\n# Run it\nresult = asyncio.run(search())\nprint(result)\n```\n\n## Key points\n\n| curl part | httpx equivalent |\n|-----------|------------------|\n| `-X POST` | `client.post(...)` |\n| `-H \"Authorization: Bearer XYZ\"` | `headers={\"Authorization\": \"Bearer XYZ\"}` |\n| `-d '{\"q\":\"hello\"}'` | `json={\"q\": \"h…",
+              "prompt_tokens": 70,
+              "completion_tokens": 593,
+              "latency_ms": 7024.460003012791,
+              "cost_usd": 0.015175,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_013JEFKD6LrikadZR4g3dZiX"
+              },
+              "turn": 1,
+              "user_text_preview": "Convert this curl command to an httpx async call in Python:\ncurl -X POST -H \"Authorization: Bearer XYZ\" -d '{\"q\":\"hello\"}' https://api.example.com/search\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-012-multi_turn-mt-004",
+          "is_multi_turn": true,
+          "turns": 4,
+          "expected_category": null,
+          "expected_contains": [],
+          "quality_check": {
+            "checked": false,
+            "pass": null,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly answers that DFS stands for Depth-First Search with helpful context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 5363,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "# Cycle Detection in Directed Graph\n\nHere are a few approaches to detect cycles in a directed graph.\n\n## Approach 1: DFS with Color States (Recommended)\n\nThis uses three states to track nodes during DFS traversal.\n\n```python\ndef has_cycle(graph):\n    \"\"\"\n    Detect if a directed graph contains a cycle using DFS.\n    \n    Args:\n        graph: dict where keys are nodes and values are lists of adjacent nodes\n               e.g., {0: [1, 2], 1: [2], 2: [0]}\n    \n    Returns:\n        bool: True if a cycle exists, False otherwise\n    \"\"\"\n    # States: 0 = unvisited (white), 1 = in progress (gray), 2 = done (black)\n    WHITE, GRAY, BLACK = 0, 1, 2\n    color = {node: WHITE for node in graph}\n\n    def dfs(node):\n        color[node] = GRAY  # Mark as being processed\n        \n        for neighbor in …",
+              "prompt_tokens": 25,
+              "completion_tokens": 1764,
+              "latency_ms": 16602.306175016565,
+              "cost_usd": 0.044225,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01Dn8DEaXTXvhYRVBPrn9KSo"
+              },
+              "turn": 1,
+              "user_text_preview": "Write a Python function to detect cycles in a directed graph."
+            },
+            {
+              "response_text": "# Time Complexity Analysis\n\nAll three approaches have the **same time complexity: O(V + E)**, where:\n- **V** = number of vertices (nodes)\n- **E** = number of edges\n\n## Why O(V + E)?\n\n### DFS Approaches (1 & 2)\n\n```python\nfor node in graph:          # Visit each vertex once → O(V)\n    if color[node] == WHITE:\n        dfs(node)\n\ndef dfs(node):\n    for neighbor in graph.get(node, []):  # Examine each edge once → O(E)\n        ...\n```\n\n- Each **vertex** is visited exactly once (the color states prevent revisiting) → **O(V)**\n- Each **edge** is traversed exactly once (when we iterate over a node's neighbors) → **O(E)**\n- Total: **O(V + E)**\n\n### Kahn's Algorithm (BFS)\n\n```python\n# Computing in-degrees: visits every edge once\nfor node in graph:\n    for neighbor in graph[node]:   # O(E)\n        in…",
+              "prompt_tokens": 1801,
+              "completion_tokens": 744,
+              "latency_ms": 9575.571917986963,
+              "cost_usd": 0.027605,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01FAkPcTL8MG99FtrUoecFcN"
+              },
+              "turn": 2,
+              "user_text_preview": "What's the time complexity of that?"
+            },
+            {
+              "response_text": "# Space Complexity Analysis\n\nAll three approaches have **O(V)** space complexity, but they use it differently. Let me break down each one.\n\n## Approach 1: DFS with Colors\n\n```python\ncolor = {node: WHITE for node in graph}   # O(V) — one entry per node\n\ndef dfs(node):\n    ...  # recursion stack\n```\n\n**Space breakdown:**\n| Component | Space |\n|-----------|-------|\n| `color` dictionary | O(V) |\n| Recursion call stack | O(V) worst case |\n| **Total** | **O(V)** |\n\nThe recursion stack can grow to depth **V** in the worst case (e.g., a graph that's one long chain: `0 → 1 → 2 → ... → V`).\n\n## Approach 2: DFS Returning the Cycle\n\n```python\ncolor = {node: WHITE for node in graph}   # O(V)\nparent = {}                                # O(V)\n\ndef dfs(node):\n    cycle = [...]   # O(V) in worst case\n```\n\n…",
+              "prompt_tokens": 2553,
+              "completion_tokens": 1030,
+              "latency_ms": 11378.933580999728,
+              "cost_usd": 0.038515,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_019acfhpL7m1Yq7FRmNiBCtm"
+              },
+              "turn": 3,
+              "user_text_preview": "And space complexity?"
+            },
+            {
+              "response_text": "**DFS** stands for **Depth-First Search**.\n\n## What it means\n\nIt's a graph traversal algorithm that explores **as deep as possible** along each branch before **backtracking**.\n\n## The \"Depth-First\" idea\n\nImagine exploring a maze: you follow one path all the way to the end (going *deep*), and only when you hit a dead end do you back up and try a different route.\n\n```\n        A\n       / \\\n      B   C\n     / \\\n    D   E\n\nDFS order: A → B → D → (backtrack) → E → (backtrack) → C\n```\n\nIt fully explores B's branch (down to D and E) **before** ever visiting C.\n\n## Contrast with BFS\n\n| | DFS (Depth-First Search) | BFS (Breadth-First Search) |\n|---|---|---|\n| Strategy | Go **deep** first | Go **wide** first (level by level) |\n| Data structure | Stack (or recursion) | Queue |\n| Order above | A → B → …",
+              "prompt_tokens": 3599,
+              "completion_tokens": 472,
+              "latency_ms": 7346.501524007181,
+              "cost_usd": 0.029795,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01856dQpG9DiQE1N2b1WeehS"
+              },
+              "turn": 4,
+              "user_text_preview": "Thanks. What does DFS stand for?"
+            }
+          ],
+          "notes": "code-shaped turn followed by simple follow-ups — should stay at code (no downgrade)"
+        },
+        {
+          "id": "mix-013-simple_qa-sq-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "light"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Accurate one-sentence definition including light energy.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1792,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy, water, and carbon dioxide into glucose and oxygen.",
+              "prompt_tokens": 20,
+              "completion_tokens": 52,
+              "latency_ms": 1200.371785002062,
+              "cost_usd": 0.0014,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01Te6EiAQNXrpptoszUVuQEy"
+              },
+              "turn": 1,
+              "user_text_preview": "Define photosynthesis in one sentence."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-014-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with accurate additional context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1647,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell in **1989**, specifically on **November 9, 1989**. This event marked a pivotal moment in the end of the Cold War and led to the reunification of Germany, which was formally completed on October 3, 1990.",
+              "prompt_tokens": 21,
+              "completion_tokens": 79,
+              "latency_ms": 2248.8401450100355,
+              "cost_usd": 0.00208,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01SApwaQnZYxEUkXJFRFzJAo"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-015-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with accurate additional context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1647,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell in **1989**, specifically on **November 9, 1989**. This event marked a pivotal moment in the end of the Cold War and led to the reunification of Germany, which was formally completed on October 3, 1990.",
+              "prompt_tokens": 21,
+              "completion_tokens": 79,
+              "latency_ms": 2385.705187014537,
+              "cost_usd": 0.00208,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01Dws3wFRZZHi7Pv8Ygt8sCL"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-016-code_generation-cg-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "httpx",
+            "asyncclient",
+            "post"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 0.9,
+            "instruction_following": 1.0,
+            "overall": 0.95,
+            "passed": true,
+            "reasoning": "Correctly converts curl to httpx async with AsyncClient and post, matching expected elements.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1742,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "# Converting curl to httpx async call\n\nHere's the equivalent `httpx` async call in Python:\n\n```python\nimport httpx\nimport asyncio\n\n\nasync def search():\n    url = \"https://api.example.com/search\"\n    headers = {\n        \"Authorization\": \"Bearer XYZ\",\n    }\n    data = '{\"q\":\"hello\"}'\n\n    async with httpx.AsyncClient() as client:\n        response = await client.post(url, headers=headers, content=data)\n        return response\n\n\n# Run it\nasync def main():\n    response = await search()\n    print(response.status_code)\n    print(response.text)\n\n\nasyncio.run(main())\n```\n\n## Notes & Recommendations\n\n### Using `json=` instead of raw `content=`\n\nSince your `-d` payload is JSON, it's cleaner to use the `json=` parameter, which automatically serializes the dict and sets the `Content-Type: application/j…",
+              "prompt_tokens": 70,
+              "completion_tokens": 662,
+              "latency_ms": 7280.52886200021,
+              "cost_usd": 0.0169,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01NzmbTggNjURhnyKzFFb9ND"
+              },
+              "turn": 1,
+              "user_text_preview": "Convert this curl command to an httpx async call in Python:\ncurl -X POST -H \"Authorization: Bearer XYZ\" -d '{\"q\":\"hello\"}' https://api.example.com/search\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-017-simple_qa-sq-011",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "jupiter"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 0.9,
+            "overall": 0.97,
+            "passed": true,
+            "reasoning": "Correctly identifies Jupiter with accurate supporting facts.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1785,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The largest planet in our solar system is **Jupiter**.\n\nHere are some key facts about Jupiter:\n\n- **Size**: It has a diameter of about 86,881 miles (139,820 km)—roughly 11 times wider than Earth.\n- **Mass**: Jupiter is more massive than all the other planets in the solar system combined—about 2.5 times their total mass.\n- **Type**: It's a gas giant, composed mainly of hydrogen and helium.\n- **Notable feature**: It has the Great Red Spot, a giant storm that has been raging for hundreds of years.\n- **Moons**: Jupiter has at least 95 known moons, including the four large Galilean moons: Io, Europa, Ganymede, and Callisto.\n\nWould you like to know more about Jupiter or any other planet?",
+              "prompt_tokens": 19,
+              "completion_tokens": 265,
+              "latency_ms": 3931.8903780076653,
+              "cost_usd": 0.00672,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01U9bt4Kvge9y7y8XMqBdWtv"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the largest planet in our solar system?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-018-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 0.9,
+            "overall": 0.97,
+            "passed": true,
+            "reasoning": "Correctly credits Tim Berners-Lee with accurate context, though slightly verbose for a simple QA and ends with a truncated sentence.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2439,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He proposed the concept in 1989 while working at CERN (the European Organization for Nuclear Research) and developed the foundational technologies, including HTML (HyperText Markup Language), HTTP (HyperText Transfer Protocol), and URLs (Uniform Resource Locators).\n\nHe also created the first web browser and web server, with the World Wide Web becoming publicly available in the early 1990s. Notably, Berners-Lee chose not to patent his invention, allowing the technology to be used freely, which contributed significantly to the rapid growth and widespread adoption of the Web.\n\nIt's worth distinguishing the World Wide Web from the Internet itself—the Internet is the underlying network infrastructure that predates the Web,…",
+              "prompt_tokens": 25,
+              "completion_tokens": 292,
+              "latency_ms": 4818.493416998535,
+              "cost_usd": 0.007425,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01VDN8nrfSiZhyp6mmDMzw66"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-019-code_generation-cg-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "for x in nums",
+            "if x % 2"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correct list comprehension refactor, concise as requested.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1371,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "```python\nresult = [x * x for x in nums if x % 2 == 0]\n```",
+              "prompt_tokens": 68,
+              "completion_tokens": 28,
+              "latency_ms": 996.76966201514,
+              "cost_usd": 0.00104,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_01Ee2YqZku6f6zeJe488DDiY"
+              },
+              "turn": 1,
+              "user_text_preview": "Refactor this Python snippet to use a list comprehension:\n\n    result = []\n    for x in nums:\n        if x % 2 == 0:\n            result.append(x * x)\n\nJust the refactor.\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-020-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with helpful context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1765,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "At sea level (standard atmospheric pressure of 1 atmosphere or 101.325 kPa), water boils at **100°C** (212°F).\n\nIt's worth noting that this temperature decreases at higher altitudes, where atmospheric pressure is lower. For example, at higher elevations like mountain tops, water can boil at noticeably lower temperatures.",
+              "prompt_tokens": 25,
+              "completion_tokens": 118,
+              "latency_ms": 2114.310833014315,
+              "cost_usd": 0.003075,
+              "model": "claude-opus-4-8",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "msg_016JsKYBzfxZiuf5Gto243e3"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        }
+      ]
+    },
+    "direct:openai:gpt-4o-mini": {
+      "label": "direct-openai-gpt-4o-mini",
+      "summary": {
+        "target": "direct-openai-gpt-4o-mini",
+        "n_prompts": 20,
+        "n_calls": 23,
+        "n_errors": 0,
+        "n_cached": 0,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.002175,
+        "tokens": {
+          "prompt": 3501,
+          "completion": 2749
+        },
+        "latency_ms": {
+          "p50": 1276.06,
+          "p95": 9221.28,
+          "p99": 13186.82,
+          "max": 14207.48
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 19,
+          "n_pass": 19,
+          "rate": 1.0
+        },
+        "judge": {
+          "n": 20,
+          "n_errors": 0,
+          "mean_overall": 0.9935,
+          "mean_correctness": 1.0,
+          "pass_rate": 1.0,
+          "by_judge_model": {
+            "claude-opus-4-7": 20
+          }
+        },
+        "routing": {
+          "tiers": {},
+          "categories": {},
+          "escalations": 0,
+          "category_match": {
+            "checked": 0,
+            "match": 0,
+            "rate": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "mix-001-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with precise date.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2109,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell on November 9, 1989.",
+              "prompt_tokens": 16,
+              "completion_tokens": 13,
+              "latency_ms": 1124.5652769866865,
+              "cost_usd": 1.02e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLikeDRJohohnIS7vBwfbdzWCPvb"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-002-simple_qa-sq-001",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "canberra"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Canberra as Australia's capital.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1666,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The capital of Australia is Canberra.",
+              "prompt_tokens": 14,
+              "completion_tokens": 7,
+              "latency_ms": 498.4917849942576,
+              "cost_usd": 6.3e-06,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLil8sNcTMI67TYhGCER0CDnrDEu"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the capital of Australia?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-003-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correct and concise answer matching ground truth.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1717,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is 100 degrees Celsius (°C).",
+              "prompt_tokens": 20,
+              "completion_tokens": 17,
+              "latency_ms": 668.8587829994503,
+              "cost_usd": 1.32e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLilQFKzvUDqlxm7cdzZL1HBGZuZ"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-004-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly credits Tim Berners-Lee with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1568,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He proposed it in 1989 while working at CERN, and he developed the first successful communication between a Hypertext Transfer Protocol (HTTP) client and server. His work laid the foundation for the web as we know it today.",
+              "prompt_tokens": 19,
+              "completion_tokens": 62,
+              "latency_ms": 1276.0600240144413,
+              "cost_usd": 4.005e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLimXSppgo1AQfWdEcbCh85QBgvd"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-005-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correct and concise answer matching ground truth.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1717,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is 100 degrees Celsius (°C).",
+              "prompt_tokens": 20,
+              "completion_tokens": 17,
+              "latency_ms": 749.774019990582,
+              "cost_usd": 1.32e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLiprwnrISUsBbYnwvZiBwzGoegv"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-006-simple_qa-sq-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Shakespeare as the author.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1612,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The play 'Hamlet' was written by William Shakespeare.",
+              "prompt_tokens": 15,
+              "completion_tokens": 12,
+              "latency_ms": 645.7844509859569,
+              "cost_usd": 9.45e-06,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLiq0qhmSTWRb1HSkUKhHMvN273s"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play 'Hamlet'?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-007-simple_qa-sq-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Shakespeare with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1887,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The play 'Hamlet' was written by William Shakespeare. It is one of his most famous tragedies and is believed to have been written around 1600.",
+              "prompt_tokens": 15,
+              "completion_tokens": 32,
+              "latency_ms": 967.6512020232622,
+              "cost_usd": 2.145e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLisLg50RXErhNysutNYapORwx0X"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play 'Hamlet'?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-008-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 100°C with helpful context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1473,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is approximately 100 degrees Celsius (212 degrees Fahrenheit). However, this can vary slightly depending on atmospheric pressure and purity of the water.",
+              "prompt_tokens": 20,
+              "completion_tokens": 35,
+              "latency_ms": 997.2660839848686,
+              "cost_usd": 2.4e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLivbXJ5iR6RflNJAmOpjgWffYbj"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-009-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly credits Tim Berners-Lee with accurate context.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1643,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The World Wide Web is generally credited to Tim Berners-Lee, a British computer scientist. He proposed the concept in 1989 while working at CERN, and he developed the first successful communication between a Hypertext Transfer Protocol (HTTP) client and server via the internet. His work laid the foundation for the modern web as we know it today.",
+              "prompt_tokens": 19,
+              "completion_tokens": 70,
+              "latency_ms": 1750.1428019895684,
+              "cost_usd": 4.485e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLiyear8oVP8ZvrHzbN9ZUQwmA32"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-010-simple_qa-sq-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "light"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Accurate one-sentence definition containing 'light' as expected.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2136,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Photosynthesis is the biochemical process by which green plants, algae, and some bacteria convert light energy, usually from the sun, into chemical energy in the form of glucose, using carbon dioxide and water, while releasing oxygen as a byproduct.",
+              "prompt_tokens": 14,
+              "completion_tokens": 48,
+              "latency_ms": 1896.858872991288,
+              "cost_usd": 3.09e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLj14W5uQIx5F6gg1YcE1MCalSqQ"
+              },
+              "turn": 1,
+              "user_text_preview": "Define photosynthesis in one sentence."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-011-code_generation-cg-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "httpx",
+            "asyncclient",
+            "post"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 0.85,
+            "instruction_following": 1.0,
+            "overall": 0.93,
+            "passed": true,
+            "reasoning": "Correctly converts curl to httpx async call with AsyncClient and post, though response appears truncated at the end.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2298,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "To convert the given `curl` command to an asynchronous HTTP call using the `httpx` library in Python, you'll first need to install the `httpx` library if you haven't already. You can do this via pip:\n\n```bash\npip install httpx\n```\n\nThen, you can use the following Python code to perform the same request:\n\n```python\nimport httpx\nimport asyncio\n\nasync def fetch_data():\n    url = \"https://api.example.com/search\"\n    headers = {\n        \"Authorization\": \"Bearer XYZ\",\n        \"Content-Type\": \"application/json\",  # Adding content type\n    }\n    payload = {\"q\": \"hello\"}\n\n    async with httpx.AsyncClient() as client:\n        response = await client.post(url, headers=headers, json=payload)\n        return response.json()  # or response.text for a string response\n\nasync def main():\n    response_data =…",
+              "prompt_tokens": 48,
+              "completion_tokens": 388,
+              "latency_ms": 9568.12921600067,
+              "cost_usd": 0.00024,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLj55ZO14YrPDzMEt1h79WKNByf6"
+              },
+              "turn": 1,
+              "user_text_preview": "Convert this curl command to an httpx async call in Python:\ncurl -X POST -H \"Authorization: Bearer XYZ\" -d '{\"q\":\"hello\"}' https://api.example.com/search\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-012-multi_turn-mt-004",
+          "is_multi_turn": true,
+          "turns": 4,
+          "expected_category": null,
+          "expected_contains": [],
+          "quality_check": {
+            "checked": false,
+            "pass": null,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 0.9,
+            "overall": 0.97,
+            "passed": true,
+            "reasoning": "Correctly answers that DFS stands for Depth-First Search; extra detail is helpful though slightly more than needed for a simple question.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2549,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "To detect cycles in a directed graph, we can use Depth-First Search (DFS). The idea is to traverse the graph while keeping track of vertices that are currently being explored. If we encounter a vertex that is already on the current DFS path, a cycle is detected.\n\nHere’s how you can implement this in Python:\n\n```python\ndef detect_cycle(graph):\n    \"\"\"\n    Detects a cycle in a directed graph using Depth-First Search (DFS).\n    \n    Args:\n    graph (dict): A dictionary representation of the directed graph where\n                  keys are node identifiers and values are lists of adjacent nodes.\n\n    Returns:\n    bool: True if there is a cycle in the graph, False otherwise.\n    \"\"\"\n    \n    def dfs(node):\n        # If the node is in the current path, a cycle is detected\n        if node in visit…",
+              "prompt_tokens": 19,
+              "completion_tokens": 673,
+              "latency_ms": 14207.482726022135,
+              "cost_usd": 0.00040665,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLjGjG75ueUrzfyUfFyUfyWCNAyU"
+              },
+              "turn": 1,
+              "user_text_preview": "Write a Python function to detect cycles in a directed graph."
+            },
+            {
+              "response_text": "The time complexity of the cycle detection algorithm in a directed graph using Depth-First Search (DFS) is \\(O(V + E)\\), where:\n\n- \\(V\\) is the number of vertices (nodes) in the graph.\n- \\(E\\) is the number of edges in the graph.\n\n### Explanation of Time Complexity:\n\n1. **Traversal of Nodes**: \n   - Each vertex is visited exactly once during the DFS traversal. This contributes \\(O(V)\\) to the time complexity.\n\n2. **Traversal of Edges**:\n   - For each vertex, we might explore all of its adjacent vertices (neighbors) through its outgoing edges. The total number of outgoing edges across the entire graph is \\(E\\). This contributes \\(O(E)\\) to the time complexity.\n\n3. **Overall Complexity**: \n   - The total time complexity combines both contributions, yielding \\(O(V + E)\\).\n\n### Space Complexit…",
+              "prompt_tokens": 707,
+              "completion_tokens": 292,
+              "latency_ms": 5480.522494995967,
+              "cost_usd": 0.00028125,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLjVBD8NpJ6vwXfXBrAGbc34EzE7"
+              },
+              "turn": 2,
+              "user_text_preview": "What's the time complexity of that?"
+            },
+            {
+              "response_text": "The space complexity of the cycle detection algorithm using Depth-First Search (DFS) in a directed graph can be analyzed as follows:\n\n### Space Complexity Breakdown:\n\n1. **Visited Set**:\n   - The `visited` set stores all the nodes that have been fully processed. In the worst case, this can grow to include all vertices in the graph, contributing \\(O(V)\\) to the space complexity.\n\n2. **Visiting Set**:\n   - The `visiting` set keeps track of the nodes that are currently in the recursion stack of the DFS. This set can also grow to include all vertices in the worst case, contributing another \\(O(V)\\).\n\n3. **Recursion Stack**:\n   - The recursive nature of the DFS algorithm also adds to the space complexity due to the call stack. In the worst case (for example, in a deep graph where every vertex h…",
+              "prompt_tokens": 1011,
+              "completion_tokens": 317,
+              "latency_ms": 6099.643993016798,
+              "cost_usd": 0.00034185,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLja311cg5L6o99benLldMixq2fk"
+              },
+              "turn": 3,
+              "user_text_preview": "And space complexity?"
+            },
+            {
+              "response_text": "DFS stands for **Depth-First Search**. It is an algorithm used for traversing or searching through data structures, especially graphs and trees. \n\n### Key Characteristics of Depth-First Search (DFS):\n\n1. **Traversal Method**: \n   - DFS explores as far down a branch of the graph as possible before backtracking. This means it goes deep into the graph structure before visiting other neighbors at the same level.\n\n2. **Data Structure**:\n   - DFS can be implemented using either recursion or an explicit stack data structure. In recursive implementations, the call stack serves to keep track of the nodes being explored.\n\n3. **Applications**:\n   - DFS is used in various applications, including:\n     - Finding connected components in a graph.\n     - Solving puzzles with a single solution (like mazes)…",
+              "prompt_tokens": 1344,
+              "completion_tokens": 255,
+              "latency_ms": 4674.9331270111725,
+              "cost_usd": 0.0003546,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLjgiHNTOMTPfoxdauR4rNFtIB1Q"
+              },
+              "turn": 4,
+              "user_text_preview": "Thanks. What does DFS stand for?"
+            }
+          ],
+          "notes": "code-shaped turn followed by simple follow-ups — should stay at code (no downgrade)"
+        },
+        {
+          "id": "mix-013-simple_qa-sq-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "light"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Accurate one-sentence definition that includes light and key elements.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1865,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Photosynthesis is the biochemical process by which green plants, algae, and some bacteria convert light energy, usually from the sun, into chemical energy in the form of glucose, using carbon dioxide and water while releasing oxygen as a byproduct.",
+              "prompt_tokens": 14,
+              "completion_tokens": 47,
+              "latency_ms": 1490.6449390109628,
+              "cost_usd": 3.03e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLjoJVuFLS8dfYvmXnYBeCWlPFI3"
+              },
+              "turn": 1,
+              "user_text_preview": "Define photosynthesis in one sentence."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-014-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with precise date.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2109,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell on November 9, 1989.",
+              "prompt_tokens": 16,
+              "completion_tokens": 13,
+              "latency_ms": 1446.9915940135252,
+              "cost_usd": 1.02e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLjr2ffJ3dfoYddmQchboFikhWjq"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-015-simple_qa-sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly states 1989 with precise date.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2109,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell on November 9, 1989.",
+              "prompt_tokens": 16,
+              "completion_tokens": 13,
+              "latency_ms": 667.6985000085551,
+              "cost_usd": 1.02e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLjsasMRxwZTXP5KiXWuvPC5xXgn"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-016-code_generation-cg-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "httpx",
+            "asyncclient",
+            "post"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 0.95,
+            "instruction_following": 1.0,
+            "overall": 0.97,
+            "passed": true,
+            "reasoning": "Correctly converts curl to httpx async with AsyncClient and post, matching expected keywords.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 2197,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "To convert the provided `curl` command to an async HTTP call using the `httpx` library in Python, you can use the following code:\n\n```python\nimport httpx\nimport asyncio\n\nasync def main():\n    url = \"https://api.example.com/search\"\n    headers = {\n        \"Authorization\": \"Bearer XYZ\",\n        \"Content-Type\": \"application/json\"  # It's a good practice to specify the content type\n    }\n    data = {\"q\": \"hello\"}\n\n    async with httpx.AsyncClient() as client:\n        response = await client.post(url, json=data, headers=headers)\n\n    print(response.status_code)\n    print(response.json())\n\n# Running the async function\nasyncio.run(main())\n```\n\n### Explanation:\n1. **httpx** is imported and an asynchronous function `main` is defined.\n2. The URL (`https://api.example.com/search`) and headers includi…",
+              "prompt_tokens": 48,
+              "completion_tokens": 275,
+              "latency_ms": 5351.562949013896,
+              "cost_usd": 0.0001722,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLjtWIZvyjz3G9Mf94a7oDVCD6rX"
+              },
+              "turn": 1,
+              "user_text_preview": "Convert this curl command to an httpx async call in Python:\ncurl -X POST -H \"Authorization: Bearer XYZ\" -d '{\"q\":\"hello\"}' https://api.example.com/search\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-017-simple_qa-sq-011",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "jupiter"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Jupiter with accurate supporting details.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1519,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "The largest planet in our solar system is Jupiter. It is a gas giant, known for its massive size, strong magnetic field, and prominent storm systems, including the Great Red Spot, which is a giant storm larger than Earth. Jupiter has a diameter of about 86,881 miles (139,822 kilometers) and is primarily composed of hydrogen and helium.",
+              "prompt_tokens": 17,
+              "completion_tokens": 72,
+              "latency_ms": 1483.4307370183524,
+              "cost_usd": 4.575e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLk1tKv3QbX8aW0wcmtDyhUYNAYp"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the largest planet in our solar system?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-018-simple_qa-sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correctly identifies Tim Berners-Lee with accurate supporting details.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1660,
+            "cached": false
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He proposed the concept in 1989 while working at CERN and developed the first successful communication between a Hypertext Transfer Protocol (HTTP) client and server via the internet in 1990.",
+              "prompt_tokens": 19,
+              "completion_tokens": 54,
+              "latency_ms": 1204.1298509866465,
+              "cost_usd": 3.525e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLk4NSm9vqV6jP1cscy0zAb4EiHu"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-019-code_generation-cg-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "code",
+          "expected_contains": [
+            "for x in nums",
+            "if x % 2"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correct list comprehension refactor, concise as requested.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1371,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "```python\nresult = [x * x for x in nums if x % 2 == 0]\n```",
+              "prompt_tokens": 50,
+              "completion_tokens": 23,
+              "latency_ms": 606.1097769998014,
+              "cost_usd": 2.13e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLk6WDFCEMhxo8LQeQ8N4k0VbccD"
+              },
+              "turn": 1,
+              "user_text_preview": "Refactor this Python snippet to use a list comprehension:\n\n    result = []\n    for x in nums:\n        if x % 2 == 0:\n            result.append(x * x)\n\nJust the refactor.\n"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mix-020-simple_qa-sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "judge_verdict": {
+            "mode": "single",
+            "correctness": 1.0,
+            "completeness": 1.0,
+            "instruction_following": 1.0,
+            "overall": 1.0,
+            "passed": true,
+            "reasoning": "Correct and concise answer matching expected value.",
+            "judge_model": "claude-opus-4-7",
+            "prompt_version": "2026-06-19.v1",
+            "judge_latency_ms": 1661,
+            "cached": true
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is 100 degrees Celsius.",
+              "prompt_tokens": 20,
+              "completion_tokens": 14,
+              "latency_ms": 595.6575380114373,
+              "cost_usd": 1.14e-05,
+              "model": "gpt-4o-mini",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": null,
+              "error": null,
+              "raw": {
+                "id": "chatcmpl-DsLk7e6M48IwIrmzgI3nlnZJn1NxP"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        }
+      ]
+    }
+  }
+}

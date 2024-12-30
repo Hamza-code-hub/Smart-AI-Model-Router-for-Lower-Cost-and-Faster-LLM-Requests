@@ -1,0 +1,35 @@
+Workload: paraphrase_cache v1 (10 prompts, fingerprint=8983d5c3a9c15acd)
+Targets:  gateway:fast-qa
+
+=== gateway:fast-qa ===
+
+JSON written → eval/results/resume_run/2026-06-19_paraphrase_cache_gateway-fast-qa.json
+
+## Eval — paraphrase_cache v1
+
+- Date: `2026-06-19T05:44:40+00:00`
+- Workload: `paraphrase_cache` (10 prompts, fingerprint=`8983d5c3a9c15acd`)
+- Targets: `gateway:fast-qa`
+
+### `gateway:fast-qa`
+
+- **Calls**: 10 across 10 prompts (0 errors, 0 cached, 0 fallback)
+- **Latency**: p50 961ms · p95 1533ms · p99 1544ms · max 1547ms
+- **Cost**: $0.00243 (148 prompt + 456 completion tokens)
+- **Quality (substring check)**: 100.0% (10/10)
+
+#### Per-prompt
+
+| Prompt | Turns | Model | Tier/Cat | Lat (last) | Cost | Quality |
+|---|---:|---|---|---:|---:|:---:|
+| `pc-a1-prime` | 1 | claude-haiku-4-5 | — | 678ms | $0.0000640 | ✓ |
+| `pc-a2-prime` | 1 | claude-haiku-4-5 | — | 848ms | $0.00021 | ✓ |
+| `pc-a3-prime` | 1 | claude-haiku-4-5 | — | 577ms | $0.00014 | ✓ |
+| `pc-a4-prime` | 1 | claude-haiku-4-5 | — | 1515ms | $0.00042 | ✓ |
+| `pc-a5-prime` | 1 | claude-haiku-4-5 | — | 1502ms | $0.00042 | ✓ |
+| `pc-b1-para` | 1 | claude-haiku-4-5 | — | 702ms | $0.0000700 | ✓ |
+| `pc-b2-para` | 1 | claude-haiku-4-5 | — | 1026ms | $0.00023 | ✓ |
+| `pc-b3-para` | 1 | claude-haiku-4-5 | — | 896ms | $0.0000690 | ✓ |
+| `pc-b4-para` | 1 | claude-haiku-4-5 | — | 1547ms | $0.00041 | ✓ |
+| `pc-b5-para` | 1 | claude-haiku-4-5 | — | 1127ms | $0.00040 | ✓ |
+

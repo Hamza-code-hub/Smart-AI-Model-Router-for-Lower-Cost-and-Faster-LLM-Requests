@@ -1,0 +1,573 @@
+{
+  "run_metadata": {
+    "date": "2026-06-17T06:14:19+00:00",
+    "workload": {
+      "name": "simple_qa",
+      "version": 1,
+      "fingerprint": "61a52aaa46a17ec9",
+      "source": "eval/workloads/simple_qa.yaml",
+      "n_prompts": 12
+    },
+    "targets": [
+      "gateway:auto"
+    ],
+    "gateway_url": "http://localhost:8000"
+  },
+  "results_by_target": {
+    "gateway:auto": {
+      "label": "gateway-auto",
+      "summary": {
+        "target": "gateway-auto",
+        "n_prompts": 12,
+        "n_calls": 12,
+        "n_errors": 0,
+        "n_cached": 0,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.002924,
+        "tokens": {
+          "prompt": 204,
+          "completion": 544
+        },
+        "latency_ms": {
+          "p50": 900.99,
+          "p95": 1481.94,
+          "p99": 1483.42,
+          "max": 1483.79
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 12,
+          "n_pass": 10,
+          "rate": 0.8333
+        },
+        "routing": {
+          "tiers": {
+            "heuristic": 9,
+            "llm": 3
+          },
+          "categories": {
+            "fast-qa": 12
+          },
+          "escalations": 0,
+          "category_match": {
+            "checked": 12,
+            "match": 12,
+            "rate": 1.0
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "sq-001",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "canberra"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "The capital of Australia is Canberra. It was purpose-built as the capital city and is located in the Australian Capital Territory (ACT), situated between the two largest cities, Sydney and Melbourne.",
+              "prompt_tokens": 14,
+              "completion_tokens": 45,
+              "latency_ms": 1246.2662350008031,
+              "cost_usd": 0.000239,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01UuBtSShKiaJ1uATabHPmGW"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the capital of Australia?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "shakespeare"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "William Shakespeare wrote \"Hamlet.\" It was written early in his career, likely between 1600 and 1601, and remains one of his most famous and frequently performed works.",
+              "prompt_tokens": 17,
+              "completion_tokens": 41,
+              "latency_ms": 1480.4292039916618,
+              "cost_usd": 0.000222,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": 0.99
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01QEZZk6GPhnibtCbjAAtvsn"
+              },
+              "turn": 1,
+              "user_text_preview": "Who wrote the play 'Hamlet'?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1989"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "The Berlin Wall fell in 1989. It was officially opened on November 9, 1989, marking a pivotal moment in the end of the Cold War and leading to the reunification of Germany in 1990.",
+              "prompt_tokens": 16,
+              "completion_tokens": 50,
+              "latency_ms": 1483.789603007608,
+              "cost_usd": 0.000266,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": 0.99
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01Y7dS97TrhivJFueeXvjWhq"
+              },
+              "turn": 1,
+              "user_text_preview": "In what year did the Berlin Wall fall?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "light"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "Photosynthesis is the process by which plants, algae, and some bacteria use sunlight to convert carbon dioxide and water into glucose and oxygen.",
+              "prompt_tokens": 16,
+              "completion_tokens": 35,
+              "latency_ms": 680.2641539979959,
+              "cost_usd": 0.000191,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01N4yX8FsvqjCAMHAZ68M16m"
+              },
+              "turn": 1,
+              "user_text_preview": "Define photosynthesis in one sentence."
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-005",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "1000"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": false,
+            "missing": [
+              "1000"
+            ]
+          },
+          "calls": [
+            {
+              "response_text": "According to the SI (International System of Units) definition, there are **1,000 bytes** in a kilobyte (kB).\n\nThis is different from the binary definition, where a kibibyte (KiB) = 1,024 bytes.",
+              "prompt_tokens": 20,
+              "completion_tokens": 60,
+              "latency_ms": 901.3003339932766,
+              "cost_usd": 0.00032,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01GHzxoL4recvekjp8nnDg3y"
+              },
+              "turn": 1,
+              "user_text_preview": "How many bytes are in a kilobyte (SI definition)?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-006",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "hypertext",
+            "transfer"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "HTTP stands for **HyperText Transfer Protocol**.\n\nIt's the foundational protocol used for transferring data across the World Wide Web, enabling communication between web browsers and web servers.",
+              "prompt_tokens": 16,
+              "completion_tokens": 41,
+              "latency_ms": 726.0530320054386,
+              "cost_usd": 0.000221,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01NoLfsND6QSaEE4eg8oqdru"
+              },
+              "turn": 1,
+              "user_text_preview": "What does the acronym HTTP stand for?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-007",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "gold"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "Gold has the chemical symbol Au.",
+              "prompt_tokens": 15,
+              "completion_tokens": 10,
+              "latency_ms": 1370.2702059963485,
+              "cost_usd": 6.5e-05,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "llm",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": 0.99
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01Ww6QWiVLTfVWT5amaewfyu"
+              },
+              "turn": 1,
+              "user_text_preview": "Which element has the chemical symbol Au?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-008",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "seven",
+            "7"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": false,
+            "missing": [
+              "seven"
+            ]
+          },
+          "calls": [
+            {
+              "response_text": "There are **7 continents**:\n\n1. Africa\n2. Antarctica\n3. Asia\n4. Europe\n5. North America\n6. Oceania (Australia)\n7. South America\n\nNote: Some countries use a 6-continent model (combining North and South America, or Europe and Asia), but the 7-continent model is most widely taught in",
+              "prompt_tokens": 14,
+              "completion_tokens": 80,
+              "latency_ms": 1463.8107339997077,
+              "cost_usd": 0.000414,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01CZrQuGikfLcY32CGjQug7r"
+              },
+              "turn": 1,
+              "user_text_preview": "How many continents are there?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-009",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "100"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "The boiling point of water at sea level is **100°C** (212°F).\n\nThis occurs at standard atmospheric pressure of 101.325 kPa (1 atm). At higher altitudes where atmospheric pressure is lower, water boils at a lower temperature.",
+              "prompt_tokens": 22,
+              "completion_tokens": 63,
+              "latency_ms": 854.8519939940888,
+              "cost_usd": 0.000337,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01AMkQ7jCtM5QAfQfg2XCoQw"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the boiling point of water in Celsius at sea level?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-010",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "berners-lee"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "Tim Berners-Lee is generally credited with inventing the World Wide Web. He created it in 1989 while working at CERN (the European Organization for Nuclear Research) in Switzerland, developing the system as a way to help researchers share information more easily.",
+              "prompt_tokens": 19,
+              "completion_tokens": 59,
+              "latency_ms": 892.8431039967109,
+              "cost_usd": 0.000314,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_0151x7ist4VrwotYj1xmDUqt"
+              },
+              "turn": 1,
+              "user_text_preview": "Who is generally credited with inventing the World Wide Web?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-011",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "jupiter"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "Jupiter is the largest planet in our solar system. It's a gas giant with a diameter of about 88,846 miles (142,984 kilometers), making it roughly 11 times wider than Earth.",
+              "prompt_tokens": 17,
+              "completion_tokens": 47,
+              "latency_ms": 900.6703259947244,
+              "cost_usd": 0.000252,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_016inR1oiQE5sn4ga2pbirBU"
+              },
+              "turn": 1,
+              "user_text_preview": "What is the largest planet in our solar system?"
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sq-012",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "fast-qa",
+          "expected_contains": [
+            "391"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "17 × 23 = 391",
+              "prompt_tokens": 18,
+              "completion_tokens": 13,
+              "latency_ms": 567.5449560076231,
+              "cost_usd": 8.3e-05,
+              "model": "claude-haiku-4-5",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "fast-qa",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "fast-qa",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01MQjso2mMCTXLJgEPy2QTgA"
+              },
+              "turn": 1,
+              "user_text_preview": "What is 17 multiplied by 23?"
+            }
+          ],
+          "notes": null
+        }
+      ]
+    }
+  }
+}

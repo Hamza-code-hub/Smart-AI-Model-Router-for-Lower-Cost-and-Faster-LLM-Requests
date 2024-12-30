@@ -1,0 +1,320 @@
+{
+  "run_metadata": {
+    "date": "2026-06-17T06:17:50+00:00",
+    "workload": {
+      "name": "long_context",
+      "version": 1,
+      "fingerprint": "b8d900b8631e9baf",
+      "source": "eval/workloads/long_context.yaml",
+      "n_prompts": 6
+    },
+    "targets": [
+      "gateway:auto"
+    ],
+    "gateway_url": "http://localhost:8000"
+  },
+  "results_by_target": {
+    "gateway:auto": {
+      "label": "gateway-auto",
+      "summary": {
+        "target": "gateway-auto",
+        "n_prompts": 6,
+        "n_calls": 6,
+        "n_errors": 0,
+        "n_cached": 0,
+        "n_fallback_used": 0,
+        "total_cost_usd": 0.237085,
+        "tokens": {
+          "prompt": 47187,
+          "completion": 46
+        },
+        "latency_ms": {
+          "p50": 1874.52,
+          "p95": 2692.42,
+          "p99": 2865.09,
+          "max": 2908.25
+        },
+        "success_rate": 1.0,
+        "quality_check": {
+          "n_checked": 6,
+          "n_pass": 3,
+          "rate": 0.5
+        },
+        "routing": {
+          "tiers": {
+            "heuristic": 6
+          },
+          "categories": {
+            "long-context": 6
+          },
+          "escalations": 0,
+          "category_match": {
+            "checked": 6,
+            "match": 6,
+            "rate": 1.0
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "nh-001",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "long-context",
+          "expected_contains": [
+            "purple-trombone-42"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "purple-trombone-42",
+              "prompt_tokens": 7842,
+              "completion_tokens": 12,
+              "latency_ms": 1958.992453000974,
+              "cost_usd": 0.03951,
+              "model": "claude-opus-4-7",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "long-context",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "long-context",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01LP2EAbjj77AdmqMovMUDVT"
+              },
+              "turn": 1,
+              "user_text_preview": "Below is a long document. Read it carefully, then answer the question at the end.\n\n---\nThe wagon wheels creaked over the loose gravel of the lane. The compass needle wavered, then settled firmly on no…"
+            }
+          ],
+          "notes": "needle at depth=0.1, haystack≈24056 chars"
+        },
+        {
+          "id": "nh-002",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "long-context",
+          "expected_contains": [
+            "zx-99-omega"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "ZX-99-OMEGA",
+              "prompt_tokens": 7893,
+              "completion_tokens": 15,
+              "latency_ms": 2044.9330850096885,
+              "cost_usd": 0.03984,
+              "model": "claude-opus-4-7",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "long-context",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "long-context",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01Sxn2umFZauayY8QXcvsbqe"
+              },
+              "turn": 1,
+              "user_text_preview": "Below is a long document. Read it carefully, then answer the question at the end.\n\n---\nA single candle burned on the windowsill, oblivious to the wind. She turned the page and continued reading in sil…"
+            }
+          ],
+          "notes": "needle at depth=0.5, haystack≈24068 chars"
+        },
+        {
+          "id": "nh-003",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "long-context",
+          "expected_contains": [
+            "73-and-a-half"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": true,
+            "missing": []
+          },
+          "calls": [
+            {
+              "response_text": "73-and-a-half",
+              "prompt_tokens": 7897,
+              "completion_tokens": 12,
+              "latency_ms": 2908.251808999921,
+              "cost_usd": 0.039785,
+              "model": "claude-opus-4-7",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "long-context",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "long-context",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01XKbEAM625KGbkiW7BreHmD"
+              },
+              "turn": 1,
+              "user_text_preview": "Below is a long document. Read it carefully, then answer the question at the end.\n\n---\nHe scribbled a note in the margin and underlined it twice. Most of the chairs in the parlor were older than the h…"
+            }
+          ],
+          "notes": "needle at depth=0.9, haystack≈24079 chars"
+        },
+        {
+          "id": "nh-004",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "long-context",
+          "expected_contains": [
+            "operation birchwood"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": false,
+            "missing": [
+              "operation birchwood"
+            ]
+          },
+          "calls": [
+            {
+              "response_text": "",
+              "prompt_tokens": 7865,
+              "completion_tokens": 5,
+              "latency_ms": 1790.0574739906006,
+              "cost_usd": 0.03945,
+              "model": "claude-opus-4-7",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "long-context",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "long-context",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_018wUUVHiUcrjunR3LM3CHh9"
+              },
+              "turn": 1,
+              "user_text_preview": "Below is a long document. Read it carefully, then answer the question at the end.\n\n---\nOutside, the rain had begun to fall against the cobblestones. A small clock on the desk ticked steadily toward fi…"
+            }
+          ],
+          "notes": "needle at depth=0.1, haystack≈24061 chars"
+        },
+        {
+          "id": "nh-005",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "long-context",
+          "expected_contains": [
+            "the third door on the left in the north tower"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": false,
+            "missing": [
+              "the third door on the left in the north tower"
+            ]
+          },
+          "calls": [
+            {
+              "response_text": "",
+              "prompt_tokens": 7867,
+              "completion_tokens": 1,
+              "latency_ms": 1629.0362189902226,
+              "cost_usd": 0.03936,
+              "model": "claude-opus-4-7",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "long-context",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "long-context",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_015PmCp8fENidV4nHj9JYEpG"
+              },
+              "turn": 1,
+              "user_text_preview": "Below is a long document. Read it carefully, then answer the question at the end.\n\n---\nSomewhere down the hall, a door closed with a soft click. The old map had been folded so many times its creases w…"
+            }
+          ],
+          "notes": "needle at depth=0.5, haystack≈24133 chars"
+        },
+        {
+          "id": "nh-006",
+          "is_multi_turn": false,
+          "turns": 1,
+          "expected_category": "long-context",
+          "expected_contains": [
+            "purple-trombone-42"
+          ],
+          "quality_check": {
+            "checked": true,
+            "pass": false,
+            "missing": [
+              "purple-trombone-42"
+            ]
+          },
+          "calls": [
+            {
+              "response_text": "",
+              "prompt_tokens": 7823,
+              "completion_tokens": 1,
+              "latency_ms": 1578.608786003315,
+              "cost_usd": 0.03914,
+              "model": "claude-opus-4-7",
+              "cached": false,
+              "fallback_used": false,
+              "routing_decision": {
+                "tier": "heuristic",
+                "category": "long-context",
+                "escalation_count": 0,
+                "switched_from": null,
+                "raw_category": "long-context",
+                "similarity": null,
+                "confidence": null
+              },
+              "error": null,
+              "raw": {
+                "id": "msg_01Dp8oPaxutjxqzWtFRzH53M"
+              },
+              "turn": 1,
+              "user_text_preview": "Below is a long document. Read it carefully, then answer the question at the end.\n\n---\nThe library was unusually quiet that afternoon. He scribbled a note in the margin and underlined it twice. Outsid…"
+            }
+          ],
+          "notes": "needle at depth=0.9, haystack≈24085 chars"
+        }
+      ]
+    }
+  }
+}

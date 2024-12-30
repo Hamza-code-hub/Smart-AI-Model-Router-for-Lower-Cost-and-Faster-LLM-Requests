@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Test 5 &mdash; Chaos &amp; Failover MTTR</title>
+<style>
+  :root {
+    --bg: #0B0F1A;
+    --panel: #131A2B;
+    --panel-2: #1A2238;
+    --line: #243154;
+    --ink: #E6EAF2;
+    --ink-dim: #9AA6BF;
+    --indigo: #7B61FF;
+    --emerald: #0EA570;
+    --amber: #E0A458;
+    --red: #E26A6A;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding: 32px 24px 64px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 20px; margin: 32px 0 12px; letter-spacing: -0.01em; }
+  h3 { font-size: 15px; margin: 20px 0 8px; color: var(--ink); }
+  .sub { color: var(--ink-dim); font-size: 14px; margin-bottom: 24px; }
+  .hero {
+    background: linear-gradient(135deg, #131A2B 0%, #1A2238 100%);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .stat-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 14px; }
+  .stat { min-width: 140px; }
+  .stat .v { font-size: 26px; font-weight: 600; color: var(--indigo); letter-spacing: -0.01em; }
+  .stat .v.warn { color: var(--amber); }
+  .stat .v.ok { color: var(--emerald); }
+  .stat .l { font-size: 12px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+  th, td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { background: var(--panel-2); font-weight: 600; color: var(--ink-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.mono, .mono { font-family: var(--mono); }
+  .ok { color: var(--emerald); }
+  .warn { color: var(--amber); }
+  .bad { color: var(--red); }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 14px;
+  }
+  pre {
+    font-family: var(--mono);
+    background: #0A0E18;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .meta { font-size: 13px; color: var(--ink-dim); }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .pill {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+    background: var(--panel-2); color: var(--ink-dim); border: 1px solid var(--line);
+  }
+  .pill.ok { background: rgba(14, 165, 112, 0.12); color: var(--emerald); border-color: rgba(14, 165, 112, 0.4); }
+  .pill.warn { background: rgba(224, 164, 88, 0.12); color: var(--amber); border-color: rgba(224, 164, 88, 0.4); }
+  .pill.bad { background: rgba(226, 106, 106, 0.12); color: var(--red); border-color: rgba(226, 106, 106, 0.4); }
+  .bullet {
+    background: var(--panel-2);
+    border-left: 3px solid var(--indigo);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  .callout {
+    background: rgba(224, 164, 88, 0.08);
+    border-left: 3px solid var(--amber);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .callout b { color: var(--amber); }
+  .callout.bad { background: rgba(226, 106, 106, 0.08); border-left-color: var(--red); }
+  .callout.bad b { color: var(--red); }
+  footer { color: var(--ink-dim); font-size: 12px; margin-top: 36px; text-align: center; }
+  code { font-family: var(--mono); background: #0A0E18; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="pill">Test 5 &middot; Chaos &amp; Failover MTTR</span>
+    <h1 style="margin-top:8px;">Fail-soft on Redis, hard-dependent on Postgres &mdash; honest failure map</h1>
+    <div class="sub">
+      Four-scenario chaos pass: Redis outage, Postgres outage, cross-provider failover history,
+      circuit-breaker state &middot; gateway under <code>docker pause</code> against live infra
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="v ok">5 / 5</div><div class="l">200s during Redis outage</div></div>
+      <div class="stat"><div class="v warn">0 / 5</div><div class="l">200s during Postgres outage</div></div>
+      <div class="stat"><div class="v">~2 s</div><div class="l">Redis recovery to first 200</div></div>
+      <div class="stat"><div class="v">4 / 4</div><div class="l">Breakers in closed state</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Resume bullet</h3>
+    <div class="bullet">
+      Mapped fail-soft behavior end-to-end under synthetic infra outages: a <code>docker pause</code> of Redis
+      degraded <b>all 5 in-flight requests to 200</b> (cache + token-bucket rate-limit fail open, p50 latency
+      climbed from 1.9&nbsp;s to 6.5&nbsp;s as every call missed cache), and recovery to baseline took
+      <b>under 2 seconds</b>. A Postgres pause, by contrast, <b>blocked the request path entirely</b> (0/5 served
+      inside a 15-second client deadline) &mdash; an honest finding contradicting the design intent. Cross-provider
+      failover policy is wired (<code>FAILOVER_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504}</code> at
+      <code>src/gateway/fallback.py:15</code>) and per-target circuit-breaker state is observable via
+      <code>/admin/breakers</code> (all 4 targets closed, 0 failures).
+    </div>
+  </div>
+
+  <div class="callout bad">
+    <b>Honest finding &mdash; Postgres is a hard dependency.</b>
+    The plan called this scenario as &ldquo;200s during outage; logging degrades silently.&rdquo; The measurement
+    disagrees: with Postgres paused, all 5 requests timed out at the 15-second client cutoff with no HTTP response.
+    The most likely culprits are the synchronous tenant key-lookup, semantic-cache check, and request-log write on
+    the request path; one or more of these does not catch and degrade. Wrapping the Postgres path in a per-call
+    timeout with a fail-open default is tracked in <code>future_work.md</code>.
+  </div>
+
+  <h2>Methodology</h2>
+  <div class="card meta">
+    <p style="margin-top:0;">
+      Four scenarios. <b>5a/5b</b> &mdash; baseline call, <code>docker pause &lt;svc&gt;</code>, 5 calls during
+      the outage, <code>docker unpause</code>, recovery call. Same request body in every call
+      (<code>model: "auto"</code>, single user message) so any latency change is attributable to the paused
+      dependency, not the workload. Tenant: <code>default</code> (rate limit 600 RPM). Curl per-call timeout: 15 s.
+    </p>
+    <p>
+      <b>5c</b> &mdash; queried the <code>requests</code> table for historical <code>fallback_used = true</code>
+      rows. This is a passive measurement of failover in production traffic; the failover code path itself is
+      proved by reading <code>src/gateway/routes/chat.py:178&ndash;234</code>, where every provider exception
+      passes through <code>should_failover()</code> and on a match the next target in the cascade is tried.
+    </p>
+    <p style="margin-bottom:0;">
+      <b>5d</b> &mdash; <code>GET /admin/breakers</code> with the admin bearer. Returns one entry per
+      <code>(provider, model)</code> pair under management with state and failure count.
+      Raw logs: <span class="mono">eval/results/resume_run/test5{a,b,c,d}_*.log</span>.
+    </p>
+  </div>
+
+  <h2>5a &nbsp;Redis chaos &mdash; cache &amp; rate-limit fail open</h2>
+  <span class="pill ok">Pass</span>
+  <table style="margin-top:10px;">
+    <thead>
+      <tr><th>Phase</th><th>HTTP</th><th>Wall time</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Baseline (Redis healthy)</td><td class="mono ok">200</td><td class="mono">1.919 s</td><td>cold-path, no cache hit</td></tr>
+      <tr><td>Outage call 1</td><td class="mono ok">200</td><td class="mono">6.540 s</td><td>cache lookup skipped; provider called</td></tr>
+      <tr><td>Outage call 2</td><td class="mono ok">200</td><td class="mono">6.402 s</td><td></td></tr>
+      <tr><td>Outage call 3</td><td class="mono ok">200</td><td class="mono">6.766 s</td><td></td></tr>
+      <tr><td>Outage call 4</td><td class="mono ok">200</td><td class="mono">6.310 s</td><td></td></tr>
+      <tr><td>Outage call 5</td><td class="mono ok">200</td><td class="mono">6.505 s</td><td></td></tr>
+      <tr><td>Recovery (unpause + first call)</td><td class="mono ok">200</td><td class="mono">1.486 s</td><td>~2 s end-to-end MTTR</td></tr>
+    </tbody>
+  </table>
+  <div class="meta" style="margin-top:8px;">
+    During the 5-call outage window the gateway returned <b>200 on every request</b>. p50 latency climbed from
+    <b>1.92 s &rarr; 6.51 s</b> (3.4&times; slower), consistent with the exact-match cache being skipped and the
+    token-bucket limiter falling back to allow. No 5xx, no client retries, no manual intervention required to
+    recover &mdash; the request after <code>docker unpause</code> was a clean 200 in 1.49 s.
+  </div>
+  <h3>Raw output</h3>
+  <pre>=== Test 5a: Redis chaos ===
+--- before ---
+before: 200 1.918644s
+--- pausing Redis ---
+llm-router-redis-1
+--- during outage ---
+during 1: 200 6.539638s
+during 2: 200 6.401662s
+during 3: 200 6.765855s
+during 4: 200 6.310188s
+during 5: 200 6.505181s
+--- unpausing Redis ---
+llm-router-redis-1
+--- after recovery ---
+after: 200 1.485682s</pre>
+
+  <h2>5b &nbsp;Postgres chaos &mdash; request path blocks</h2>
+  <span class="pill bad">Fail</span> &nbsp;<span class="meta">(measurement disagrees with design intent)</span>
+  <table style="margin-top:10px;">
+    <thead>
+      <tr><th>Phase</th><th>HTTP</th><th>Wall time</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Baseline (Postgres healthy)</td><td class="mono ok">200</td><td class="mono">2.075 s</td><td></td></tr>
+      <tr><td>Outage call 1</td><td class="mono bad">&mdash;</td><td class="mono">15.003 s</td><td>client timed out; no response</td></tr>
+      <tr><td>Outage call 2</td><td class="mono bad">&mdash;</td><td class="mono">15.016 s</td><td>client timed out; no response</td></tr>
+      <tr><td>Outage call 3</td><td class="mono bad">&mdash;</td><td class="mono">15.014 s</td><td>client timed out; no response</td></tr>
+      <tr><td>Outage call 4</td><td class="mono bad">&mdash;</td><td class="mono">15.015 s</td><td>client timed out; no response</td></tr>
+      <tr><td>Outage call 5</td><td class="mono bad">&mdash;</td><td class="mono">15.004 s</td><td>client timed out; no response</td></tr>
+      <tr><td>Recovery (unpause + first call)</td><td class="mono ok">200</td><td class="mono">1.389 s</td><td>clean recovery, no warm-up</td></tr>
+    </tbody>
+  </table>
+  <div class="meta" style="margin-top:8px;">
+    Every call inside the outage window hung past the 15-second client deadline with no HTTP status returned
+    (<code>%{http_code}</code> was <code>000</code>). The gateway process itself stayed up &mdash; the very first
+    call after <code>docker unpause</code> succeeded in 1.39 s without warm-up. This is the right thing to know
+    before pitching the system as &ldquo;fail-soft&rdquo;: Redis is, Postgres is not.
+  </div>
+  <h3>Raw output</h3>
+  <pre>=== Test 5b: Postgres chaos (with 15s timeout) ===
+--- before ---
+before: 200 2.074822s
+--- pausing Postgres ---
+llm-router-postgres-1
+--- during outage (15s timeout per request) ---
+during 1: http=000 time=15.002607s    (client-side timeout)
+during 2: http=000 time=15.015913s    (client-side timeout)
+during 3: http=000 time=15.014269s    (client-side timeout)
+during 4: http=000 time=15.014756s    (client-side timeout)
+during 5: http=000 time=15.003844s    (client-side timeout)
+--- unpausing Postgres ---
+llm-router-postgres-1
+--- after recovery ---
+after: 200 1.389174s</pre>
+
+  <h2>5c &nbsp;Cross-provider failover &mdash; policy wired, untriggered in production</h2>
+  <span class="pill warn">Policy verified, no production events</span>
+  <div class="grid-2" style="margin-top:10px;">
+    <div class="card">
+      <h3 style="margin-top:0;">Production traffic audit</h3>
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Total <code>requests</code> rows</td><td class="mono">1,081</td></tr>
+          <tr><td>Rows with <code>fallback_used = true</code></td><td class="mono warn">0</td></tr>
+          <tr><td>Observed failover events</td><td class="mono warn">0</td></tr>
+        </tbody>
+      </table>
+      <div class="meta" style="margin-top:8px;">
+        In 1,081 logged requests, no upstream returned a status the policy classifies as failover-eligible.
+        Honest read: the policy is wired and observable, but it has not been exercised in production
+        &mdash; we cannot claim a measured MTTR for this scenario.
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Failover policy (source)</h3>
+      <pre style="margin:0;"># src/gateway/fallback.py
+FAILOVER_STATUS_CODES = frozenset({
+    408, 425, 429, 500, 502, 503, 504,
+})
+
+def should_failover(exc: ProviderError) -> bool:
+    return exc.status_code in FAILOVER_STATUS_CODES</pre>
+      <div class="meta" style="margin-top:8px;">
+        Used at <code>src/gateway/routes/chat.py:178&ndash;234</code>: on a provider exception, the policy decides
+        whether to advance to the next target in the cascade. Deterministic 4xx (e.g. <code>401</code>,
+        <code>400</code>) are deliberately not retried &mdash; retrying a malformed request just wastes budget.
+      </div>
+    </div>
+  </div>
+
+  <h2>5d &nbsp;Circuit-breaker state &mdash; per-target observability</h2>
+  <span class="pill ok">Verified</span>
+  <table style="margin-top:10px;">
+    <thead>
+      <tr><th>Provider</th><th>Model</th><th>State</th><th>Failures</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>openai</td><td class="mono">gpt-4o</td><td class="ok">closed</td><td class="mono">0</td></tr>
+      <tr><td>anthropic</td><td class="mono">claude-opus-4-7</td><td class="ok">closed</td><td class="mono">0</td></tr>
+      <tr><td>anthropic</td><td class="mono">claude-haiku-4-5</td><td class="ok">closed</td><td class="mono">0</td></tr>
+      <tr><td>anthropic</td><td class="mono">claude-opus-4-8</td><td class="ok">closed</td><td class="mono">0</td></tr>
+    </tbody>
+  </table>
+  <div class="meta" style="margin-top:8px;">
+    Per-<code>(provider, model)</code> breaker state is queryable via <code>GET /admin/breakers</code>
+    (admin-bearer-authed). All four currently-managed targets are closed with zero recent failures &mdash; the
+    expected steady state. The same data feeds a Grafana gauge for at-a-glance oncall visibility.
+  </div>
+  <h3>Raw response</h3>
+  <pre>$ curl -s http://localhost:8000/admin/breakers \
+    -H "Authorization: Bearer change-me-in-production" | python -m json.tool
+{
+    "breakers": [
+        { "provider": "openai",    "model": "gpt-4o",           "state": "closed", "failures": 0 },
+        { "provider": "anthropic", "model": "claude-opus-4-7",  "state": "closed", "failures": 0 },
+        { "provider": "anthropic", "model": "claude-haiku-4-5", "state": "closed", "failures": 0 },
+        { "provider": "anthropic", "model": "claude-opus-4-8",  "state": "closed", "failures": 0 }
+    ]
+}</pre>
+
+  <h2>What I would do with another week</h2>
+  <div class="card meta">
+    <ul style="margin:0; padding-left:20px;">
+      <li>Wrap the Postgres call sites on the request path (tenant key-lookup, semantic-cache check, request-log write) in per-call timeouts with explicit fail-open defaults, then re-run 5b. The expected result is the same Redis-style behavior &mdash; 5/5 200s during the outage at degraded p50 latency.</li>
+      <li>Engineer a failover event end-to-end by injecting an invalid <code>ANTHROPIC_API_KEY</code> at process-env level on a single request and measuring time-to-OpenAI in the response trace. Today's evidence (zero <code>fallback_used = true</code> rows in 1,081 calls) shows the policy is untriggered, not that it works.</li>
+      <li>Add a synthetic chaos cron job (weekly): pause Redis for 30 s, pause Postgres for 30 s, kill the gateway pod &mdash; emit a Prometheus alert if recovery exceeds the target SLO. This turns a one-shot measurement into a regression test.</li>
+      <li>Surface breaker state in the public <code>/health</code> body (today it's admin-only) so load balancers can drain a gateway instance whose downstream is flapping.</li>
+    </ul>
+  </div>
+
+  <footer>
+    Generated 2026-06-18 &middot;
+    Raw logs:
+    <span class="mono">eval/results/resume_run/test5a_redis_chaos.log</span>,
+    <span class="mono">test5b_postgres_chaos.log</span>,
+    <span class="mono">test5c_failover_history.log</span>,
+    <span class="mono">test5d_breakers.log</span>
+  </footer>
+
+</div>
+</body>
+</html>
