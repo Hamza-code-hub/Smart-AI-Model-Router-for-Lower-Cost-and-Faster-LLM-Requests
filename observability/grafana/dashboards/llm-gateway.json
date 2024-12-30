@@ -1,0 +1,245 @@
+{
+  "uid": "llm-gateway",
+  "title": "LLM Gateway",
+  "tags": ["llm-gateway"],
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {"from": "now-1h", "to": "now"},
+  "timezone": "browser",
+  "editable": true,
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "Router (Phase 2.3)",
+      "gridPos": {"x": 0, "y": 0, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Per-tier hit rate (rps)",
+      "gridPos": {"x": 0, "y": 1, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {
+        "defaults": {
+          "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 30, "stacking": {"mode": "normal"}},
+          "unit": "reqps"
+        }
+      },
+      "targets": [
+        {
+          "expr": "sum by (tier) (rate(gateway_routing_tier_fired_total[5m]))",
+          "legendFormat": "{{tier}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Routing decision p95 (seconds, by tier)",
+      "gridPos": {"x": 12, "y": 1, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {
+        "defaults": {
+          "custom": {"drawStyle": "line", "lineWidth": 2, "fillOpacity": 10},
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byRegexp", "options": "^.*100ms.*$"},
+            "properties": [{"id": "custom.lineStyle", "value": {"fill": "dash"}}]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le, tier) (rate(gateway_routing_decision_seconds_bucket[5m])))",
+          "legendFormat": "p95 {{tier}}"
+        },
+        {
+          "expr": "vector(0.1)",
+          "legendFormat": "SLO 100ms"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Routing category distribution",
+      "gridPos": {"x": 0, "y": 9, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {
+        "defaults": {
+          "custom": {"drawStyle": "bars", "fillOpacity": 60, "stacking": {"mode": "normal"}},
+          "unit": "reqps"
+        }
+      },
+      "targets": [
+        {
+          "expr": "sum by (category) (rate(gateway_routing_category_total[5m]))",
+          "legendFormat": "{{category}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Escalations (rate, /min)",
+      "gridPos": {"x": 12, "y": 9, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "ops"}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
+      "targets": [
+        {"expr": "sum(rate(gateway_routing_escalations_total[5m])) * 60"}
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Polarity flips (rate, /min)",
+      "gridPos": {"x": 18, "y": 9, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "ops"}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
+      "targets": [
+        {"expr": "sum(rate(gateway_routing_polarity_flips_total[5m])) * 60"}
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Escalations from→to (rps)",
+      "gridPos": {"x": 12, "y": 13, "w": 12, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}},
+      "targets": [
+        {
+          "expr": "sum by (from_category, to_category) (rate(gateway_routing_escalations_total[5m]))",
+          "legendFormat": "{{from_category}} → {{to_category}}"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "row",
+      "title": "Gateway",
+      "gridPos": {"x": 0, "y": 17, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "Request rate by routing mode",
+      "gridPos": {"x": 0, "y": 18, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "line", "fillOpacity": 20}}},
+      "targets": [
+        {
+          "expr": "sum by (routing_mode) (rate(gateway_requests_total[5m]))",
+          "legendFormat": "{{routing_mode}}"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Request latency p50 / p95 / p99",
+      "gridPos": {"x": 12, "y": 18, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "s"}},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.5, sum by (le) (rate(gateway_request_duration_seconds_bucket[5m])))",
+          "legendFormat": "p50"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(gateway_request_duration_seconds_bucket[5m])))",
+          "legendFormat": "p95"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(gateway_request_duration_seconds_bucket[5m])))",
+          "legendFormat": "p99"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Cache hits by type (rps)",
+      "gridPos": {"x": 0, "y": 26, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}},
+      "targets": [
+        {
+          "expr": "sum by (cache_type) (rate(gateway_cache_hits_total[5m]))",
+          "legendFormat": "{{cache_type}}"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "Cumulative USD cost by model",
+      "gridPos": {"x": 12, "y": 26, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "currencyUSD"}},
+      "targets": [
+        {
+          "expr": "sum by (model) (gateway_cost_usd_total)",
+          "legendFormat": "{{model}}"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "timeseries",
+      "title": "Tokens / sec by direction",
+      "gridPos": {"x": 0, "y": 34, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "short"}},
+      "targets": [
+        {
+          "expr": "sum by (direction) (rate(gateway_tokens_total[5m]))",
+          "legendFormat": "{{direction}}"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "Provider errors (rps)",
+      "gridPos": {"x": 12, "y": 34, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}},
+      "targets": [
+        {
+          "expr": "sum by (provider, error_type) (rate(gateway_provider_errors_total[5m]))",
+          "legendFormat": "{{provider}} {{error_type}}"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "stat",
+      "title": "Circuit breaker state",
+      "gridPos": {"x": 0, "y": 42, "w": 24, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {"type": "value", "options": {"0": {"text": "CLOSED", "color": "green"}, "1": {"text": "HALF_OPEN", "color": "yellow"}, "2": {"text": "OPEN", "color": "red"}}}
+          ]
+        }
+      },
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
+      "targets": [
+        {
+          "expr": "gateway_circuit_breaker_state",
+          "legendFormat": "{{provider}} / {{model}}"
+        }
+      ]
+    }
+  ]
+}
